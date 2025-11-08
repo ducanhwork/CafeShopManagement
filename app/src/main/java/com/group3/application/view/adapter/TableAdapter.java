@@ -7,6 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.group3.application.R;
+import com.group3.application.model.entity.Table;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.application.R;
@@ -17,12 +23,23 @@ import java.util.List;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
 
+    private List<Table> tableList;
+    private final List<TableInfo> data = new ArrayList<>();
+    private OnTableClickListener onTableClickListener;
+    private final OnItemClick listener;
+
+    public interface OnTableClickListener {
+        void onTableClick(Table table);
+    }
+  
     public interface OnItemClick {
         void onClick(TableInfo item);
     }
 
-    private final List<TableInfo> data = new ArrayList<>();
-    private final OnItemClick listener;
+    public TableAdapter(List<Table> tableList, OnTableClickListener onTableClickListener) {
+        this.tableList = tableList;
+        this.onTableClickListener = onTableClickListener;
+    }
 
     public TableAdapter(OnItemClick listener) {
         this.listener = listener;
