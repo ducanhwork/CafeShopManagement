@@ -2,6 +2,7 @@ package com.group3.application.model.webservice;
 
 import android.content.SharedPreferences;
 
+import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.UpdatePassWordRequest;
@@ -34,7 +35,7 @@ public interface ApiService {
     Call<String> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
 
     @POST("/api/auth/reset-password")
-    Call<String> resetPassword(@Query("email") String email);
+    Call<APIResult> resetPassword(@Body String email);
 
     @GET("api/auth/me")
     Call<User> myProfile(@Header("Authorization") String authToken);

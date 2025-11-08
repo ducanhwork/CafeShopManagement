@@ -8,12 +8,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import retrofit2.Callback;
 
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
-import com.group3.application.model.dto.LoginResult;
+import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
 
@@ -43,16 +44,15 @@ public class AuthRepository {
                     if (token != null && !token.isEmpty()) {
                         saveAuthToken(token);
                         // Tạo LoginResult thành công với token và email đã nhập
-                        listener.onLoginComplete(new LoginResult(
+                        listener.onLoginComplete(new APIResult(
                                 true,
                                 "Đăng nhập thành công!",
-                                token,
-                                email // Sử dụng email đã nhập
+                                token
                         ));
                     } else {
                         // Phản hồi thành công (HTTP 200) nhưng token bị thiếu hoặc rỗng
                         String errorMessage = "Đăng nhập thất bại: Token không hợp lệ từ server.";
-                        listener.onLoginComplete(new LoginResult(false, errorMessage, null, null));
+                        listener.onLoginComplete(new APIResult(false, errorMessage, null));
                         Log.e(TAG, "Login successful but no token: " + response.message());
                     }
                 } else {
@@ -67,7 +67,7 @@ public class AuthRepository {
                         Log.e(TAG, "Error parsing error body: " + e.getMessage());
                     }
                     Log.e(TAG, "Login API failed: " + errorMessage);
-                    listener.onLoginComplete(new LoginResult(false, errorMessage, null, null));
+                    listener.onLoginComplete(new APIResult(false, errorMessage, null));
                 }
             }
 
@@ -75,7 +75,7 @@ public class AuthRepository {
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
                 // Lỗi mạng hoặc lỗi không xác định
                 Log.e(TAG, "Login API network error: " + t.getMessage(), t);
-                listener.onLoginComplete(new LoginResult(false, "Lỗi kết nối mạng: " + t.getMessage(), null, null));
+                listener.onLoginComplete(new APIResult(false, "Lỗi kết nối mạng: " + t.getMessage(), null));
             }
         });
     }
@@ -94,6 +94,44 @@ public class AuthRepository {
     }
 
     public interface OnLoginCompleteListener {
-        void onLoginComplete(LoginResult result);
+        void onLoginComplete(APIResult result);
+    }
+
+    public interface OnResetPasswordCompleteListener {
+        void onResetPasswordComplete(APIResult result);
+    }
+
+    public void forgotPassword(String email, OnResetPasswordCompleteListener listener) {
+        apiService.resetPassword(email).enqueue(new Callback<APIResult>() {
+
+            @Override
+            public void onResponse(Call<APIResult> call, Response<APIResult> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    APIResult result = response.body();
+                    if (result != null) {
+                        String message = result.getMessage();
+                        Log.d(TAG, "Password reset successful: " + message);
+                        listener.onResetPasswordComplete(new APIResult(true, message, null));
+                    }
+                } else {
+                    String errorMessage = "Đăng nhập thất bại. Mã lỗi: " + response.code();
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage += " - " + response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing error body: " + e.getMessage());
+                    }
+                    Log.e(TAG, "Login API failed: " + errorMessage);
+                    listener.onResetPasswordComplete(new APIResult(false, errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResult> call, Throwable t) {
+                Log.e(TAG, "Login API network error: " + t.getMessage(), t);
+                listener.onResetPasswordComplete(new APIResult(false, "Line 131 Auth Repo: " + t.getMessage(), null));
+            }
+        });
     }
 }

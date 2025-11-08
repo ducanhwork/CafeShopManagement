@@ -15,10 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.group3.application.ProductListActivity;
 import com.group3.application.R;
 import com.group3.application.common.enums.NavigationTarget;
-import com.group3.application.model.dto.LoginResult;
+import com.group3.application.model.dto.APIResult;
 import com.group3.application.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -27,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editPassword;
     private Button btnLogin;
     private TextView tvForgotPassword;
-    private TextView btnFwdRegister;
 
     private LoginViewModel loginViewModel;
 
@@ -46,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         initView();
 
         loginViewModel.loginResult.observe(this, event -> {
-            LoginResult result = event.getContentIfNotHandled();
+            APIResult result = event.getContentIfNotHandled();
             if (result != null) {
                 if (result.isSuccess()) {
                     // Hiển thị thông báo thành công từ ViewModel
@@ -71,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             if (target != null) {
                 Intent intent;
                 switch (target) {
-                    case PRODUCT_LIST:
-                        intent = new Intent(LoginActivity.this, ProductListActivity.class);
+                    case PROFILE:
+                        intent = new Intent(LoginActivity.this, ProfileActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

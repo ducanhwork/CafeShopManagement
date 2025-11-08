@@ -12,11 +12,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.group3.application.common.enums.NavigationTarget;
-import com.group3.application.model.dto.LoginResult;
+import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.repository.AuthRepository;
 import com.group3.application.common.utils.Event; // SỬA LỖI: Import đúng lớp Event wrapper của bạn
 
-// SỬA LỖI: Lớp phải kế thừa từ AndroidViewModel
+
 public class LoginViewModel extends AndroidViewModel {
     private AuthRepository authRepository;
     private SharedPreferences prefs;
@@ -26,8 +26,8 @@ public class LoginViewModel extends AndroidViewModel {
     public static final String KEY_USER_EMAIL = "userEmail";
     public static final String KEY_AUTH_TOKEN = "authToken";
 
-    private MutableLiveData<Event<LoginResult>> _loginResult = new MutableLiveData<>();
-    public LiveData<Event<LoginResult>> loginResult = _loginResult;
+    private MutableLiveData<Event<APIResult>> _loginResult = new MutableLiveData<>();
+    public LiveData<Event<APIResult>> loginResult = _loginResult;
 
     private MutableLiveData<Event<NavigationTarget>> _navigationEvent = new MutableLiveData<>();
     public LiveData<Event<NavigationTarget>> navigationEvent = _navigationEvent;
@@ -40,7 +40,7 @@ public class LoginViewModel extends AndroidViewModel {
 
 
     public LoginViewModel(@NonNull Application application) {
-        super(application); // SỬA LỖI: super() bây giờ sẽ hoạt động
+        super(application);
         authRepository = new AuthRepository(application);
         // SỬA LỖI: Sử dụng Context.MODE_PRIVATE thay vì import sai
         prefs = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -78,7 +78,7 @@ public class LoginViewModel extends AndroidViewModel {
         }
 
         if (!isValid) {
-            _loginResult.postValue(new Event<>(new LoginResult(false, "Lỗi xác thực cục bộ.")));
+            _loginResult.postValue(new Event<>(new APIResult(false, "Lỗi xác thực cục bộ.")));
             return;
         }
 
@@ -88,15 +88,15 @@ public class LoginViewModel extends AndroidViewModel {
                 // Ở đây, bạn có thể lưu userEmail vào SharedPreferences nếu bạn muốn
                 saveUserEmailToPrefs(email);
                 _loginResult.postValue(new Event<>(result));
-                _navigationEvent.postValue(new Event<>(NavigationTarget.PRODUCT_LIST));
+                _navigationEvent.postValue(new Event<>(NavigationTarget.PROFILE));
             } else {
                 _loginResult.postValue(new Event<>(result));
             }
         });
     }
 
-    public void navigateToRegister() {
-        _navigationEvent.postValue(new Event<>(NavigationTarget.REGISTER));
+    public void navigateToProfile() {
+        _navigationEvent.postValue(new Event<>(NavigationTarget.PROFILE));
     }
 
     public void navigateToForgotPassword() {
