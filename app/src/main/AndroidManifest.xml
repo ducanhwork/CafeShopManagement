@@ -11,6 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeManagementApplication">
+        <activity
+            android:name=".view.activity.CreateReservationActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.activity.ReservationListActivity" />
+        <activity
+            android:name=".view.activity.ReservationDetailActivity" />
 
     </application>
 
