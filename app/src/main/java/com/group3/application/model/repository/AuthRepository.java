@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.APIResult;
+import com.group3.application.model.entity.User;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
 
@@ -93,13 +94,6 @@ public class AuthRepository {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false) && (prefs.getString(KEY_AUTH_TOKEN, null) != null);
     }
 
-    public interface OnLoginCompleteListener {
-        void onLoginComplete(APIResult result);
-    }
-
-    public interface OnResetPasswordCompleteListener {
-        void onResetPasswordComplete(APIResult result);
-    }
 
     public void forgotPassword(String email, OnResetPasswordCompleteListener listener) {
         apiService.resetPassword(email).enqueue(new Callback<APIResult>() {
@@ -134,4 +128,42 @@ public class AuthRepository {
             }
         });
     }
+
+    public void getMyProfile(OnGetProfileCompleteListener listener) {
+        apiService.myProfile("Bearer " + application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).getString(KEY_AUTH_TOKEN, null)).enqueue(new Callback<User>() {
+
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    if (user != null) {
+                        listener.onGetProfileComplete(new APIResult(true, "Get profile successfully", user));
+                    }
+                } else {
+                    String errorMessage = "Get profile failed. Error code: " + response.code();
+                    Log.e(TAG, "Get profile failed: " + errorMessage);
+                    listener.onGetProfileComplete(new APIResult(false, errorMessage, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Log.e(TAG, "onFailure get profile: " + throwable.getMessage());
+                listener.onGetProfileComplete(new APIResult(false, "onFailure get profile: " + throwable.getMessage()));
+            }
+        });
+    }
+
+    public interface OnLoginCompleteListener {
+        void onLoginComplete(APIResult result);
+    }
+
+    public interface OnResetPasswordCompleteListener {
+        void onResetPasswordComplete(APIResult result);
+    }
+
+    public interface OnGetProfileCompleteListener {
+        void onGetProfileComplete(APIResult result);
+    }
+
 }

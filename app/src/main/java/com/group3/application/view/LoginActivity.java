@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             if (target != null) {
                 Intent intent;
                 switch (target) {
-                    case PROFILE:
-                        intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    case ADMIN_PAGE:
+                        intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

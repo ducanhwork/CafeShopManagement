@@ -43,6 +43,8 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     implementation("org.projectlombok:lombok:1.18.38")
+    implementation(libs.circleimageview)
+    implementation(libs.core.i18n)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

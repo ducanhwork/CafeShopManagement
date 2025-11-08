@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +25,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     public static final String TAG = "ForgotPasswordActivity";
 
     private ForgotPasswordViewModel forgotPasswordViewModel;
-    private TextView tvSuccessMessage;
+
     private TextView tvInstructions;
     private TextView tvBackToLogin;
     private TextInputLayout tilEmail;
     private EditText editEmail;
     private Button btnResetPassword;
+    // NEW: Add references to the layouts
+    private LinearLayout formLayout;
+    private LinearLayout successLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +81,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        tvSuccessMessage = findViewById(R.id.tvSuccessMessage);
         tvInstructions = findViewById(R.id.tvInstructions);
         tvBackToLogin = findViewById(R.id.tvBackToLogin);
         tilEmail = findViewById(R.id.tilEmail);
         editEmail = findViewById(R.id.editEmail);
         btnResetPassword = findViewById(R.id.btnResetPassword);
+        formLayout = findViewById(R.id.formLayout);
+        successLayout = findViewById(R.id.successLayout);
     }
 
     public void hideInstructionAndSuccessMessage() {
@@ -90,7 +95,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         tilEmail.setVisibility(View.GONE);
         btnResetPassword.setVisibility(View.GONE);
         tvBackToLogin.setVisibility(View.VISIBLE);
-        tvSuccessMessage.setVisibility(View.VISIBLE);
-
+        formLayout.setVisibility(View.GONE);
+        successLayout.setVisibility(View.VISIBLE);
     }
 }

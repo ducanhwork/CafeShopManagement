@@ -88,15 +88,11 @@ public class LoginViewModel extends AndroidViewModel {
                 // Ở đây, bạn có thể lưu userEmail vào SharedPreferences nếu bạn muốn
                 saveUserEmailToPrefs(email);
                 _loginResult.postValue(new Event<>(result));
-                _navigationEvent.postValue(new Event<>(NavigationTarget.PROFILE));
+                _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
             } else {
                 _loginResult.postValue(new Event<>(result));
             }
         });
-    }
-
-    public void navigateToProfile() {
-        _navigationEvent.postValue(new Event<>(NavigationTarget.PROFILE));
     }
 
     public void navigateToForgotPassword() {

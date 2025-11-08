@@ -38,5 +38,5 @@ public interface ApiService {
     Call<APIResult> resetPassword(@Body String email);
 
     @GET("api/auth/me")
-    Call<User> myProfile(@Header("Authorization") String authToken);
+    Call<User> myProfile(@Header("Authorization") String token);
 }
