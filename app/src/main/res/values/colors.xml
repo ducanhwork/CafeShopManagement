@@ -2,4 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="coffee_primary">#6D4C41</color>        <!-- Brown 700 -->
+    <color name="coffee_on_primary">#FFFFFF</color>
+    <color name="coffee_primary_variant">#5D4037</color>
+    <color name="coffee_accent">#D7A86E</color>         <!-- Latte -->
+    <color name="coffee_on_accent">#3E2723</color>
+
+    <color name="coffee_surface">#F9F5F2</color>        <!-- Creamy background -->
+    <color name="coffee_surface_variant">#EFE5DD</color>
+    <color name="coffee_outline">#C7B7A6</color>
+
+    <color name="coffee_text_primary">#3E2723</color>
+    <color name="coffee_text_secondary">#6A4F4B</color>
+    <color name="chip_inactive_background">#757575</color> <!-- Tương đương material_grey_600 -->
+    <color name="chip_inactive_text">#99000000</color>
+    <color name="positive_points">#4CAF50</color>
+    <color name="negative_points">#F44336</color>
 </resources>
