@@ -18,86 +18,221 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/customer_name_label"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Customer Name:"
-            android:textStyle="bold" />
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/customer_name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/reservation_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/customer_phone_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer Phone:"
-            android:textStyle="bold" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
 
-        <TextView
-            android:id="@+id/customer_phone_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+                    <ImageView
+                        android:id="@+id/customer_name_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_person"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/customer_name_label"
+                        app:tint="?attr/colorPrimary" />
 
-        <TextView
-            android:id="@+id/reservation_time_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reservation Time:"
-            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/customer_name_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Customer Name"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toEndOf="@+id/customer_name_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/reservation_time_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:id="@+id/customer_name_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/customer_name_label"
+                        tools:text="John Doe" />
 
-        <TextView
-            android:id="@+id/num_guests_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Number of Guests:"
-            android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/customer_phone_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/ic_phone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/customer_name_text_view"
+                        app:tint="?attr/colorPrimary" />
 
-        <TextView
-            android:id="@+id/num_guests_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:id="@+id/customer_phone_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Customer Phone"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toEndOf="@+id/customer_phone_icon"
+                        app:layout_constraintTop_toTopOf="@+id/customer_phone_icon" />
 
-        <TextView
-            android:id="@+id/status_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status:"
-            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/customer_phone_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/customer_phone_label"
+                        tools:text="123-456-7890" />
 
-        <TextView
-            android:id="@+id/status_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/reservation_time_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/ic_time"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/customer_phone_text_view"
+                        app:tint="?attr/colorPrimary" />
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Cancel Reservation"
-            android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/reservation_time_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Reservation Time"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toEndOf="@+id/reservation_time_icon"
+                        app:layout_constraintTop_toTopOf="@+id/reservation_time_icon" />
 
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/reservation_time_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/reservation_time_label"
+                        tools:text="2024-12-24 18:00" />
+
+                    <ImageView
+                        android:id="@+id/num_guests_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/ic_group"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/reservation_time_text_view"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/num_guests_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Number of Guests"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toEndOf="@+id/num_guests_icon"
+                        app:layout_constraintTop_toTopOf="@+id/num_guests_icon" />
+
+                    <TextView
+                        android:id="@+id/num_guests_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/num_guests_label"
+                        tools:text="4" />
+
+                    <ImageView
+                        android:id="@+id/status_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/ic_status"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/num_guests_text_view"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/status_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Status"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toEndOf="@+id/status_icon"
+                        app:layout_constraintTop_toTopOf="@+id/status_icon" />
+
+                    <TextView
+                        android:id="@+id/status_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/status_label"
+                        tools:text="Confirmed" />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Cancel Reservation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reservation_card"
+                android:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

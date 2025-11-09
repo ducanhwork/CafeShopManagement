@@ -24,7 +24,7 @@ public class ReservationViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
     private final MutableLiveData<Reservation> createdReservation = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> reservationCancelled = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> _reservationCancelled = new MutableLiveData<>(false);
 
     public LiveData<List<Reservation>> getReservations() {
         return reservations;
@@ -43,7 +43,7 @@ public class ReservationViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> getReservationCancelled() {
-        return reservationCancelled;
+        return _reservationCancelled;
     }
 
     public void fetchReservationsByTable(String tableId) {
@@ -98,11 +98,16 @@ public class ReservationViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    reservationCancelled.setValue(true);
+                    _reservationCancelled.setValue(true);
+                    if (reservation.getTableId() != null) {
+                        fetchReservationsByTable(reservation.getTableId().toString());
+                    } else {
+                        isLoading.setValue(false);
+                    }
                 } else {
                     error.setValue("Failed to cancel reservation");
+                    isLoading.setValue(false);
                 }
-                isLoading.setValue(false);
             }
 
             @Override
