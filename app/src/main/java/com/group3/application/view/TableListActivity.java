@@ -24,6 +24,7 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.view.adapter.TableAdapter;
 import com.group3.application.viewmodel.TableViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -122,16 +123,19 @@ public class TableListActivity extends AppCompatActivity {
                 if (selectedTables == null) {
                     selectedTables = new ArrayList<>();
                 }
-                ArrayList<String> updatedTableIds = new ArrayList<>();
-                ArrayList<String> updatedTableNames = new ArrayList<>(); // Thêm danh sách tên
-                for (TableInfo table : selectedTables) {
-                    updatedTableIds.add(table.getId());
-                    updatedTableNames.add(table.getName()); // Thêm tên vào danh sách
+
+                // 1. Kiểm tra (giữ nguyên)
+                if (selectedTables.isEmpty()) {
+                    Toast.makeText(this, "Bạn phải chọn ít nhất 1 bàn.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                // 2. SỬA: Gửi về List<TableInfo>
                 Intent resultIntent = new Intent();
-                resultIntent.putStringArrayListExtra("updatedTableIds", updatedTableIds);
-                resultIntent.putStringArrayListExtra("updatedTableNames", updatedTableNames); // Gửi cả tên về
+
+                // Gửi cả List<TableInfo> với key là "updatedTables"
+                resultIntent.putExtra("updatedTables", (Serializable) selectedTables);
+
                 setResult(AppCompatActivity.RESULT_OK, resultIntent);
                 finish();
             } else {

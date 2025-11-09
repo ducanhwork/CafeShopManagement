@@ -17,7 +17,6 @@ import java.util.List;
 
 public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItemAdapter.ViewHolder> {
 
-    // SỬA: Sử dụng đúng kiểu DTO
     private List<OrderDetailItemDTO> items = new ArrayList<>();
 
     @NonNull
@@ -37,7 +36,6 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
         return items.size();
     }
 
-    // SỬA: Cập nhật phương thức setItems để nhận đúng kiểu DTO
     public void setItems(List<OrderDetailItemDTO> newItems) {
         this.items.clear();
         if (newItems != null) {
@@ -58,11 +56,9 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
             tvItemSubtotal = itemView.findViewById(R.id.tv_item_subtotal);
         }
 
-        // SỬA: Cập nhật hàm bind để làm việc với DTO
         void bind(OrderDetailItemDTO item) {
             tvItemName.setText(item.getProductName());
             tvItemQuantity.setText("x " + item.getQuantity());
-            // Tính subtotal trực tiếp từ price và quantity
             double subtotal = item.getPrice() * item.getQuantity();
             tvItemSubtotal.setText(formatCurrency(subtotal));
         }

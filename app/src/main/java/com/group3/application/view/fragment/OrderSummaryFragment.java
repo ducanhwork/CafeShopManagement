@@ -94,7 +94,9 @@ public class OrderSummaryFragment extends Fragment {
         // --- Event Listeners ---
         btnConfirm.setOnClickListener(v -> {
             String note = etNote.getText() != null ? etNote.getText().toString().trim() : "";
-            orderVM.submitOrder(note);
+            // SỬA: Cập nhật lại cách gọi submit
+            orderVM.setNote(note);
+            orderVM.submitOrder();
         });
     }
 
@@ -123,21 +125,19 @@ public class OrderSummaryFragment extends Fragment {
 
         // Lắng nghe kết quả gửi order
         orderVM.orderSubmissionResult.observe(getViewLifecycleOwner(), event -> {
-            if (event != null && !event.hasBeenHandled()) {
-                APIResult result = event.getContentIfNotHandled();
-                if (result == null) return;
+            APIResult result = event.getContentIfNotHandled();
+            if (result == null) return;
 
-                if (result.isSuccess()) {
-                    Toast.makeText(requireContext(), "Đặt món thành công!", Toast.LENGTH_LONG).show();
-                    if (isAdded()) {
-                        Intent intent = new Intent(requireActivity(), OrderListActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        requireActivity().finish();
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Lỗi: " + result.getMessage(), Toast.LENGTH_LONG).show();
+            if (result.isSuccess()) {
+                Toast.makeText(requireContext(), "Đặt món thành công!", Toast.LENGTH_LONG).show();
+                if (isAdded()) {
+                    Intent intent = new Intent(requireActivity(), OrderListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    requireActivity().finish();
                 }
+            } else {
+                Toast.makeText(requireContext(), "Lỗi: " + result.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

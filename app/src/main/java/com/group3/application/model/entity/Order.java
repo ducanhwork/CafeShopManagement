@@ -27,12 +27,14 @@ public class Order {
     @SerializedName("tableNames")
     private List<String> tableNames = new ArrayList<>();
 
-    // SỬA: Thay thế tableIds bằng trường "tables" chứa đối tượng TableInfo đầy đủ
     @SerializedName("tables")
     private List<TableInfo> tables = new ArrayList<>();
 
     @SerializedName("items")
     private List<OrderDetailItemDTO> items = new ArrayList<>();
+
+    @SerializedName("note")
+    private String note;
 
     // Getters and Setters
     public String getId() {
@@ -83,7 +85,6 @@ public class Order {
         this.tableNames = tableNames;
     }
 
-    // SỬA: Getter cho `tables` đầy đủ
     public List<TableInfo> getTables() {
         return tables;
     }
@@ -92,7 +93,6 @@ public class Order {
         this.tables = tables;
     }
 
-    // SỬA: Viết lại getTableIds() để trích xuất ID từ danh sách `tables`
     public List<String> getTableIds() {
         if (tables == null) {
             return new ArrayList<>();
@@ -108,5 +108,14 @@ public class Order {
 
     public void setItems(List<OrderDetailItemDTO> items) {
         this.items = items;
+    }
+
+    // SỬA: Thêm getter và setter cho note
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

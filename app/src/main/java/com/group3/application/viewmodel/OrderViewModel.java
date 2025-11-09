@@ -38,7 +38,9 @@ public class OrderViewModel extends AndroidViewModel {
 
     private List<String> tableIds;
     private String tableNames;
+    private String note;
     private String editOrderId;
+    private boolean isEditMode = false;
 
     public OrderViewModel(@NonNull Application application) {
         super(application);
@@ -61,30 +63,35 @@ public class OrderViewModel extends AndroidViewModel {
 
     public LiveData<List<OrderItemDTO>> getCurrentOrderItems() { return currentOrderItems; }
     public LiveData<Double> getTotalAmount() { return totalAmount; }
-    public List<String> getTableIds() { return tableIds; }
     public String getTableNames() { return tableNames; }
+    public boolean isEditMode() { return isEditMode; }
 
     public void setTableInfo(List<String> tableIds, String tableNames) {
         this.tableIds = tableIds;
         this.tableNames = tableNames;
     }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    // SỬA: Đọc và lưu lại ghi chú khi tải đơn hàng
     public void loadExistingOrder(String orderId) {
         this.editOrderId = orderId;
+        this.isEditMode = true;
         orderRepository.getOrderDetails(orderId, result -> {
             if (result.isSuccess() && result.getData() != null) {
                 Order order = result.getData();
-                // SỬA: Dùng đúng tên trường khi map dữ liệu từ server
                 List<OrderItemDTO> existingItems = order.getItems().stream()
                         .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
                         .collect(Collectors.toList());
                 currentOrderItems.postValue(existingItems);
                 setTableInfo(order.getTableIds(), String.join(", ", order.getTableNames()));
+                this.note = order.getNote(); // <--- SỬA Ở ĐÂY
             }
         });
     }
 
-    // SỬA: Sử dụng đúng tên trường "name"
     public void addOrUpdateItem(Product product, int quantity) {
         List<OrderItemDTO> currentList = currentOrderItems.getValue();
         if (currentList == null) currentList = new ArrayList<>();
@@ -116,15 +123,12 @@ public class OrderViewModel extends AndroidViewModel {
         currentOrderItems.setValue(currentList);
     }
 
-    public void submitOrder(String note) {
+    public void submitOrder() {
         List<OrderItemDTO> items = currentOrderItems.getValue();
 
-        if (editOrderId != null) {
+        if (isEditMode) {
             if (items == null) items = new ArrayList<>();
-            orderRepository.updateOrderItems(editOrderId, items, note, result -> {
-                if (result.isSuccess()) {
-                    clearOrder();
-                }
+            orderRepository.updateOrderItems(editOrderId, items, this.note, result -> {
                 _orderSubmissionResult.postValue(new Event<>(result));
             });
         } else {
@@ -132,7 +136,7 @@ public class OrderViewModel extends AndroidViewModel {
                 _orderSubmissionResult.postValue(new Event<>(new APIResult(false, "Vui lòng chọn bàn và món ăn.", null)));
                 return;
             }
-            orderRepository.createOrder(tableIds, items, note, result -> {
+            orderRepository.createOrder(tableIds, items, this.note, result -> {
                 if (result.isSuccess()) {
                     clearOrder();
                 }
@@ -146,6 +150,8 @@ public class OrderViewModel extends AndroidViewModel {
         tableIds = null;
         tableNames = null;
         editOrderId = null;
+        isEditMode = false;
+        note = null;
     }
 
     private void loadCurrentUser() {

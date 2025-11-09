@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.OrderItemDTO;
 import com.group3.application.model.dto.OrderRequest;
+import com.group3.application.model.dto.OrderUpdateDTO;
 import com.group3.application.model.entity.Order;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
@@ -108,6 +109,38 @@ public class OrderRepository {
         }
         OrderRequest updateRequest = new OrderRequest(null, items, note);
         apiService.updateOrderItems(authToken, orderId, updateRequest).enqueue(new DefaultCallback<>(listener));
+    }
+
+    public void updateOrder(String orderId, OrderUpdateDTO updateData, OnResultListener<APIResult> listener) {
+
+        // 1. Lấy token (Đúng pattern)
+        String authToken = getAuthToken();
+        if (authToken == null) {
+            listener.onResult(new APIResult(false, "Người dùng chưa đăng nhập.", null));
+            return;
+        }
+
+        // 2. Gọi ApiService với token (Đúng pattern)
+        apiService.updateOrder(authToken, orderId, updateData).enqueue(new Callback<APIResult>() {
+            @Override
+            public void onResponse(Call<APIResult> call, Response<APIResult> response) {
+                // 3. Dùng OnResultListener (Đúng pattern)
+                if (response.isSuccessful() && response.body() != null) {
+                    listener.onResult(response.body());
+                } else {
+                    String errorMsg = "Lỗi server: " + response.code();
+                    Log.e(TAG, errorMsg);
+                    listener.onResult(new APIResult(false, errorMsg, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResult> call, Throwable t) {
+                // 4. Dùng OnResultListener (Đúng pattern)
+                Log.e(TAG, "Network Failure: " + t.getMessage(), t);
+                listener.onResult(new APIResult(false, "Lỗi mạng: " + t.getMessage(), null));
+            }
+        });
     }
 
     private String getAuthToken() {

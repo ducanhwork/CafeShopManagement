@@ -1,6 +1,7 @@
 package com.group3.application.model.webservice;
 
 import com.group3.application.model.dto.OrderRequest;
+import com.group3.application.model.dto.OrderUpdateDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
@@ -55,6 +56,13 @@ public interface ApiService {
     Call<Order> getOrderDetails(
             @Header("Authorization") String authToken,
             @Path("id") String orderId
+    );
+
+    @PUT("api/orders/{id}")
+    Call<APIResult> updateOrder(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderUpdateDTO updateData
     );
 
     @PUT("api/orders/{id}/items")

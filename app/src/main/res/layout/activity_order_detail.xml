@@ -29,7 +29,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Info Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,18 +59,17 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_detail_tables"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_detail_tables"
-                        app:tint="@color/design_default_color_primary" />
-
-                    <TextView
-                        android:id="@+id/tv_detail_staff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:drawablePadding="8dp"
-                        app:drawableStartCompat="@drawable/ic_staff"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_detail_tables"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:text="NV: Nguyễn Văn A" />
+                        app:tint="@color/design_default_color_primary"
+                        android:visibility="gone" /> <TextView
+                    android:id="@+id/tv_detail_staff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    app:drawableStartCompat="@drawable/ic_staff"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_detail_tables"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="NV: Nguyễn Văn A" />
 
                     <TextView
                         android:id="@+id/tv_detail_date"
@@ -84,23 +82,57 @@
                         app:layout_constraintStart_toStartOf="parent"
                         tools:text="Ngày: 10:30 25/05/2024" />
 
-                    <TextView
-                        android:id="@+id/tv_detail_status"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_detail_status"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:drawablePadding="8dp"
-                        app:drawableStartCompat="@drawable/ic_status"
+                        android:layout_marginTop="8dp"
+                        android:hint="Trạng thái"
                         app:layout_constraintTop_toBottomOf="@+id/tv_detail_date"
                         app:layout_constraintStart_toStartOf="parent"
-                        tools:text="Trạng thái: SERVING" />
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/act_detail_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            tools:text="SERVING" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Items Header -->
-             <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_detail_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ghi chú (Tuỳ chọn)"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_detail_note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:minLines="3"
+                        tools:text="Không cay, ít hành..." />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -124,14 +156,12 @@
 
             </LinearLayout>
 
-            <!-- Items RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_order_detail_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/item_order_detail" />
 
-            <!-- Total Section -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,6 +182,16 @@
                         tools:text="Tổng: 250,000 đ" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/fab_save_changes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:text="Save change"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
