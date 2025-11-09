@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.group3.application.common.utils.Event;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.OrderItemDTO;
+import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.repository.OrderRepository;
@@ -21,14 +22,13 @@ import com.group3.application.model.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OrderViewModel extends AndroidViewModel {
 
-    // --- Repositories ---
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
-    // --- LiveData cho UI ---
     private final MutableLiveData<List<OrderItemDTO>> currentOrderItems;
     private final MediatorLiveData<Double> totalAmount = new MediatorLiveData<>();
     private final MutableLiveData<Event<APIResult>> _orderSubmissionResult = new MutableLiveData<>();
@@ -36,9 +36,9 @@ public class OrderViewModel extends AndroidViewModel {
     private final MutableLiveData<User> _currentUser = new MutableLiveData<>();
     public final LiveData<User> currentUser = _currentUser;
 
-    // --- Thông tin Bàn/Order ---
     private List<String> tableIds;
     private String tableNames;
+    private String editOrderId;
 
     public OrderViewModel(@NonNull Application application) {
         super(application);
@@ -59,64 +59,39 @@ public class OrderViewModel extends AndroidViewModel {
         loadCurrentUser();
     }
 
-    // --- Getters ---
-
-    public LiveData<List<OrderItemDTO>> getCurrentOrderItems() {
-        return currentOrderItems;
-    }
-
-    public LiveData<Double> getTotalAmount() {
-        return totalAmount;
-    }
-
+    public LiveData<List<OrderItemDTO>> getCurrentOrderItems() { return currentOrderItems; }
+    public LiveData<Double> getTotalAmount() { return totalAmount; }
     public List<String> getTableIds() { return tableIds; }
-
     public String getTableNames() { return tableNames; }
-
-    // --- Actions (Hành động từ View) ---
 
     public void setTableInfo(List<String> tableIds, String tableNames) {
         this.tableIds = tableIds;
         this.tableNames = tableNames;
     }
-    
-    // SỬA: Overload method để nhận trực tiếp OrderItemDTO
-    public void addOrUpdateItem(OrderItemDTO newItem) {
-        List<OrderItemDTO> currentList = currentOrderItems.getValue();
-        if (currentList == null) {
-            currentList = new ArrayList<>();
-        }
 
-        OrderItemDTO existingItem = null;
-        for (OrderItemDTO item : currentList) {
-            if (Objects.equals(item.productId, newItem.productId)) {
-                existingItem = item;
-                break;
+    public void loadExistingOrder(String orderId) {
+        this.editOrderId = orderId;
+        orderRepository.getOrderDetails(orderId, result -> {
+            if (result.isSuccess() && result.getData() != null) {
+                Order order = result.getData();
+                // SỬA: Dùng đúng tên trường khi map dữ liệu từ server
+                List<OrderItemDTO> existingItems = order.getItems().stream()
+                        .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
+                        .collect(Collectors.toList());
+                currentOrderItems.postValue(existingItems);
+                setTableInfo(order.getTableIds(), String.join(", ", order.getTableNames()));
             }
-        }
-
-        if (existingItem != null) {
-            existingItem.quantity = newItem.quantity;
-        } else {
-            currentList.add(newItem);
-        }
-        // Không postValue ở đây để tránh trigger observer không cần thiết khi load order cũ
+        });
     }
 
-
+    // SỬA: Sử dụng đúng tên trường "name"
     public void addOrUpdateItem(Product product, int quantity) {
         List<OrderItemDTO> currentList = currentOrderItems.getValue();
-        if (currentList == null) {
-            currentList = new ArrayList<>();
-        }
+        if (currentList == null) currentList = new ArrayList<>();
 
-        OrderItemDTO existingItem = null;
-        for (OrderItemDTO item : currentList) {
-            if (Objects.equals(item.productId, product.getId())) {
-                existingItem = item;
-                break;
-            }
-        }
+        OrderItemDTO existingItem = currentList.stream()
+                .filter(item -> Objects.equals(item.name, product.getName()))
+                .findFirst().orElse(null);
 
         if (existingItem != null) {
             if (quantity <= 0) {
@@ -125,58 +100,59 @@ public class OrderViewModel extends AndroidViewModel {
                 existingItem.quantity = quantity;
             }
         } else if (quantity > 0) {
-            OrderItemDTO newItem = new OrderItemDTO(
-                    product.getId(),
-                    product.getName(),
-                    product.getPrice(),
-                    quantity
-            );
-            currentList.add(newItem);
+            currentList.add(new OrderItemDTO(product.getId(), product.getName(), product.getPrice(), quantity));
         }
-
         currentOrderItems.setValue(currentList);
     }
 
     public void updateQuantityForSummary(OrderItemDTO itemToUpdate, int newQuantity) {
         List<OrderItemDTO> currentList = currentOrderItems.getValue();
         if (currentList == null) return;
-
         if (newQuantity <= 0) {
             currentList.remove(itemToUpdate);
         } else {
             itemToUpdate.quantity = newQuantity;
         }
-
         currentOrderItems.setValue(currentList);
+    }
+
+    public void submitOrder(String note) {
+        List<OrderItemDTO> items = currentOrderItems.getValue();
+
+        if (editOrderId != null) {
+            if (items == null) items = new ArrayList<>();
+            orderRepository.updateOrderItems(editOrderId, items, note, result -> {
+                if (result.isSuccess()) {
+                    clearOrder();
+                }
+                _orderSubmissionResult.postValue(new Event<>(result));
+            });
+        } else {
+            if (tableIds == null || tableIds.isEmpty() || items == null || items.isEmpty()) {
+                _orderSubmissionResult.postValue(new Event<>(new APIResult(false, "Vui lòng chọn bàn và món ăn.", null)));
+                return;
+            }
+            orderRepository.createOrder(tableIds, items, note, result -> {
+                if (result.isSuccess()) {
+                    clearOrder();
+                }
+                _orderSubmissionResult.postValue(new Event<>(result));
+            });
+        }
     }
 
     public void clearOrder() {
         currentOrderItems.setValue(new ArrayList<>());
         tableIds = null;
         tableNames = null;
-    }
-
-    public void submitOrder(String note) {
-        List<OrderItemDTO> items = currentOrderItems.getValue();
-        if (tableIds == null || tableIds.isEmpty() || items == null || items.isEmpty()) {
-            _orderSubmissionResult.postValue(new Event<>(new APIResult(false, "Vui lòng chọn bàn và món ăn.", null)));
-            return;
-        }
-
-        orderRepository.createOrder(tableIds, items, note, result -> {
-            if (result.isSuccess()) {
-                clearOrder();
-            }
-            _orderSubmissionResult.postValue(new Event<>(result));
-        });
+        editOrderId = null;
     }
 
     private void loadCurrentUser() {
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences(LoginViewModel.PREF_NAME, android.content.Context.MODE_PRIVATE);
         String userJson = sharedPreferences.getString(LoginViewModel.KEY_USER, null);
         if (userJson != null) {
-            User user = new Gson().fromJson(userJson, User.class);
-            _currentUser.setValue(user);
+            _currentUser.setValue(new Gson().fromJson(userJson, User.class));
         }
     }
 }

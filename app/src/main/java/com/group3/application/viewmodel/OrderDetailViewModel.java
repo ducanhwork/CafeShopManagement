@@ -27,15 +27,15 @@ public class OrderDetailViewModel extends AndroidViewModel {
         this.orderRepository = new OrderRepository(application);
     }
 
+    // SỬA: Đồng bộ lại với OrderRepository mới
     public void fetchOrderDetails(String orderId) {
         _isLoading.setValue(true);
-        // Chú ý: Cần thêm phương thức getOrderById vào OrderRepository
-        orderRepository.getOrderById(orderId, (order, error) -> {
+        orderRepository.getOrderDetails(orderId, result -> {
             _isLoading.postValue(false);
-            if (error != null) {
-                _error.postValue(error);
+            if (result.isSuccess() && result.getData() != null) {
+                _order.postValue(result.getData());
             } else {
-                _order.postValue(order);
+                _error.postValue(result.getMessage());
             }
         });
     }

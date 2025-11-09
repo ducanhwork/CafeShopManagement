@@ -115,7 +115,7 @@ public class TableListActivity extends AppCompatActivity {
             }
         });
 
-        // SỬA: Xử lý logic trả về kết quả cho chế độ sửa
+        // SỬA: Trả về cả ID và TÊN BÀN
         fabConfirm.setOnClickListener(v -> {
             if (isEditMode) {
                 List<TableInfo> selectedTables = vm.getSelectedTables().getValue();
@@ -123,12 +123,15 @@ public class TableListActivity extends AppCompatActivity {
                     selectedTables = new ArrayList<>();
                 }
                 ArrayList<String> updatedTableIds = new ArrayList<>();
+                ArrayList<String> updatedTableNames = new ArrayList<>(); // Thêm danh sách tên
                 for (TableInfo table : selectedTables) {
                     updatedTableIds.add(table.getId());
+                    updatedTableNames.add(table.getName()); // Thêm tên vào danh sách
                 }
 
                 Intent resultIntent = new Intent();
                 resultIntent.putStringArrayListExtra("updatedTableIds", updatedTableIds);
+                resultIntent.putStringArrayListExtra("updatedTableNames", updatedTableNames); // Gửi cả tên về
                 setResult(AppCompatActivity.RESULT_OK, resultIntent);
                 finish();
             } else {

@@ -2,12 +2,15 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -37,8 +41,9 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private TextView tvTableNames, tvStaffName, tvOrderDate, tvStatus, tvTotalAmount;
     private ImageButton btnEditTables, btnEditItems;
+    private Menu menu;
+    private List<String> pendingTableIds;
 
-    // SỬA: Thêm ActivityResultLauncher để xử lý kết quả trả về từ TableListActivity
     private ActivityResultLauncher<Intent> editTableLauncher;
 
     @Override
@@ -46,13 +51,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-        // Toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar_order_detail);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // View Binding
         tvTableNames = findViewById(R.id.tv_detail_tables);
         tvStaffName = findViewById(R.id.tv_detail_staff);
         tvOrderDate = findViewById(R.id.tv_detail_date);
@@ -61,22 +64,16 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnEditTables = findViewById(R.id.btn_edit_tables);
         btnEditItems = findViewById(R.id.btn_edit_items);
 
-        // RecyclerView Setup
         RecyclerView recyclerView = findViewById(R.id.rv_order_detail_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new OrderDetailItemAdapter();
         recyclerView.setAdapter(adapter);
 
-        // SỬA: Khởi tạo launcher
         setupLaunchers();
 
-        // ViewModel Setup
         viewModel = new ViewModelProvider(this).get(OrderDetailViewModel.class);
-
-        // Observe ViewModel
         observeViewModel();
 
-        // Get Order ID from Intent and fetch data
         String orderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
         if (orderId == null || orderId.isEmpty()) {
             Toast.makeText(this, "Lỗi: Không tìm thấy ID đơn hàng", Toast.LENGTH_LONG).show();
@@ -86,32 +83,59 @@ public class OrderDetailActivity extends AppCompatActivity {
         viewModel.fetchOrderDetails(orderId);
     }
 
-    // SỬA: Hàm mới để khởi tạo các ActivityResultLauncher
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.order_detail_menu, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_save_changes) {
+            if (pendingTableIds != null && viewModel.order.getValue() != null) {
+                // TODO: Gọi API cập nhật bàn trong ViewModel
+                Toast.makeText(this, "Đang lưu thay đổi...", Toast.LENGTH_SHORT).show();
+                // viewModel.updateOrderTables(viewModel.order.getValue().getId(), pendingTableIds);
+                item.setVisible(false); // Ẩn nút sau khi nhấn
+                pendingTableIds = null; // Xóa thay đổi đang chờ
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setupLaunchers() {
         editTableLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == AppCompatActivity.RESULT_OK && result.getData() != null) {
                         ArrayList<String> newTableIds = result.getData().getStringArrayListExtra("updatedTableIds");
-                        // TODO: Gọi ViewModel để cập nhật bàn lên server
-                        Toast.makeText(this, "Bàn mới đã được chọn: " + (newTableIds != null ? newTableIds.toString() : "null"), Toast.LENGTH_LONG).show();
+                        ArrayList<String> newTableNames = result.getData().getStringArrayListExtra("updatedTableNames");
+
+                        if (newTableIds != null && newTableNames != null && menu != null) {
+                            this.pendingTableIds = newTableIds;
+                            tvTableNames.setText("Bàn: " + String.join(", ", newTableNames));
+                            menu.findItem(R.id.action_save_changes).setVisible(true);
+                        }
                     }
                 }
         );
     }
 
-    // SỬA: Hàm mới để gán sự kiện cho các nút edit, gọi sau khi có dữ liệu order
     private void setupEditListeners(Order order) {
         btnEditTables.setOnClickListener(v -> {
             Intent intent = new Intent(OrderDetailActivity.this, TableListActivity.class);
-            // Gửi danh sách ID của các bàn hiện tại đến TableListActivity
             intent.putStringArrayListExtra(TableListActivity.EXTRA_INITIAL_TABLE_IDS, new ArrayList<>(order.getTableIds()));
             editTableLauncher.launch(intent);
         });
 
+        // SỬA: Thêm logic cho nút sửa món ăn
         btnEditItems.setOnClickListener(v -> {
-            // Logic cho sửa món ăn sẽ làm sau
-            Toast.makeText(this, "Chức năng sửa món ăn sẽ được phát triển sau.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(OrderDetailActivity.this, OrderHostActivity.class);
+            intent.putExtra(OrderHostActivity.EXTRA_EDIT_ORDER_ID, order.getId());
+            intent.putExtra(OrderHostActivity.EXTRA_START_FRAGMENT, "PRODUCTS");
+            startActivity(intent);
         });
     }
 
@@ -119,13 +143,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         viewModel.order.observe(this, order -> {
             if (order != null) {
                 updateUi(order);
-                // SỬA: Gán listener sau khi có dữ liệu order để đảm bảo không bị null
                 setupEditListeners(order);
             }
         });
 
         viewModel.isLoading.observe(this, isLoading -> {
-            // Có thể thêm ProgressBar nếu muốn
+            // Handle loading state
         });
 
         viewModel.error.observe(this, error -> {

@@ -1,4 +1,4 @@
-package com.group3.application.view.fragment; // Gói của Fragment
+package com.group3.application.view.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity; // Cần để setup Toolbar
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment; // Lớp cha đã đổi
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,8 +30,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.model.dto.OrderItemDTO;
 import com.group3.application.model.entity.Category;
-import com.group3.application.model.entity.Product;
-import com.group3.application.view.OrderHostActivity; // Import Activity chứa
+import com.group3.application.view.OrderHostActivity;
 import com.group3.application.view.adapter.ProductAdapter;
 import com.group3.application.viewmodel.OrderViewModel;
 import com.group3.application.viewmodel.ProductListViewModel;
@@ -41,11 +40,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-// Sửa: extends Fragment và implements interfaces
-public class ProductListFragment extends Fragment
-        implements ProductAdapter.Listener, ProductAdapter.QuantityFetcher {
+// SỬA: Bỏ implements, Fragment sẽ không cần biết chi tiết của Adapter nữa
+public class ProductListFragment extends Fragment {
 
-    // --- (Tất cả biến thành viên được copy từ Activity) ---
     private ProductListViewModel productVM;
     private OrderViewModel orderVM; // ViewModel dùng chung
     private ProductAdapter adapter;
@@ -55,27 +52,21 @@ public class ProductListFragment extends Fragment
     private TextInputEditText edtSearch;
     private MaterialAutoCompleteTextView actCategory;
     private ExtendedFloatingActionButton fab;
-    private TextView tvSub; // Thêm biến cho tvSub
+    private TextView tvSub;
 
-    private final List<Product> source = new ArrayList<>();
     private final List<Category> categoryData = new ArrayList<>();
     private ArrayAdapter<String> catAdapter;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable pendingSearch;
 
-    // Bỏ: tableId, tableName (sẽ lấy từ OrderViewModel)
-
     public ProductListFragment() {
         // Required empty public constructor
     }
 
-    // Bỏ: newInstance() và các tham số (trừ khi bạn cần truyền dữ liệu đặc biệt)
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Logic không liên quan đến View có thể đặt ở đây
     }
 
     @Override
@@ -88,9 +79,7 @@ public class ProductListFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // --- (Toàn bộ logic từ onCreate của Activity được chuyển vào đây) ---
-
-        // --- 1. Ánh xạ UI (dùng view.findViewById) ---
+        // --- 1. Ánh xạ UI ---
         MaterialToolbar tb = view.findViewById(R.id.toolbar);
         tvSub = view.findViewById(R.id.tvSubtitle);
         swipe = view.findViewById(R.id.swipe);
@@ -100,13 +89,11 @@ public class ProductListFragment extends Fragment
         fab = view.findViewById(R.id.fabAdd);
         View appBar = view.findViewById(R.id.appBar);
 
-        // --- 2. Setup Toolbar (Fragment cần tham chiếu đến Activity) ---
-        // (Giả sử OrderHostActivity kế thừa AppCompatActivity)
+        // --- 2. Setup Toolbar ---
         ((AppCompatActivity) requireActivity()).setSupportActionBar(tb);
         tb.setTitle("Create Order");
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar())
                 .setDisplayHomeAsUpEnabled(true);
-        // Sửa: Quay lại (pop fragment) hoặc đóng Activity
         tb.setNavigationOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
 
         ViewCompat.setOnApplyWindowInsetsListener(appBar, (v, insets) -> {
@@ -115,18 +102,18 @@ public class ProductListFragment extends Fragment
             return insets;
         });
 
-        // --- 3. Khởi tạo ViewModel (QUAN TRỌNG) ---
-        // productVM có scope là Fragment này (this)
+        // --- 3. Khởi tạo ViewModel ---
         productVM = new ViewModelProvider(this).get(ProductListViewModel.class);
-        // orderVM có scope là Activity chứa (requireActivity())
         orderVM = new ViewModelProvider(requireActivity()).get(OrderViewModel.class);
 
         // --- 4. Lấy thông tin bàn từ OrderViewModel ---
         String tableName = orderVM.getTableNames();
         tvSub.setText("Choose product for table " + (tableName == null ? "" : tableName));
 
-        // --- 5. Setup Adapter (dùng requireContext()) ---
-        adapter = new ProductAdapter(this, this);
+        // --- 5. Setup Adapter (SỬA: Khởi tạo theo cách mới) ---
+        adapter = new ProductAdapter((product, newQuantity) -> {
+            orderVM.addOrUpdateItem(product, newQuantity);
+        });
         rv.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         rv.setAdapter(adapter);
 
@@ -143,12 +130,12 @@ public class ProductListFragment extends Fragment
 
         swipe.setOnRefreshListener(productVM::reload);
 
-        // --- 6. Observers (dùng getViewLifecycleOwner()) ---
+        // --- 6. Observers ---
         productVM.getProducts().observe(getViewLifecycleOwner(), list -> {
-            source.clear();
-            if (list != null) source.addAll(list);
-            adapter.submit(source);
+            // SỬA: Gửi thẳng danh sách cho adapter
+            adapter.setProductList(list);
         });
+
         productVM.getLoadingProducts().observe(getViewLifecycleOwner(), isLoading ->
                 swipe.setRefreshing(Boolean.TRUE.equals(isLoading)));
         productVM.getError().observe(getViewLifecycleOwner(), err -> {
@@ -178,21 +165,24 @@ public class ProductListFragment extends Fragment
             }
         });
 
-        // Observers cho OrderViewModel (dùng getViewLifecycleOwner())
+        // SỬA: Lắng nghe giỏ hàng và đẩy xuống Adapter
         orderVM.getCurrentOrderItems().observe(getViewLifecycleOwner(), items -> {
-            adapter.notifyDataSetChanged();
+            adapter.setOrderItems(items);
         });
 
         orderVM.getTotalAmount().observe(getViewLifecycleOwner(), total -> {
-            int itemCount = 0;
+            int totalItemCount = 0;
             List<OrderItemDTO> items = orderVM.getCurrentOrderItems().getValue();
             if (items != null) {
-                itemCount = items.size();
+                // SỬA: Đếm tổng số lượng thay vì số loại món ăn
+                for (OrderItemDTO item : items) {
+                    totalItemCount += item.quantity;
+                }
             }
 
-            if (itemCount > 0) {
+            if (totalItemCount > 0) {
                 fab.setText(String.format(Locale.getDefault(),
-                        "Tổng: %,.0f đ (%d món)", total, itemCount));
+                        "Tổng: %,.0f đ (%d món)", total, totalItemCount));
                 fab.show();
             } else {
                 fab.hide();
@@ -204,7 +194,7 @@ public class ProductListFragment extends Fragment
         productVM.fetchCategories();
         productVM.reload();
 
-        // --- 8. SỬA FAB Click (Điều hướng Fragment) ---
+        // --- 8. FAB Click ---
         fab.setOnClickListener(v -> {
             List<OrderItemDTO> cart = orderVM.getCurrentOrderItems().getValue();
 
@@ -213,14 +203,11 @@ public class ProductListFragment extends Fragment
                 return;
             }
 
-            // Gọi hàm của Activity chứa để chuyển Fragment
             if (getActivity() instanceof OrderHostActivity) {
                 ((OrderHostActivity) getActivity()).navigateToSummary();
             }
         });
     }
-
-    // --- (Copy các hàm helper và interface) ---
 
     private String currentCategoryIdFromUi() {
         String label = safeText(actCategory);
@@ -233,21 +220,5 @@ public class ProductListFragment extends Fragment
         return tv.getText() == null ? null : tv.getText().toString().trim();
     }
 
-    @Override
-    public void onQuantityChanged(Product product, int newQuantity) {
-        orderVM.addOrUpdateItem(product, newQuantity);
-    }
-
-    @Override
-    public int getQuantity(String productId) {
-        List<OrderItemDTO> items = orderVM.getCurrentOrderItems().getValue();
-        if (items != null) {
-            for (OrderItemDTO item : items) {
-                if (Objects.equals(item.productId, productId)) {
-                    return item.quantity;
-                }
-            }
-        }
-        return 0;
-    }
+    // SỬA: Bỏ 2 hàm onQuantityChanged và getQuantity vì Fragment không còn implements interfaces của Adapter nữa
 }

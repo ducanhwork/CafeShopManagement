@@ -40,7 +40,7 @@ public interface ApiService {
     Call<List<Category>> getCategories();
 
     @POST("api/orders")
-    Call<APIResult> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
+    Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
 
     @GET("api/orders")
     Call<List<Order>> getOrders(
@@ -50,10 +50,18 @@ public interface ApiService {
             @Query("staffId") String staffId
     );
 
+    // SỬA: Hoàn trả lại kiểu dữ liệu gốc mà server trả về
     @GET("api/orders/{id}")
-    Call<Order> getOrderById(
+    Call<Order> getOrderDetails(
             @Header("Authorization") String authToken,
             @Path("id") String orderId
+    );
+
+    @PUT("api/orders/{id}/items")
+    Call<APIResult<Object>> updateOrderItems(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderRequest orderRequest
     );
 
     @GET("api/users")

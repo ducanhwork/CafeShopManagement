@@ -3,7 +3,9 @@ package com.group3.application.model.entity;
 import com.google.gson.annotations.SerializedName;
 import com.group3.application.model.dto.OrderDetailItemDTO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Order {
 
@@ -23,14 +25,14 @@ public class Order {
     private String staffName;
 
     @SerializedName("tableNames")
-    private List<String> tableNames;
+    private List<String> tableNames = new ArrayList<>();
 
-    // SỬA: Thêm trường tableIds
-    @SerializedName("tableIds")
-    private List<String> tableIds;
+    // SỬA: Thay thế tableIds bằng trường "tables" chứa đối tượng TableInfo đầy đủ
+    @SerializedName("tables")
+    private List<TableInfo> tables = new ArrayList<>();
 
     @SerializedName("items")
-    private List<OrderDetailItemDTO> items;
+    private List<OrderDetailItemDTO> items = new ArrayList<>();
 
     // Getters and Setters
     public String getId() {
@@ -81,13 +83,23 @@ public class Order {
         this.tableNames = tableNames;
     }
 
-    // SỬA: Thêm getter và setter cho tableIds
-    public List<String> getTableIds() {
-        return tableIds;
+    // SỬA: Getter cho `tables` đầy đủ
+    public List<TableInfo> getTables() {
+        return tables;
     }
 
-    public void setTableIds(List<String> tableIds) {
-        this.tableIds = tableIds;
+    public void setTables(List<TableInfo> tables) {
+        this.tables = tables;
+    }
+
+    // SỬA: Viết lại getTableIds() để trích xuất ID từ danh sách `tables`
+    public List<String> getTableIds() {
+        if (tables == null) {
+            return new ArrayList<>();
+        }
+        return tables.stream()
+                .map(TableInfo::getId)
+                .collect(Collectors.toList());
     }
 
     public List<OrderDetailItemDTO> getItems() {
