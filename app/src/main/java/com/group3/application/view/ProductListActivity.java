@@ -1,4 +1,4 @@
-package com.group3.application;
+package com.group3.application.view;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.group3.application.R;
 
 public class ProductListActivity extends AppCompatActivity {
 
