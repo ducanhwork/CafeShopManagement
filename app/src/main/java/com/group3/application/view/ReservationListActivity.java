@@ -1,6 +1,7 @@
 package com.group3.application.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ReservationListActivity extends AppCompatActivity {
         viewModel.getError().observe(this, error -> {
             if (error != null) {
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                Log.e("ReservationListActivity", error);
             }
         });
 

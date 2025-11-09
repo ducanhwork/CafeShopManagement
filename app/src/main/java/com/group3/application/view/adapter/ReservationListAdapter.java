@@ -14,7 +14,7 @@ import com.group3.application.model.entity.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationListAdapter extends RecyclerView.Adapter<ReservationListAdapter.ReservationViewHolder> {
+public class ReservationListAdapter extends RecyclerView.Adapter<ReservationListAdapter.ReservationListViewHolder> {
 
     private List<Reservation> reservations = new ArrayList<>();
 
@@ -25,13 +25,13 @@ public class ReservationListAdapter extends RecyclerView.Adapter<ReservationList
 
     @NonNull
     @Override
-    public ReservationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ReservationListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_list_item, parent, false);
-        return new ReservationViewHolder(view);
+        return new ReservationListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReservationViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReservationListViewHolder holder, int position) {
         Reservation reservation = reservations.get(position);
         holder.bind(reservation);
     }
@@ -41,12 +41,12 @@ public class ReservationListAdapter extends RecyclerView.Adapter<ReservationList
         return reservations.size();
     }
 
-    static class ReservationViewHolder extends RecyclerView.ViewHolder {
+    static class ReservationListViewHolder extends RecyclerView.ViewHolder {
 
         private TextView customerNameTextView;
         private TextView reservationTimeTextView;
 
-        public ReservationViewHolder(@NonNull View itemView) {
+        public ReservationListViewHolder(@NonNull View itemView) {
             super(itemView);
             customerNameTextView = itemView.findViewById(R.id.customer_name_text_view);
             reservationTimeTextView = itemView.findViewById(R.id.reservation_time_text_view);
@@ -54,7 +54,7 @@ public class ReservationListAdapter extends RecyclerView.Adapter<ReservationList
 
         public void bind(Reservation reservation) {
             customerNameTextView.setText(reservation.getCustomerName());
-            reservationTimeTextView.setText(reservation.getReservationTime());
+            reservationTimeTextView.setText(reservation.getReservationTime().toString());
         }
     }
 }
