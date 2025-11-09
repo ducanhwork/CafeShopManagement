@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.group3.application.R;
 import com.group3.application.model.repository.AuthRepository;
@@ -18,6 +19,10 @@ import com.group3.application.view.fragment.InventoryFragment;
 import com.group3.application.view.fragment.ReportsFragment;
 import com.group3.application.view.fragment.ShiftFragment;
 import com.group3.application.view.fragment.TablesFragment;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +33,8 @@ public class AdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardManageOrders;
     private MaterialCardView cardManageVouchers;
     private TextView tvCurrentDate;
+    private BottomNavigationView bottomNavigation;
+    private AuthRepository authRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         ivAvatar = findViewById(R.id.iv_avatar);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
         cardManageProducts = findViewById(R.id.card_manage_products);
         cardManageOrders = findViewById(R.id.card_manage_orders);
         cardManageVouchers = findViewById(R.id.card_manage_vouchers);

@@ -21,11 +21,11 @@ import retrofit2.Call;
 public class TableRepository extends BaseRepository {
 
     private final TableApiService api;
-
     private final ApiService apiService;
 
     public TableRepository() {
         this.api = ApiClient.get().create(TableApiService.class);
+        this.apiService = ApiClient.get().create(ApiService.class);
     }
 
     public Call<List<TableInfo>> getTables(String status, String keyword) {

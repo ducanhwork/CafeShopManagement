@@ -20,6 +20,13 @@
         <!-- TextInput filled style default -->
         <item name="textInputStyle">@style/Cafe.FilledTextInput</item>
     </style>
+
+    <!-- NoActionBar variant (inherits from Theme.CafeApp) -->
+    <style name="Theme.CafeApp.NoActionBar" parent="Theme.CafeApp">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="Cafe.FilledTextInput" parent="Widget.Material3.TextInputLayout.FilledBox.Dense">
         <item name="boxBackgroundColor">@color/coffee_surface_variant</item>
         <item name="boxStrokeColor">@color/coffee_outline</item>
