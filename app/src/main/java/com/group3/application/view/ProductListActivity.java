@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,16 +22,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
-import com.group3.application.model.repository.CategoryRepository;
 import com.group3.application.view.adapter.ProductAdapter;
 import com.group3.application.viewmodel.ProductListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProductListActivity extends AppCompatActivity {
     private List<Product> products = new ArrayList<>();
@@ -43,7 +46,10 @@ public class ProductListActivity extends AppCompatActivity {
     private Spinner spinner_category_filter;
 
     private String selectedCategory = "All";
-    //set up spinner
+
+    private Toolbar toolbar;
+    private CircleImageView ivAvatar;
+    private MaterialButton btnCreate;
 
 
     @Override
@@ -86,7 +92,24 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view_products);
         et_search_name = findViewById(R.id.et_search_name);
         spinner_category_filter = findViewById(R.id.spinner_category_filter);
+        toolbar = findViewById(R.id.toolbar);
+        ivAvatar = findViewById(R.id.iv_avatar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        ivAvatar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        });
+        btnCreate = findViewById(R.id.btn_create);
+        btnCreate.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProductCreateActivity.class);
+            startActivity(intent);
+        });
+
     }
+
 
     public void setUpSpinner() {
         List<String> categoriesList = new ArrayList<>();
