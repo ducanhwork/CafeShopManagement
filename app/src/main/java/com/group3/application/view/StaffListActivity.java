@@ -1,28 +1,19 @@
 package com.group3.application.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.model.entity.Role;
@@ -31,30 +22,17 @@ import com.group3.application.view.adapter.StaffListAdapter;
 import com.group3.application.viewmodel.StaffListViewModel;
 
 import java.util.List;
-import java.util.UUID;
 
-public class StaffListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class StaffListActivity extends BaseDrawerActivity {
 
     private StaffListViewModel viewModel;
     private StaffListAdapter staffListAdapter;
-    private DrawerLayout drawerLayout;
     private List<Role> roles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_list);
-
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
         RecyclerView recyclerView = findViewById(R.id.rvStaffList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -103,22 +81,6 @@ public class StaffListActivity extends AppCompatActivity implements NavigationVi
                 viewModel.fetchStaff();
             }
         });
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_dashboard) {
-            // Handle dashboard click
-        } else if (id == R.id.nav_reservations) {
-            Intent intent = new Intent(this, ReservationActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_staff_list) {
-            Intent intent = new Intent(this, StaffListActivity.class);
-            startActivity(intent);
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     private void showAddStaffDialog() {
