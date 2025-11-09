@@ -1,5 +1,6 @@
 package com.group3.application.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.group3.application.R;
 import com.group3.application.common.util.PreferenceManager;
 import com.group3.application.model.entity.Ingredient;
+import com.group3.application.view.AddEditIngredientActivity;
 import com.group3.application.view.adapter.IngredientAdapter;
 import com.group3.application.viewmodel.InventoryViewModel;
 
@@ -335,7 +337,7 @@ public class IngredientListFragment extends Fragment {
      * Open ingredient detail activity
      */
     private void openIngredientDetail(Ingredient ingredient) {
-        // TODO: Navigate to IngredientDetailActivity
+        // TODO: Navigate to IngredientDetailActivity (Task 10)
         // Intent intent = new Intent(getActivity(), IngredientDetailActivity.class);
         // intent.putExtra("ingredient_id", ingredient.getId());
         // startActivity(intent);
@@ -357,16 +359,53 @@ public class IngredientListFragment extends Fragment {
      * Show ingredient context menu (Manager only)
      */
     private void showIngredientContextMenu(Ingredient ingredient) {
-        // TODO: Show context menu with Edit/Delete options
+        String[] options = {getString(R.string.edit_ingredient), getString(R.string.delete_ingredient)};
+        
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle(ingredient.getName())
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        // Edit
+                        openEditIngredient(ingredient);
+                    } else {
+                        // Delete
+                        confirmDeleteIngredient(ingredient);
+                    }
+                })
+                .show();
+    }
+    
+    /**
+     * Open edit ingredient activity
+     */
+    private void openEditIngredient(Ingredient ingredient) {
+        Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+        intent.putExtra(AddEditIngredientActivity.EXTRA_MODE, AddEditIngredientActivity.MODE_EDIT);
+        intent.putExtra(AddEditIngredientActivity.EXTRA_INGREDIENT_ID, ingredient.getId());
+        startActivity(intent);
+    }
+    
+    /**
+     * Confirm and delete ingredient
+     */
+    private void confirmDeleteIngredient(Ingredient ingredient) {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_ingredient)
+                .setMessage(R.string.delete_ingredient_confirm)
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                    viewModel.deleteIngredient(ingredient.getId());
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
     
     /**
      * Open add ingredient activity (Manager only)
      */
     private void openAddIngredient() {
-        // TODO: Navigate to AddEditIngredientActivity
-        // Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(getActivity(), AddEditIngredientActivity.class);
+        intent.putExtra(AddEditIngredientActivity.EXTRA_MODE, AddEditIngredientActivity.MODE_ADD);
+        startActivity(intent);
     }
     
     @Override

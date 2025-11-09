@@ -123,11 +123,27 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="edit_ingredient">Edit Ingredient</string>
     <string name="delete_ingredient">Delete Ingredient</string>
+    <string name="delete_ingredient_confirm">Are you sure you want to delete this ingredient? This action cannot be undone.</string>
     <string name="ingredient_details">Ingredient Details</string>
     <string name="ingredient_info">Ingredient Info</string>
+    <string name="ingredient_image">Ingredient Image</string>
     <string name="search_ingredients">Search ingredients…</string>
     <string name="no_ingredients">No ingredients found</string>
     <string name="no_ingredients_message">Add ingredients to manage your inventory</string>
+    <string name="basic_information">Basic Information</string>
+    <string name="stock_information">Stock Information</string>
+    <string name="initial_stock">Initial Stock</string>
+    <string name="initial_stock_helper">Starting quantity for new ingredient</string>
+    <string name="reorder_level_helper">Minimum quantity before low stock alert</string>
+    <string name="image_url">Image URL</string>
+    <string name="image_url_helper">Enter a valid HTTP/HTTPS image URL</string>
+    <string name="load_image">Load Image</string>
+    <string name="active_status">Active</string>
+    <string name="active_status_helper">Inactive ingredients are hidden from ordering</string>
+    <string name="unsaved_changes">Unsaved Changes</string>
+    <string name="unsaved_changes_message">You have unsaved changes. Do you want to discard them?</string>
+    <string name="discard">Discard</string>
+    <string name="error_invalid_ingredient">Invalid ingredient</string>
     
     <!-- Stock Management -->
     <string name="stock">Stock</string>
