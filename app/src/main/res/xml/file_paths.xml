@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        Định nghĩa các đường dẫn mà FileProvider có thể truy cập.
+        Trong trường hợp này, chúng ta định nghĩa một đường dẫn để lưu trữ ảnh tạm thời
+        mà ứng dụng chụp bằng camera.
+
+        'external-files-path' trỏ đến thư mục con trong bộ nhớ ngoài của ứng dụng.
+        Nó nằm trong: Context.getExternalFilesDir(null)
+
+        'name' là một tên logic bạn đặt cho đường dẫn này.
+        'path' là đường dẫn tương đối bên trong thư mục gốc của 'external-files-path'.
+        '.' có nghĩa là gốc của thư mục đó.
+        'Android/data/your_package_name/files/Pictures' là cấu trúc mặc định cho ảnh.
+    -->
+    <external-files-path name="my_images" path="." />
+</paths>

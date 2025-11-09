@@ -13,13 +13,17 @@ import com.group3.application.model.entity.User;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -46,8 +50,17 @@ public interface ApiService {
     @PUT("/api/product/update-status/{productId}")
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
 
+    @Multipart
+    @POST("api/product/add")
+    Call<Product> createProduct(
+            @Part("product") RequestBody productJson,
+            @Part MultipartBody.Part image,
+            @Header("Authorization") String token
+    );
+
     @GET("/api/category")
     Call<List<Category>> listCategories(@Header("Authorization") String token);
+
     @GET("api/reservations/table/{tableId}")
     Call<List<Reservation>> getReservationsByTable(@Path("tableId") String tableId);
 
@@ -56,4 +69,5 @@ public interface ApiService {
 
     @PATCH("api/reservations/cancel/{id}")
     Call<Void> cancelReservation(@Path("id") UUID id);
+
 }
