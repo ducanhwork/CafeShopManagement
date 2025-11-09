@@ -68,10 +68,6 @@ public class TableViewModel extends AndroidViewModel {
         });
     }
 
-    @Override protected void onCleared() {
-        if (inFlight != null) inFlight.cancel();
-    }
-
     private final MutableLiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> events = new MutableLiveData<>();
     public LiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> getEvents() { return events; }
 

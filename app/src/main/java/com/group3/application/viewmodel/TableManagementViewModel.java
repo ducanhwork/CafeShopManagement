@@ -1,10 +1,16 @@
 package com.group3.application.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.group3.application.common.base.BaseRepository;
+import com.group3.application.common.util.PreferenceManager;
+import com.group3.application.model.bean.CreateTableRequest;
+import com.group3.application.model.bean.UpdateTableRequest;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.repository.TableRepository;
 
@@ -15,7 +21,7 @@ import java.util.List;
  * Manages table list, CRUD operations, and UI state
  * Uses LiveData for reactive UI updates
  */
-public class TableManagementViewModel extends ViewModel {
+public class TableManagementViewModel extends AndroidViewModel {
     
     private final TableRepository repository;
     
@@ -24,15 +30,17 @@ public class TableManagementViewModel extends ViewModel {
     private final MutableLiveData<TableInfo> currentTable = new MutableLiveData<>();
     
     // LiveData for UI state
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
-    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<String> successMessage = new MutableLiveData<>();
     
     // Filter states
     private final MutableLiveData<String> selectedStatus = new MutableLiveData<>();
+    private final MutableLiveData<String> selectedLocation = new MutableLiveData<>();
     private final MutableLiveData<String> searchQuery = new MutableLiveData<>();
     
-    public TableManagementViewModel() {
+    public TableManagementViewModel(@NonNull Application application) {
+        super(application);
         this.repository = new TableRepository();
     }
     
@@ -45,12 +53,12 @@ public class TableManagementViewModel extends ViewModel {
         return currentTable;
     }
     
-    public LiveData<Boolean> getIsLoading() {
-        return isLoading;
+    public LiveData<Boolean> getLoading() {
+        return loading;
     }
     
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
+    public LiveData<String> getError() {
+        return error;
     }
     
     public LiveData<String> getSuccessMessage() {
@@ -61,57 +69,84 @@ public class TableManagementViewModel extends ViewModel {
         return selectedStatus;
     }
     
+    public LiveData<String> getSelectedLocation() {
+        return selectedLocation;
+    }
+    
     public LiveData<String> getSearchQuery() {
         return searchQuery;
+    }
+    
+    /**
+     * Get JWT token with Bearer prefix
+     */
+    private String getAuthToken() {
+        String rawToken = PreferenceManager.getToken(getApplication());
+        return rawToken != null ? "Bearer " + rawToken : null;
     }
     
     /**
      * Load all tables with current filters
      */
     public void loadTables() {
-        loadTables(selectedStatus.getValue(), searchQuery.getValue());
+        loadTables(selectedStatus.getValue(), selectedLocation.getValue());
     }
     
     /**
      * Load tables with specific filters
      */
-    public void loadTables(String status, String search) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+    public void loadTables(String status, String location) {
+        loading.setValue(true);
+        error.setValue(null);
         
-        repository.getAllTables(status, search, new BaseRepository.ApiCallback<List<TableInfo>>() {
-            @Override
-            public void onSuccess(List<TableInfo> result) {
-                isLoading.postValue(false);
-                tableList.postValue(result);
-            }
-            
-            @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
-            }
-        });
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        repository.getTables(token, status, location, null, 0, 100, null, 
+            new BaseRepository.ApiCallback<List<TableInfo>>() {
+                @Override
+                public void onSuccess(List<TableInfo> result) {
+                    loading.postValue(false);
+                    tableList.postValue(result);
+                }
+                
+                @Override
+                public void onError(String errorMsg) {
+                    loading.postValue(false);
+                    error.postValue(errorMsg);
+                }
+            });
     }
     
     /**
      * Get table by ID
      */
     public void getTableById(String id) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+        loading.setValue(true);
+        error.setValue(null);
         
-        repository.getTableById(id, new BaseRepository.ApiCallback<TableInfo>() {
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        repository.getTableById(token, id, new BaseRepository.ApiCallback<TableInfo>() {
             @Override
             public void onSuccess(TableInfo result) {
-                isLoading.postValue(false);
+                loading.postValue(false);
                 currentTable.postValue(result);
             }
             
             @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
+            public void onError(String errorMsg) {
+                loading.postValue(false);
+                error.postValue(errorMsg);
             }
         });
     }
@@ -119,24 +154,33 @@ public class TableManagementViewModel extends ViewModel {
     /**
      * Create new table
      */
-    public void createTable(TableInfo table) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+    public void createTable(String name, String location, Integer seatCount, String status) {
+        loading.setValue(true);
+        error.setValue(null);
         successMessage.setValue(null);
         
-        repository.createTable(table, new BaseRepository.ApiCallback<TableInfo>() {
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        CreateTableRequest request = new CreateTableRequest(name, location, seatCount, status);
+        
+        repository.createTable(token, request, new BaseRepository.ApiCallback<TableInfo>() {
             @Override
             public void onSuccess(TableInfo result) {
-                isLoading.postValue(false);
-                successMessage.postValue("Bàn #" + result.getTableNumber() + " đã được tạo thành công");
+                loading.postValue(false);
+                successMessage.postValue("Table " + result.getName() + " created successfully");
                 // Reload tables to refresh the list
                 loadTables();
             }
             
             @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
+            public void onError(String errorMsg) {
+                loading.postValue(false);
+                error.postValue(errorMsg);
             }
         });
     }
@@ -144,24 +188,33 @@ public class TableManagementViewModel extends ViewModel {
     /**
      * Update existing table
      */
-    public void updateTable(String id, TableInfo table) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+    public void updateTable(String id, String name, String location, Integer seatCount, String status) {
+        loading.setValue(true);
+        error.setValue(null);
         successMessage.setValue(null);
         
-        repository.updateTable(id, table, new BaseRepository.ApiCallback<TableInfo>() {
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        UpdateTableRequest request = new UpdateTableRequest(name, location, seatCount, status);
+        
+        repository.updateTable(token, id, request, new BaseRepository.ApiCallback<TableInfo>() {
             @Override
             public void onSuccess(TableInfo result) {
-                isLoading.postValue(false);
-                successMessage.postValue("Bàn #" + result.getTableNumber() + " đã được cập nhật");
+                loading.postValue(false);
+                successMessage.postValue("Table " + result.getName() + " updated successfully");
                 // Reload tables to refresh the list
                 loadTables();
             }
             
             @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
+            public void onError(String errorMsg) {
+                loading.postValue(false);
+                error.postValue(errorMsg);
             }
         });
     }
@@ -170,23 +223,30 @@ public class TableManagementViewModel extends ViewModel {
      * Delete table
      */
     public void deleteTable(String id) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+        loading.setValue(true);
+        error.setValue(null);
         successMessage.setValue(null);
         
-        repository.deleteTable(id, new BaseRepository.ApiCallback<Void>() {
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        repository.deleteTable(token, id, new BaseRepository.ApiCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
-                isLoading.postValue(false);
-                successMessage.postValue("Bàn đã được xóa thành công");
+                loading.postValue(false);
+                successMessage.postValue("Table deleted successfully");
                 // Reload tables to refresh the list
                 loadTables();
             }
             
             @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
+            public void onError(String errorMsg) {
+                loading.postValue(false);
+                error.postValue(errorMsg);
             }
         });
     }
@@ -195,23 +255,30 @@ public class TableManagementViewModel extends ViewModel {
      * Update table status only
      */
     public void updateTableStatus(String id, String newStatus) {
-        isLoading.setValue(true);
-        errorMessage.setValue(null);
+        loading.setValue(true);
+        error.setValue(null);
         successMessage.setValue(null);
         
-        repository.updateTableStatus(id, newStatus, new BaseRepository.ApiCallback<TableInfo>() {
+        String token = getAuthToken();
+        if (token == null) {
+            loading.postValue(false);
+            error.postValue("Authentication required. Please login again.");
+            return;
+        }
+        
+        repository.updateTableStatus(token, id, newStatus, new BaseRepository.ApiCallback<TableInfo>() {
             @Override
             public void onSuccess(TableInfo result) {
-                isLoading.postValue(false);
-                successMessage.postValue("Trạng thái bàn #" + result.getTableNumber() + " đã được cập nhật");
+                loading.postValue(false);
+                successMessage.postValue("Table " + result.getName() + " status updated");
                 // Reload tables to refresh the list
                 loadTables();
             }
             
             @Override
-            public void onError(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue(error);
+            public void onError(String errorMsg) {
+                loading.postValue(false);
+                error.postValue(errorMsg);
             }
         });
     }
@@ -221,6 +288,14 @@ public class TableManagementViewModel extends ViewModel {
      */
     public void setStatusFilter(String status) {
         selectedStatus.setValue(status);
+        loadTables();
+    }
+    
+    /**
+     * Set location filter
+     */
+    public void setLocationFilter(String location) {
+        selectedLocation.setValue(location);
         loadTables();
     }
     
@@ -237,6 +312,7 @@ public class TableManagementViewModel extends ViewModel {
      */
     public void clearFilters() {
         selectedStatus.setValue(null);
+        selectedLocation.setValue(null);
         searchQuery.setValue(null);
         loadTables();
     }
@@ -245,7 +321,7 @@ public class TableManagementViewModel extends ViewModel {
      * Clear error/success messages
      */
     public void clearMessages() {
-        errorMessage.setValue(null);
+        error.setValue(null);
         successMessage.setValue(null);
     }
 }
