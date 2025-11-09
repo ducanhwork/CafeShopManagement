@@ -16,6 +16,10 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.StaffDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.StaffListActivity"/>
+        <activity
             android:name=".view.ProductUpdateActivity"
             android:exported="false" />
         <activity
@@ -24,11 +28,15 @@
         <activity
             android:name=".view.activity.CreateReservationActivity"
             android:exported="true" />
-        <activity android:name=".view.activity.ReservationListActivity" />
-        <activity android:name=".view.activity.ReservationDetailActivity" />
+        <activity 
+            android:name=".view.activity.ReservationListActivity" 
+            android:exported="false" />
+        <activity 
+            android:name=".view.activity.ReservationDetailActivity" 
+            android:exported="false"/>
+        <activity 
             android:name=".view.ReservationActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".view.ReservationListActivity"
             android:exported="false"
@@ -70,6 +78,10 @@
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.StaffListActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

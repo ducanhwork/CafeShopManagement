@@ -2,4 +2,6 @@
     <string name="app_name">Cafe Management Application</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="staff_list">Staff List</string>
+    <string name="no_staff_found">No Staff Found</string>
 </resources>

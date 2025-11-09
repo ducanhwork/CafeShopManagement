@@ -83,20 +83,14 @@ public class ReservationActivity extends AppCompatActivity implements TableAdapt
         if (id == R.id.nav_dashboard) {
             // Handle dashboard click
         } else if (id == R.id.nav_reservations) {
-            // Handle reservations click
-        } else if (id == R.id.nav_settings) {
-            // Handle settings click
+            Intent intent = new Intent(this, ReservationActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_staff_list) {
+            Intent intent = new Intent(this, StaffListActivity.class);
+            startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
