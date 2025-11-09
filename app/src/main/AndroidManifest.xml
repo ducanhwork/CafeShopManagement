@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
 
     <application
+        android:name=".CafeShopApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,10 +19,33 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.CafeApp">
+        
+        <!-- Splash Activity (Launcher) -->
+        <activity
+            android:name=".view.auth.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CafeApp.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Authentication Activities -->
+        <activity
+            android:name=".view.auth.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CafeApp.NoActionBar"/>
+        
+        <activity
+            android:name=".view.auth.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CafeApp.NoActionBar"/>
+        
+        <!-- Table Management -->
         <activity
             android:name=".view.TableListActivity"
-            android:exported="true"
-            />
+            android:exported="false" />
 
     </application>
 
