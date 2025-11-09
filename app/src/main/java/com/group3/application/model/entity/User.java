@@ -1,8 +1,9 @@
 package com.group3.application.model.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
     private UUID id;
     private String email;
     private String fullname;

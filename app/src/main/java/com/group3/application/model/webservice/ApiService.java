@@ -64,6 +64,9 @@ public interface ApiService {
     @PATCH("api/reservations/cancel/{id}")
     Call<Void> cancelReservation(@Path("id") UUID id);
 
+    @GET("api/users")
+    Call<List<User>> getAllUsers();
+  
     @POST("api/v1/vouchers")
     Call<VoucherResponse> createVoucher(@Body VoucherRequest request);
 
