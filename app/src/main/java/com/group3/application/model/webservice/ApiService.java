@@ -1,5 +1,7 @@
 package com.group3.application.model.webservice;
 
+import com.group3.application.model.dto.OrderRequest;
+import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
@@ -13,6 +15,8 @@ import com.group3.application.model.bean.PointsHistoryItem;
 import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.bean.VoucherRequest;
 import com.group3.application.model.bean.VoucherResponse;
+import com.group3.application.model.entity.Order;
+import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 
@@ -31,17 +35,49 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+    @GET("api/tables?for=order")
+    Call<List<TableInfo>> listTables(
+            @Query("status") String status,
+            @Query("keyword") String keyword
+    );
 
-    @GET("api/tables")
-    Call<List<TableInfo>> listTables(@Query("status") String status, @Query("keyword") String keyword);
+    @GET("api/products")
+    Call<java.util.List<Product>> listProducts(
+            @Query("status") String status,
+            @Query("categoryId") String categoryId,
+            @Query("keyword") String keyword
+    );
 
-    @POST("/api/auth/login")
+    @GET("api/categories")
+    Call<List<Category>> getCategories();
+
+    @POST("api/orders")
+    Call<APIResult> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
+
+    @GET("api/orders")
+    Call<List<Order>> getOrders(
+            @Header("Authorization") String authToken,
+            @Query("status") String status,
+            @Query("tableId") String tableId,
+            @Query("staffId") String staffId
+    );
+
+    @GET("api/orders/{id}")
+    Call<Order> getOrderById(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId
+    );
+
+    @GET("api/users")
+    Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
+
+    @POST("api/auth/login")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 
-    @PUT("/api/auth/change-password")
-    Call<APIResult> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
+    @PUT("api/auth/change-password")
+    Call<String> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
 
-    @POST("/api/auth/reset-password")
+    @POST("api/auth/reset-password")
     Call<APIResult> resetPassword(@Body String email);
 
     @GET("api/auth/me")

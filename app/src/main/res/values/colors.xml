@@ -16,6 +16,7 @@
     <color name="chip_inactive_text">#99000000</color>
     <color name="positive_points">#4CAF50</color>
     <color name="negative_points">#F44336</color>
+    <color name="purple_600">#7E57C2</color>
     <color name="gray_300">#E0E0E0</color>
 
     <color name="coffee_primary">#5D4037</color>

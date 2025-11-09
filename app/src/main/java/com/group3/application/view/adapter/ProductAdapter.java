@@ -1,109 +1,109 @@
 package com.group3.application.view.adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.bumptech.glide.Glide;
 import com.group3.application.R;
 import com.group3.application.model.entity.Product;
-import com.group3.application.viewmodel.ProductListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private List<Product> products;
-    private OnItemClickListener listener;
-    private ProductListViewModel viewModel;
 
-    public ProductAdapter(List<Product> products, OnItemClickListener listener, ProductListViewModel viewModel) {
-        this.products = products;
+    // 1. Interface mới để gửi sự kiện (Product, Quantity mới) lên ViewModel
+    public interface Listener {
+        void onQuantityChanged(Product product, int newQuantity);
+    }
+
+    // 2. Interface mới để lấy số lượng hiện tại từ ViewModel
+    public interface QuantityFetcher {
+        int getQuantity(String productId);
+    }
+
+    private final List<Product> data = new ArrayList<>();
+    private final Listener listener;
+    private final QuantityFetcher quantityFetcher; // Biến mới để lấy dữ liệu
+
+    // 3. Cập nhật Constructor
+    public ProductAdapter(Listener listener, QuantityFetcher fetcher) {
         this.listener = listener;
-        this.viewModel = viewModel;
+        this.quantityFetcher = fetcher;
+    }
+
+    public void submit(List<Product> items) {
+        data.clear();
+        if (items != null) data.addAll(items);
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_admin, parent, false);
-        return new ProductViewHolder(view);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.product_list_item_for_order, parent, false);
+        return new ProductViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = products.get(position);
+    public void onBindViewHolder(@NonNull ProductViewHolder h, int pos) {
+        Product p = data.get(pos);
 
-        // Set data cho view
-        holder.tv_product_name.setText(product.getName());
-        holder.tv_product_price.setText(String.format("%s VND", product.getPrice()));
+        h.tvName.setText(p.getName()); // Nên dùng getName()
+        h.tvPrice.setText(String.format("%,.0f đ", p.getPrice())); // Nên dùng getPrice()
+        Glide.with(h.img).load(p.getImageLink()).into(h.img);
 
-        // QUAN TRỌNG: Remove listener trước khi set checked state
-        holder.switchStatus.setOnCheckedChangeListener(null);
+        // 4. Lấy số lượng từ ViewModel thông qua QuantityFetcher
+        int currentQty = quantityFetcher.getQuantity(p.getId()); // Giả sử Product có getId()
+        h.tvQty.setText(String.valueOf(currentQty));
 
-        // Set trạng thái switch từ data
-        holder.switchStatus.setChecked(product.isActive());
-
-        // Set listener sau khi đã set checked state
-        holder.switchStatus.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Chỉ xử lý khi người dùng thực sự tương tác
-            if (buttonView.isPressed()) {
-                // Gọi ViewModel để update status
-                viewModel.updateProductStatus(product.getId(), isChecked);
-                // KHÔNG gọi notifyItemChanged ở đây
-                // Data sẽ được tự động cập nhật qua LiveData
+        // --- Nút Giảm (-) ---
+        h.btnMinus.setOnClickListener(v -> {
+            int q = quantityFetcher.getQuantity(p.getId());
+            if (q > 0) {
+                int newQty = q - 1;
+                if (listener != null) listener.onQuantityChanged(p, newQty); // Gửi sự kiện
             }
         });
 
-        // Load image
-        if (product.getImageLink() != null && !product.getImageLink().isEmpty()) {
-            try {
-                holder.iv_product_image.setImageURI(Uri.parse(product.getImageLink()));
-            } catch (Exception e) {
-                holder.iv_product_image.setImageResource(R.drawable.trends);
-            }
-        } else {
-            holder.iv_product_image.setImageResource(R.drawable.trends);
-        }
+        // --- Nút Tăng (+) ---
+        h.btnPlus.setOnClickListener(v -> {
+            int q = quantityFetcher.getQuantity(p.getId());
+            int newQty = q + 1;
+            if (listener != null) listener.onQuantityChanged(p, newQty); // Gửi sự kiện
+            // KHÔNG TỰ CẬP NHẬT TVQTY ở đây. ViewModel sẽ làm và Activity sẽ notify adapter.
+        });
 
-        holder.btnUpdate.setOnClickListener(v -> listener.onItemClick(product));
+        h.itemView.setOnClickListener(v -> h.btnPlus.performClick());
     }
 
     @Override
     public int getItemCount() {
-        return products != null ? products.size() : 0;
+        return data.size();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Product product);
-    }
+    static class ProductViewHolder extends RecyclerView.ViewHolder {
+        // ... (Giữ nguyên)
+        ImageView img;
+        TextView tvName, tvPrice, tvQty;
+        ImageButton btnMinus, btnPlus;
 
-    public void setData(List<Product> newData) {
-        this.products = newData != null ? newData : new ArrayList<>();
-        notifyDataSetChanged();
-    }
-
-    public class ProductViewHolder extends RecyclerView.ViewHolder {
-        private SwitchMaterial switchStatus;
-        private MaterialButton btnUpdate;
-        private TextView tv_product_price;
-        private TextView tv_product_name;
-        private ImageView iv_product_image;
-
-        public ProductViewHolder(@NonNull View itemView) {
-            super(itemView);
-            switchStatus = itemView.findViewById(R.id.switch_status);
-            btnUpdate = itemView.findViewById(R.id.btn_update);
-            tv_product_price = itemView.findViewById(R.id.tv_product_price);
-            tv_product_name = itemView.findViewById(R.id.tv_product_name);
-            iv_product_image = itemView.findViewById(R.id.iv_product_image);
+        ProductViewHolder(@NonNull View v) {
+            super(v);
+            img = v.findViewById(R.id.img);
+            tvName = v.findViewById(R.id.tvName);
+            tvPrice = v.findViewById(R.id.tvPrice);
+            tvQty = v.findViewById(R.id.tvQty);
+            btnMinus = v.findViewById(R.id.btnMinus);
+            btnPlus = v.findViewById(R.id.btnPlus);
         }
     }
 }

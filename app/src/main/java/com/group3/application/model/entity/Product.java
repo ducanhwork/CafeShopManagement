@@ -1,33 +1,21 @@
 package com.group3.application.model.entity;
 
-import java.math.BigDecimal;
-import java.util.UUID;
+import java.io.Serializable;
 
-public class Product {
-    private UUID id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private String imageLink;
-    private String status;
-    private String categoryName;
+public class Product implements Serializable {
+    public String id;
+    public String name;
+    public String description;
+    public double price;
+    public String imageLink;
+    public String status;
+    public String categoryId;
 
-    public Product(UUID id, String name, String description, BigDecimal price, String imageLink, String status, String categoryName) {
-
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imageLink = imageLink;
-        this.status = status;
-        this.categoryName = categoryName;
-    }
-
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -47,20 +35,12 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
     }
 
     public String getStatus() {
@@ -71,17 +51,19 @@ public class Product {
         this.status = status;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getImageLink() {
+        return imageLink;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
-    public boolean isActive() {
-        return status.equals("active");
+    public String getCategoryId() {
+        return categoryId;
     }
 
-
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 }

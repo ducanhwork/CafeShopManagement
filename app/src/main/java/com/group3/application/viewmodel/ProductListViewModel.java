@@ -1,15 +1,9 @@
-package com.group3.application.viewmodel;
+/*package com.group3.application.viewmodel;
 
-import android.app.Application;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.group3.application.common.utils.Event;
-import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
@@ -17,73 +11,154 @@ import com.group3.application.model.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class ProductListViewModel extends AndroidViewModel {
-    private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
-    private final String TAG = "ProductListViewModel";
-    private MutableLiveData<List<Product>> _products = new MutableLiveData<>();
-    public final LiveData<List<Product>> products = _products;
-    private MutableLiveData<List<Category>> _categories = new MutableLiveData<>();
-    public final LiveData<List<Category>> categories = _categories;
-    private MutableLiveData<Event<APIResult>> _updateStatusResult = new MutableLiveData<>();
-    public LiveData<Event<APIResult>> updateStatusResult = _updateStatusResult;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private MutableLiveData<Event<Product>> _navigateToProductDetail = new MutableLiveData<>();
-    public LiveData<Event<Product>> navigateToProductDetail = _navigateToProductDetail;
+public class ProductListViewModel extends ViewModel {
+    private final ProductRepository productRepo = new ProductRepository();
+    private final CategoryRepository categoryRepo = new CategoryRepository();
 
-    public ProductListViewModel(@NonNull Application application) {
-        super(application);
-        productRepository = new ProductRepository(application);
-        categoryRepository = new CategoryRepository(application);
-    }
+    private final MutableLiveData<List<Category>> categories = new MutableLiveData<>();
+    private final MutableLiveData<List<Product>> products = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
-    public void getProducts(String keyword, String category) {
-        productRepository.getProducts(result -> {
-            if (result.isSuccess()) {
-                _products.postValue((List<Product>) result.getData());
-            } else {
-                Log.e(TAG, "getProducts: " + result.getMessage());
-            }
-        }, keyword, category);
-    }
+    private Call<List<Product>> inFlight;
 
-    public void updateProductStatus(UUID productId, Boolean status) {
-        productRepository.updateProductStatus(productId, status, result -> {
-            _updateStatusResult.setValue(new Event<>(result));
-            Log.d(TAG, "updateProductStatus: " + result.getMessage());
+    public LiveData<List<Product>> getProducts() { return products; }
+    public LiveData<List<Category>> getCategories() {return categories;}
+    public LiveData<Boolean> getLoading() { return loading; }
+    public LiveData<String> getError() { return error; }
 
-            // QUAN TRỌNG: Update local data khi API thành công
-            if (result.isSuccess()) {
-                updateLocalProductStatus(productId, status);
-            }
-        });
-    }
-
-    // Phương thức mới: cập nhật trạng thái sản phẩm trong local data
-    private void updateLocalProductStatus(UUID productId, Boolean status) {
-        List<Product> currentProducts = _products.getValue();
-        if (currentProducts != null) {
-            for (Product product : currentProducts) {
-                if (product.getId().equals(productId)) {
-                    product.setStatus(status ? "active" : "inactive");
-                    break;
+    public void load(String status, String categoryId, String keyword) {
+        if (inFlight != null) inFlight.cancel();
+        loading.setValue(true); error.setValue(null);
+        inFlight = productRepo.getProducts(status, categoryId, keyword);
+        inFlight.enqueue(new Callback<List<Product>>() {
+            @Override public void onResponse(Call<List<Product>> call, Response<List<Product>> resp) {
+                loading.postValue(false);
+                if (resp.isSuccessful() && resp.body()!=null) {
+                    products.postValue(resp.body());
+                } else {
+                    error.postValue("Load failed: " + resp.code());
                 }
             }
-            // Post giá trị mới để LiveData thông báo thay đổi
-            _products.postValue(new ArrayList<>(currentProducts));
-        }
-    }
-
-    public void getCategories() {
-        categoryRepository.getCategories(result -> {
-            if (result.isSuccess()) {
-                _categories.postValue((List<Category>) result.getData());
-            } else {
-                Log.e(TAG, "getCategories: " + result.getMessage());
+            @Override public void onFailure(Call<List<Product>> call, Throwable t) {
+                if (call.isCanceled()) return;
+                loading.postValue(false);
+                error.postValue(t.getMessage());
             }
         });
     }
 
+
+    public void fetchCategories() {
+        categoryRepo.getCategories().enqueue(new Callback<List<Category>>() {
+            @Override public void onResponse(Call<List<Category>> call, Response<List<Category>> resp) {
+                if (resp.isSuccessful() && resp.body()!=null) {
+                    categories.postValue(resp.body());
+                } else error.postValue("Load categories failed: " + resp.code());
+            }
+            @Override public void onFailure(Call<List<Category>> call, Throwable t) {
+                error.postValue(t.getMessage());
+            }
+        });
+    }
+    @Override
+    protected void onCleared() {
+        if (inFlight != null) inFlight.cancel();
+    }
+}*/
+package com.group3.application.viewmodel;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+import com.group3.application.model.entity.Category;
+import com.group3.application.model.entity.Product;
+import com.group3.application.model.repository.CategoryRepository;
+import com.group3.application.model.repository.ProductRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ProductListViewModel extends ViewModel {
+
+    private final ProductRepository productRepo = new ProductRepository();
+    private final CategoryRepository categoryRepo = new CategoryRepository();
+
+    private final MutableLiveData<List<Category>> categories = new MutableLiveData<>();
+    private final MutableLiveData<List<Product>> products = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> loadingProducts = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> loadingCategories = new MutableLiveData<>(false);
+    private final MutableLiveData<String> error = new MutableLiveData<>(null);
+
+    private Call<List<Product>> inFlight;
+
+    private String currentStatus = "active";
+    private String currentCategoryId = null;
+    private String currentKeyword = null;
+
+    public LiveData<List<Category>> getCategories() { return categories; }
+    public LiveData<List<Product>> getProducts() { return products; }
+    public LiveData<Boolean> getLoadingProducts() { return loadingProducts; }
+    public LiveData<Boolean> getLoadingCategories() { return loadingCategories; }
+    public LiveData<String> getError() { return error; }
+
+    public void fetchCategories() {
+        categoryRepo.getCategories().enqueue(new Callback<List<Category>>() {
+            @Override public void onResponse(Call<List<Category>> call, Response<List<Category>> resp) {
+                if (resp.isSuccessful() && resp.body()!=null) {
+                    categories.postValue(resp.body());
+                } else error.postValue("Load categories failed: " + resp.code());
+            }
+            @Override public void onFailure(Call<List<Category>> call, Throwable t) {
+                error.postValue(t.getMessage());
+            }
+        });
+    }
+
+    public void applyFilter(String categoryIdOrNull, String keywordOrNull) {
+        currentCategoryId = (categoryIdOrNull == null || categoryIdOrNull.isBlank()) ? null : categoryIdOrNull;
+        currentKeyword = (keywordOrNull == null || keywordOrNull.isBlank()) ? null : keywordOrNull;
+        reload();
+    }
+
+    public void setStatus(String statusOrNull){
+        currentStatus = (statusOrNull == null || statusOrNull.isBlank()) ? null : statusOrNull;
+        reload();
+    }
+
+    public void reload() {
+        if (inFlight != null) inFlight.cancel();
+        loadingProducts.setValue(true);
+        error.setValue(null);
+
+        inFlight = productRepo.getProducts(currentStatus, currentCategoryId, currentKeyword);
+        inFlight.enqueue(new Callback<List<Product>>() {
+            @Override public void onResponse(Call<List<Product>> call, Response<List<Product>> resp) {
+                loadingProducts.postValue(false);
+                if (resp.isSuccessful() && resp.body()!=null) {
+                    products.postValue(resp.body());
+                } else error.postValue("Load failed: " + resp.code());
+            }
+            @Override public void onFailure(Call<List<Product>> call, Throwable t) {
+                if (call.isCanceled()) return;
+                loadingProducts.postValue(false);
+                error.postValue(t.getMessage());
+            }
+        });
+    }
+
+    @Override protected void onCleared() {
+        if (inFlight != null) inFlight.cancel();
+    }
 }
+
