@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateVoucher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Voucher" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnViewList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View List Voucher" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLoyaltyList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xem danh sách khách hàng"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
+

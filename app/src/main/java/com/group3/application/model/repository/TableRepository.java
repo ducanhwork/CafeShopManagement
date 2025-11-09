@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 
 public class TableRepository {
+
     private final ApiService api = ApiClient.get().create(ApiService.class);
 
     public Call<List<TableInfo>> getTables(String status, String keyword) {
