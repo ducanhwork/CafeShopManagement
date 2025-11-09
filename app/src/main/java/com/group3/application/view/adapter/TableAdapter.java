@@ -7,12 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.group3.application.R;
-import com.group3.application.model.entity.Table;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.application.R;
@@ -22,24 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
-
-    private List<Table> tableList;
-    private final List<TableInfo> data = new ArrayList<>();
-    private OnTableClickListener onTableClickListener;
-    private final OnItemClick listener;
-
-    public interface OnTableClickListener {
-        void onTableClick(Table table);
-    }
-  
     public interface OnItemClick {
         void onClick(TableInfo item);
     }
 
-    public TableAdapter(List<Table> tableList, OnTableClickListener onTableClickListener) {
-        this.tableList = tableList;
-        this.onTableClickListener = onTableClickListener;
-    }
+    private final List<TableInfo> data = new ArrayList<>();
+    private final OnItemClick listener;
+
+    // --- ĐÃ THÊM: Danh sách lưu các bàn được chọn ---
+    private final List<TableInfo> selectedTables = new ArrayList<>();
 
     public TableAdapter(OnItemClick listener) {
         this.listener = listener;
@@ -48,6 +33,14 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public void setData(List<TableInfo> newData) {
         data.clear();
         if (newData != null) data.addAll(newData);
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedTables(List<TableInfo> selected) {
+        this.selectedTables.clear();
+        if (selected != null) {
+            this.selectedTables.addAll(selected);
+        }
         notifyDataSetChanged();
     }
 
@@ -75,16 +68,26 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
         h.tvStatus.getBackground().setTint(color);
 
+        if (selectedTables.contains(t)) {
+            h.itemView.setBackgroundColor(Color.parseColor("#E0F7FA"));
+        } else {
+            // Không được chọn
+            h.itemView.setBackgroundColor(Color.TRANSPARENT); // Màu nền mặc định
+        }
+
         h.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onClick(t);
         });
     }
 
     @Override
-    public int getItemCount() { return data.size(); }
+    public int getItemCount() {
+        return data.size();
+    }
 
     static class TableViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvStatus, tvLocation, tvSeat;
+
         TableViewHolder(@NonNull View v) {
             super(v);
             tvName = v.findViewById(R.id.tvName);

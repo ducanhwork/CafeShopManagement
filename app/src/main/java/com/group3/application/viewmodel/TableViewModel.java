@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.repository.TableRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -18,7 +19,7 @@ import retrofit2.Response;
 
 public class TableViewModel extends ViewModel {
 
-    public enum TableAction { SHOW_CONFIRM_RESERVED, OPEN_ORDER, SHOW_ERROR }
+    public enum TableAction { SHOW_CONFIRM_RESERVED, OPEN_ORDER, SHOW_ERROR_SINGLE, SHOW_ERROR_MULTI }
 
     public class OneTimeEvent<T> {
         private final T content; private boolean handled=false;
@@ -37,6 +38,8 @@ public class TableViewModel extends ViewModel {
     public LiveData<List<TableInfo>> getTables() { return tables; }
     public LiveData<Boolean> getLoading() { return loading; }
     public LiveData<String> getError() { return error; }
+    private final MutableLiveData<List<TableInfo>> selectedTables = new MutableLiveData<>(new ArrayList<>());
+    public LiveData<List<TableInfo>> getSelectedTables() { return selectedTables; }
 
     public void loadTables(String status, String keyword) {
         if (inFlight != null) inFlight.cancel();
@@ -65,27 +68,69 @@ public class TableViewModel extends ViewModel {
         if (inFlight != null) inFlight.cancel();
     }
 
-    private final MutableLiveData<OneTimeEvent<Pair<TableAction, TableInfo>>> events = new MutableLiveData<>();
-    public LiveData<OneTimeEvent<Pair<TableAction, TableInfo>>> getEvents() { return events; }
+    private final MutableLiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> events = new MutableLiveData<>();
+    public LiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> getEvents() { return events; }
 
-    public void onTableClicked(TableInfo table){
-        String st = table.getStatus()==null? "" : table.getStatus().toUpperCase();
-        switch (st){
-            case "RESERVED":
-                events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_CONFIRM_RESERVED, table)));
-                break;
+    public void onTableClicked(TableInfo table) {
+        List<TableInfo> currentSelection = selectedTables.getValue();
+        if (currentSelection == null) currentSelection = new ArrayList<>();
+
+        String st = table.getStatus() == null ? "" : table.getStatus().toUpperCase();
+
+        // Kiểm tra xem bàn có được phép chọn không
+        switch (st) {
             case "EMPTY":
             case "AVAILABLE":
+            case "RESERVED": // Cho phép chọn bàn RESERVED (sẽ hỏi sau)
+
+                // Toggle (Thêm/bớt)
+                if (currentSelection.contains(table)) {
+                    currentSelection.remove(table);
+                } else {
+                    currentSelection.add(table);
+                }
+                selectedTables.setValue(currentSelection); // Kích hoạt LiveData
+                break;
+
             case "SERVING":
             case "WAITING_BILL":
-                events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.OPEN_ORDER, table)));
+                // Bàn đang phục vụ không cho gộp
+                // Gửi sự kiện lỗi cho 1 bàn
+                events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_SINGLE, List.of(table))));
                 break;
             default:
-                events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR, table)));
+                // Các trạng thái khác (VD: "DIRTY", "MAINTENANCE")
+                events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_SINGLE, List.of(table))));
         }
     }
 
-    public void proceedReserved(TableInfo table){
-        events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.OPEN_ORDER, table)));
+    public void confirmSelection() {
+        List<TableInfo> currentSelection = selectedTables.getValue();
+        if (currentSelection == null || currentSelection.isEmpty()) {
+            // Gửi sự kiện lỗi chung
+            events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_MULTI, null)));
+            return;
+        }
+
+        // Kiểm tra xem có bàn nào đang "RESERVED" không
+        boolean hasReserved = false;
+        for (TableInfo table : currentSelection) {
+            if ("RESERVED".equalsIgnoreCase(table.getStatus())) {
+                hasReserved = true;
+                break;
+            }
+        }
+
+        if (hasReserved) {
+            // Gửi sự kiện yêu cầu xác nhận cho toàn bộ danh sách
+            events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_CONFIRM_RESERVED, currentSelection)));
+        } else {
+            // Không có bàn nào RESERVED, mở order trực tiếp
+            events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.OPEN_ORDER, currentSelection)));
+        }
+    }
+
+    public void proceedReserved(List<TableInfo> tablesToOpen) {
+        events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.OPEN_ORDER, tablesToOpen)));
     }
 }
