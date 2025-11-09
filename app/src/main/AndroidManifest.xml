@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- Cho Android cũ hơn -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Cho Android cũ hơn -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
-
-    <!-- Quyền truy cập Camera -->
+        android:maxSdkVersion="32" /> <!-- Quyền truy cập Camera -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.CashierHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.WaiterHomeActivity"
+            android:exported="false" />
         <activity
             android:name=".view.ProductCreateActivity"
             android:exported="false" />
@@ -35,10 +38,9 @@
         <activity
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
-        <activity 
+        <activity
             android:name=".view.ReservationActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".view.ReservationListActivity"
             android:exported="false"
@@ -64,25 +66,25 @@
             android:exported="false" />
         <activity
             android:name=".view.HomeMenuActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".view.StaffListActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.group3.application.model.repository;
 
 import static com.group3.application.viewmodel.LoginViewModel.KEY_AUTH_TOKEN;
 import static com.group3.application.viewmodel.LoginViewModel.KEY_IS_LOGGED_IN;
+import static com.group3.application.viewmodel.LoginViewModel.KEY_ROLE_AUTH;
 import static com.group3.application.viewmodel.LoginViewModel.KEY_USER_EMAIL;
 import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
 
@@ -50,6 +51,7 @@ public class AuthRepository {
 
                     if (token != null && !token.isEmpty()) {
                         saveAuthToken(token);
+                        saveRole(authResponse.getRole());
                         listener.onLoginComplete(new APIResult(
                                 true,
                                 "Đăng nhập thành công!",
@@ -90,6 +92,14 @@ public class AuthRepository {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
         Log.d(TAG, "Auth token saved: " + token);
+    }
+
+    private void saveRole(String role) {
+        SharedPreferences.Editor editor = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_ROLE_AUTH, role);
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.apply();
+        Log.d(TAG, "Auth role saved: " + role);
     }
 
     public boolean isUserLoggedIn() {

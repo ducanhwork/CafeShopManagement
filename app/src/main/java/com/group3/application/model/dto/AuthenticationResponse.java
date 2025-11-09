@@ -8,15 +8,25 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthenticationResponse {
     private Boolean isSuccess;
-    private String  message;
-    private String  errorCode;
+    private String message;
+    private String errorCode;
     private String token;
+    private String role;
 
-    public AuthenticationResponse(Boolean isSuccess, String message, String errorCode, String token) {
+    public AuthenticationResponse(Boolean isSuccess, String message, String errorCode, String token, String role) {
         this.isSuccess = isSuccess;
         this.message = message;
         this.errorCode = errorCode;
         this.token = token;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public AuthenticationResponse() {

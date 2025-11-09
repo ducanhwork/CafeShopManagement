@@ -37,6 +37,7 @@ import com.group3.application.R;
 import com.group3.application.model.dto.ProductCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.viewmodel.ProductCreateViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +97,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
         setupActivityResultLaunchers();
 
         setupObservers();
-
+        bindData(categoryNames);
         setupCreateButtonListener();
     }
 
@@ -145,7 +146,6 @@ public class ProductUpdateActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, // <-- Sử dụng layout cho item hiển thị
                 categoryNames);
 
-        // Set layout cho các item trong danh sách thả xuống (dropdown)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // <-- Quan trọng
 
         spinnerCategory.setAdapter(adapter);
@@ -220,23 +220,32 @@ public class ProductUpdateActivity extends AppCompatActivity {
             }
         }).show();
     }
-    public void bindData(List<String> categoryNames){
+
+    public void bindData(List<String> categoryNames) {
         Intent intent = getIntent();
-        if (intent != null){
-        String productName = intent.getStringExtra("productName");
-        String productPrice = intent.getStringExtra("productPrice");
-        String productDescription = intent.getStringExtra("productDescription");
-        String productCategory = intent.getStringExtra("productCategory");
-        String productImage = intent.getStringExtra("productImage");
+        if (intent != null) {
+            String productName = intent.getStringExtra("productName");
+            String productPrice = intent.getStringExtra("productPrice");
+            String productDescription = intent.getStringExtra("productDescription");
+            String productCategory = intent.getStringExtra("productCategory");
+            String productImage = intent.getStringExtra("productImage");
 
-        etProductName.setText(productName);
-        etProductPrice.setText(productPrice);
-        etProductDescription.setText(productDescription);
-        spinnerCategory.setSelection(categoryNames.indexOf(productCategory));
-        displayImage(Uri.parse(productImage));
+            etProductName.setText(productName);
+            etProductPrice.setText(productPrice);
+            etProductDescription.setText(productDescription);
+            spinnerCategory.setSelection(categoryNames.indexOf(productCategory));
+            try {
+                Picasso.get()
+                        .load(productImage)
+                        .placeholder(R.drawable.trends)
+                        .error(R.drawable.trends)
+                        .into(ivProductImage);
+            } catch (Exception e) {
+                ivProductImage.setImageResource(R.drawable.trends);
+            }
         }
-
     }
+
     private boolean checkStoragePermission() { /* ... */
         return true;
     } // Placeholder

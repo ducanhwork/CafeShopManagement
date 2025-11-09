@@ -80,6 +80,7 @@ public class ProductListActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
         adapter = new ProductAdapter(products, updateProduct -> {
+            Log.i("ProductListActivity ", updateProduct.toString());
             Intent intent = new Intent(this, ProductUpdateActivity.class);
             intent.putExtra("productName", updateProduct.getName());
             intent.putExtra("productPrice", updateProduct.getPrice());
