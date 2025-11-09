@@ -5,6 +5,20 @@ import java.util.UUID;
 
 public class Product {
     private UUID id;
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", imageLink='" + imageLink + '\'' +
+                ", status='" + status + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
+
     private String name;
     private String description;
     private BigDecimal price;

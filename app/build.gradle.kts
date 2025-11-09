@@ -99,6 +99,14 @@ dependencies {
     implementation(libs.work.runtime)
     
     // Additional dependencies from main branch
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    implementation("org.projectlombok:lombok:1.18.38")
+    implementation("com.squareup.picasso:picasso:2.8")
     implementation(libs.circleimageview)
     implementation(libs.core.i18n)
     implementation("org.projectlombok:lombok:1.18.38")

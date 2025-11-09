@@ -20,6 +20,7 @@ import com.group3.application.common.utils.Event; // SỬA LỖI: Import đúng 
 public class LoginViewModel extends AndroidViewModel {
     private AuthRepository authRepository;
     private SharedPreferences prefs;
+    public static final String KEY_ROLE_AUTH = "roleAuth";
 
     public static final String PREF_NAME = "CafeManagerPrefs";
     public static final String KEY_IS_LOGGED_IN = "isLoggedIn";
@@ -81,8 +82,22 @@ public class LoginViewModel extends AndroidViewModel {
             if (result.isSuccess()) {
                 //save email to prefs
                 saveUserEmailToPrefs(email);
+                // Nếu đăng nhập thành công, chuyển hướng đến trang chính
+                String role = prefs.getString(KEY_ROLE_AUTH, null);
+                if (role != null) {
+                    switch (role) {
+                        case "ADMIN":
+                            _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
+                            break;
+                        case "CASHIER":
+                            _navigationEvent.postValue(new Event<>(NavigationTarget.CASHIER_PAGE));
+                            break;
+                        case "WAITER":
+                            _navigationEvent.postValue(new Event<>(NavigationTarget.WAITER_PAGE));
+                            break;
+                    }
+                }
                 _loginResult.postValue(new Event<>(result));
-                _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
             } else {
                 _loginResult.postValue(new Event<>(result));
             }

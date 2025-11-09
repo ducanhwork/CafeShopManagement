@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +39,7 @@ public class ProductRepository {
     public void getProducts(OnGetProductsListener listener, String keyword, String category) {
         SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString(KEY_AUTH_TOKEN, null);
-        apiService.listProducts("Bearer "+token, keyword, category).enqueue(new Callback<List<Product>>() {
+        apiService.listProducts("Bearer " + token, keyword, category).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() & response.body() != null) {
@@ -67,7 +69,7 @@ public class ProductRepository {
     public void updateProductStatus(UUID productId, Boolean status, OnUpdateProductStatusListener listener) {
         SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString(KEY_AUTH_TOKEN, null);
-        apiService.updateProductStatus("Bearer "+token, productId, status).enqueue(new Callback<APIResult>() {
+        apiService.updateProductStatus("Bearer " + token, productId, status).enqueue(new Callback<APIResult>() {
             @Override
             public void onResponse(Call<APIResult> call, Response<APIResult> response) {
                 if (response.isSuccessful() & response.body() != null) {
@@ -92,6 +94,39 @@ public class ProductRepository {
                 listener.onUpdateProductStatusComplete(new APIResult(false, t.getMessage()));
             }
         });
+    }
+
+    public void createProduct(
+            RequestBody productJson,
+            MultipartBody.Part image,
+            Callback<Product> callback
+    ) {
+        if (apiService == null) {
+            Log.e(TAG, "ApiService is not initialized.");
+            // Gọi callback với lỗi hoặc trả về một LiveData lỗi
+            callback.onFailure(null, new Throwable("ApiService not initialized"));
+            return;
+        }
+        SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
+        String token = "Bearer " + prefs.getString(KEY_AUTH_TOKEN, null);
+        Call<Product> call = apiService.createProduct(productJson, image, token);
+        call.enqueue(callback);
+    }
+    public void updateProduct(
+            RequestBody productJson,
+            MultipartBody.Part image,
+            Callback<Product> callback
+    ) {
+        if (apiService == null) {
+            Log.e(TAG, "ApiService is not initialized.");
+            // Gọi callback với lỗi hoặc trả về một LiveData lỗi
+            callback.onFailure(null, new Throwable("ApiService not initialized"));
+            return;
+        }
+        SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
+        String token = "Bearer " + prefs.getString(KEY_AUTH_TOKEN, null);
+        Call<Product> call = apiService.createProduct(productJson, image, token);
+        call.enqueue(callback);
     }
 
     public interface OnUpdateProductStatusListener {

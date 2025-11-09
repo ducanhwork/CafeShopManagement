@@ -15,6 +15,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.group3.application.R;
 import com.group3.application.model.entity.Product;
 import com.group3.application.viewmodel.ProductListViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         // Set trạng thái switch từ data
         holder.switchStatus.setChecked(product.isActive());
+        holder.switchStatus.setText(product.isActive() ? "Active" : "Inactive");
+
 
         // Set listener sau khi đã set checked state
         holder.switchStatus.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -59,13 +62,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 viewModel.updateProductStatus(product.getId(), isChecked);
                 // KHÔNG gọi notifyItemChanged ở đây
                 // Data sẽ được tự động cập nhật qua LiveData
+                notifyItemChanged(position);
             }
         });
 
         // Load image
         if (product.getImageLink() != null && !product.getImageLink().isEmpty()) {
             try {
-                holder.iv_product_image.setImageURI(Uri.parse(product.getImageLink()));
+                Picasso.get()
+                        .load(product.getImageLink())
+                        .placeholder(R.drawable.trends)
+                        .error(R.drawable.trends)
+                        .into(holder.iv_product_image);
             } catch (Exception e) {
                 holder.iv_product_image.setImageResource(R.drawable.trends);
             }

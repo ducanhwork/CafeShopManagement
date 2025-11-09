@@ -7,6 +7,7 @@ import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
+import com.group3.application.model.entity.Role;
 import com.group3.application.model.bean.LoyaltyMemberDetailResponse;
 import com.group3.application.model.bean.LoyaltyMemberListItem;
 import com.group3.application.model.bean.PointsHistoryItem;
@@ -20,13 +21,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -53,8 +58,26 @@ public interface ApiService {
     @PUT("/api/product/update-status/{productId}")
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
 
+    @Multipart
+    @PUT("api/product/update{productId}")
+    Call<Product> updateProduct(
+            @Path("productId") UUID productId,
+            @Part("product") RequestBody productJson,
+            @Part MultipartBody.Part image,
+            @Header("Authorization") String token
+    );
+
+    @Multipart
+    @POST("api/product/add")
+    Call<Product> createProduct(
+            @Part("product") RequestBody productJson,
+            @Part MultipartBody.Part image,
+            @Header("Authorization") String token
+    );
+
     @GET("/api/category")
     Call<List<Category>> listCategories(@Header("Authorization") String token);
+
     @GET("api/reservations/table/{tableId}")
     Call<List<Reservation>> getReservationsByTable(@Path("tableId") String tableId);
 
@@ -66,17 +89,24 @@ public interface ApiService {
 
     @GET("api/users")
     Call<List<User>> getAllUsers();
-  
+
+    @POST("api/users")
+    Call<User> createUser(@Body User newStaff);
+
+    @GET("api/roles")
+    Call<List<Role>> getRoles();
+
     @POST("api/v1/vouchers")
     Call<VoucherResponse> createVoucher(@Body VoucherRequest request);
 
     @GET("/api/v1/vouchers")
     Call<List<VoucherResponse>> listVouchers(
-        @Query("code") String codeLike,
-        @Query("status") String status,
-        @Query("type") String type,
-        @Query("sortBy") String sortBy
+            @Query("code") String codeLike,
+            @Query("status") String status,
+            @Query("type") String type,
+            @Query("sortBy") String sortBy
     );
+
     @GET("/api/v1/vouchers/{id}")
     Call<VoucherResponse> getVoucher(@Path("id") String id);
 
@@ -86,19 +116,19 @@ public interface ApiService {
 
     @GET("api/v1/loyalty-members")
     Call<List<LoyaltyMemberListItem>> listLoyaltyMembers(
-        @Query("q") String query,
-        @Query("sortBy") String sortBy
+            @Query("q") String query,
+            @Query("sortBy") String sortBy
     );
 
     @PATCH("api/v1/loyalty-members/{customerId}")
     Call<LoyaltyMemberDetailResponse> editLoyaltyMember(
-        @Path("customerId") UUID customerId,
-        @Body UpdateLoyaltyMemberRequest request
+            @Path("customerId") UUID customerId,
+            @Body UpdateLoyaltyMemberRequest request
     );
 
     @GET("api/v1/loyalty-members/{customerId}/points-history")
     Call<List<PointsHistoryItem>> getPointsHistory(
-        @Path("customerId") UUID customerId
+            @Path("customerId") UUID customerId
     );
 
 }

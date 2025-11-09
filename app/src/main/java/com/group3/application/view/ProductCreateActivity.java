@@ -37,7 +37,6 @@ import com.group3.application.R;
 import com.group3.application.model.dto.ProductCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.viewmodel.ProductCreateViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +48,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ProductUpdateActivity extends AppCompatActivity {
+public class ProductCreateActivity extends AppCompatActivity {
     private static final String TAG = "NewProductActivity";
 
     private static final int PERMISSION_REQUEST_CODE_STORAGE = 101;
@@ -80,7 +79,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_update);
+        setContentView(R.layout.activity_product_create);
 
         initViews();
         viewModel = new ViewModelProvider(this).get(ProductCreateViewModel.class);
@@ -97,7 +96,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
         setupActivityResultLaunchers();
 
         setupObservers();
-        bindData(categoryNames);
+
         setupCreateButtonListener();
     }
 
@@ -146,6 +145,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, // <-- Sử dụng layout cho item hiển thị
                 categoryNames);
 
+        // Set layout cho các item trong danh sách thả xuống (dropdown)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // <-- Quan trọng
 
         spinnerCategory.setAdapter(adapter);
@@ -219,31 +219,6 @@ public class ProductUpdateActivity extends AppCompatActivity {
                     break;
             }
         }).show();
-    }
-
-    public void bindData(List<String> categoryNames) {
-        Intent intent = getIntent();
-        if (intent != null) {
-            String productName = intent.getStringExtra("productName");
-            String productPrice = intent.getStringExtra("productPrice");
-            String productDescription = intent.getStringExtra("productDescription");
-            String productCategory = intent.getStringExtra("productCategory");
-            String productImage = intent.getStringExtra("productImage");
-
-            etProductName.setText(productName);
-            etProductPrice.setText(productPrice);
-            etProductDescription.setText(productDescription);
-            spinnerCategory.setSelection(categoryNames.indexOf(productCategory));
-            try {
-                Picasso.get()
-                        .load(productImage)
-                        .placeholder(R.drawable.trends)
-                        .error(R.drawable.trends)
-                        .into(ivProductImage);
-            } catch (Exception e) {
-                ivProductImage.setImageResource(R.drawable.trends);
-            }
-        }
     }
 
     private boolean checkStoragePermission() { /* ... */

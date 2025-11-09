@@ -75,6 +75,18 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case CASHIER_PAGE:
+                        intent = new Intent(LoginActivity.this, CashierHomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    case WAITER_PAGE:
+                        intent = new Intent(LoginActivity.this, WaiterHomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                        return;
                     case FORGOT_PASSWORD:
                         intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                         startActivity(intent);
