@@ -1,7 +1,5 @@
 package com.group3.application.model.dto;
 
-import java.math.BigDecimal;
-
 /**
  * Request DTO for starting a new shift.
  * Matches the API endpoint: POST /shifts/start
@@ -9,21 +7,21 @@ import java.math.BigDecimal;
  */
 public class StartShiftRequest {
     
-    private BigDecimal openingCash;
+    private Double openingCash;
 
     // Constructors
     public StartShiftRequest() {}
 
-    public StartShiftRequest(BigDecimal openingCash) {
+    public StartShiftRequest(Double openingCash) {
         this.openingCash = openingCash;
     }
 
     // Getters and Setters
-    public BigDecimal getOpeningCash() {
+    public Double getOpeningCash() {
         return openingCash;
     }
 
-    public void setOpeningCash(BigDecimal openingCash) {
+    public void setOpeningCash(Double openingCash) {
         this.openingCash = openingCash;
     }
 }

@@ -16,7 +16,6 @@ import com.group3.application.model.entity.CashTransaction;
 import com.group3.application.model.entity.Shift;
 import com.group3.application.model.repository.ShiftRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -83,7 +82,7 @@ public class ShiftViewModel extends AndroidViewModel {
     /**
      * Start a new shift with opening cash amount
      */
-    public void startShift(BigDecimal openingCash) {
+    public void startShift(Double openingCash) {
         isLoading.setValue(true);
         errorMessage.setValue(null);
 
@@ -106,7 +105,7 @@ public class ShiftViewModel extends AndroidViewModel {
     /**
      * End the current shift with closing cash amount
      */
-    public void endShift(BigDecimal closingCash) {
+    public void endShift(Double closingCash) {
         isLoading.setValue(true);
         errorMessage.setValue(null);
 
@@ -153,7 +152,7 @@ public class ShiftViewModel extends AndroidViewModel {
     /**
      * Record a cash transaction (CASH_IN, CASH_OUT, REFUND)
      */
-    public void recordTransaction(BigDecimal amount, String transactionType, 
+    public void recordTransaction(Double amount, String transactionType, 
                                   String description, String referenceNumber) {
         isLoading.setValue(true);
         errorMessage.setValue(null);

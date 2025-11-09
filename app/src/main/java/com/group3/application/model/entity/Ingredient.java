@@ -1,12 +1,13 @@
 package com.group3.application.model.entity;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
  * Ingredient entity representing coffee shop supplies/ingredients
  * Stored as Product with category='Ingredient' on backend
  */
-public class Ingredient {
+public class Ingredient implements Serializable {
     
     @SerializedName("id")
     private String id;

@@ -24,7 +24,7 @@ import com.group3.application.R;
 import com.group3.application.model.bean.CreateIngredientRequest;
 import com.group3.application.model.bean.UpdateIngredientRequest;
 import com.group3.application.model.entity.Ingredient;
-import com.group3.application.viewmodel.ImageUtils;
+import com.group3.application.common.util.ImageUtils;
 import com.group3.application.viewmodel.InventoryViewModel;
 
 /**
@@ -59,7 +59,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     // Data
     private InventoryViewModel viewModel;
     private String mode;
-    private int ingredientId = -1;
+    private String ingredientId = null;
     private Ingredient currentIngredient;
 
     @Override
@@ -77,8 +77,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         if (MODE_EDIT.equals(mode)) {
-            ingredientId = getIntent().getIntExtra(EXTRA_INGREDIENT_ID, -1);
-            if (ingredientId == -1) {
+            ingredientId = getIntent().getStringExtra(EXTRA_INGREDIENT_ID);
+            if (ingredientId == null) {
                 Snackbar.make(findViewById(android.R.id.content),
                         R.string.error_invalid_ingredient, Snackbar.LENGTH_LONG).show();
                 finish();
@@ -329,7 +329,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             isValid = false;
         } else {
             try {
-                double reorderLevel = Double.parseDouble(reorderLevelStr);
+                int reorderLevel = Integer.parseInt(reorderLevelStr);
                 if (reorderLevel < 0) {
                     tilReorderLevel.setError(getString(R.string.error_invalid_reorder_level));
                     isValid = false;
@@ -355,36 +355,16 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         String name = etName.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
         double price = Double.parseDouble(etPrice.getText().toString().trim());
-        double reorderLevel = Double.parseDouble(etReorderLevel.getText().toString().trim());
+        int reorderLevel = Integer.parseInt(etReorderLevel.getText().toString().trim());
         String imageUrl = etImageUrl.getText().toString().trim();
         String status = switchStatus.isChecked() ? "active" : "inactive";
 
         if (MODE_ADD.equals(mode)) {
             // Create new ingredient
-            double initialStock = Double.parseDouble(etInitialStock.getText().toString().trim());
-            
-            CreateIngredientRequest request = new CreateIngredientRequest();
-            request.setName(name);
-            request.setDescription(description);
-            request.setPrice(price);
-            request.setImageLink(imageUrl);
-            request.setStatus(status);
-            request.setCategoryName("Ingredient");
-            request.setQuantityInStock(initialStock);
-            request.setReorderLevel(reorderLevel);
-
-            viewModel.createIngredient(request);
+            viewModel.createIngredient(name, description, price, reorderLevel, imageUrl, status);
         } else {
             // Update existing ingredient
-            UpdateIngredientRequest request = new UpdateIngredientRequest();
-            request.setName(name);
-            request.setDescription(description);
-            request.setPrice(price);
-            request.setImageLink(imageUrl);
-            request.setStatus(status);
-            request.setReorderLevel(reorderLevel);
-
-            viewModel.updateIngredient(ingredientId, request);
+            viewModel.updateIngredient(ingredientId, name, description, price, reorderLevel, imageUrl, status);
         }
     }
 

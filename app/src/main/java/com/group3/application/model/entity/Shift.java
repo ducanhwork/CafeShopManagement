@@ -6,49 +6,73 @@ import java.math.BigDecimal;
 
 /**
  * Shift entity representing a work shift with cash management.
- * Matches the backend API response structure with camelCase field names.
+ * Matches the backend API response structure exactly.
+ * 
+ * Backend fields:
+ * - id (String/UUID)
+ * - userId (String/UUID)
+ * - userFullName (String)
+ * - userEmail (String)
+ * - startTime (ISO 8601 format)
+ * - endTime (ISO 8601 format, null if OPEN)
+ * - openingCash (BigDecimal/Double)
+ * - closingCash (BigDecimal/Double, null if OPEN)
+ * - status (String: "OPEN" or "CLOSED")
+ * - durationMinutes (Long, null if OPEN)
+ * - cashDiscrepancy (BigDecimal/Double, null if OPEN)
  */
 public class Shift {
     
+    @SerializedName("id")
     private String id;
     
+    @SerializedName("userId")
     private String userId;
     
-    private String userName;
+    @SerializedName("userFullName")
+    private String userFullName;
     
+    @SerializedName("userEmail")
+    private String userEmail;
+    
+    @SerializedName("startTime")
     private String startTime; // ISO 8601 format: "2025-11-09T08:00:00"
     
-    private String endTime;
+    @SerializedName("endTime")
+    private String endTime; // Null if shift is still OPEN
     
-    private BigDecimal openingCash;
+    @SerializedName("openingCash")
+    private Double openingCash;
     
-    private BigDecimal closingCash;
+    @SerializedName("closingCash")
+    private Double closingCash; // Null if shift is still OPEN
     
-    private BigDecimal expectedCash;
+    @SerializedName("status")
+    private String status; // "OPEN" or "CLOSED"
     
-    private BigDecimal discrepancy; // closingCash - expectedCash
+    @SerializedName("durationMinutes")
+    private Long durationMinutes; // Null if shift is still OPEN
     
-    private Integer duration; // Duration in minutes (for closed shifts)
-    
-    private String status; // OPEN or CLOSED
+    @SerializedName("cashDiscrepancy")
+    private Double cashDiscrepancy; // Null if shift is still OPEN, formula: closingCash - (openingCash + totalCashIn - totalCashOut)
 
     // Constructors
     public Shift() {}
 
-    public Shift(String id, String userId, String userName, String startTime, String endTime,
-                 BigDecimal openingCash, BigDecimal closingCash, BigDecimal expectedCash,
-                 BigDecimal discrepancy, Integer duration, String status) {
+    public Shift(String id, String userId, String userFullName, String userEmail,
+                 String startTime, String endTime, Double openingCash, Double closingCash,
+                 String status, Long durationMinutes, Double cashDiscrepancy) {
         this.id = id;
         this.userId = userId;
-        this.userName = userName;
+        this.userFullName = userFullName;
+        this.userEmail = userEmail;
         this.startTime = startTime;
         this.endTime = endTime;
         this.openingCash = openingCash;
         this.closingCash = closingCash;
-        this.expectedCash = expectedCash;
-        this.discrepancy = discrepancy;
-        this.duration = duration;
         this.status = status;
+        this.durationMinutes = durationMinutes;
+        this.cashDiscrepancy = cashDiscrepancy;
     }
 
     // Getters and Setters
@@ -68,12 +92,20 @@ public class Shift {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getStartTime() {
@@ -92,44 +124,20 @@ public class Shift {
         this.endTime = endTime;
     }
 
-    public BigDecimal getOpeningCash() {
+    public Double getOpeningCash() {
         return openingCash;
     }
 
-    public void setOpeningCash(BigDecimal openingCash) {
+    public void setOpeningCash(Double openingCash) {
         this.openingCash = openingCash;
     }
 
-    public BigDecimal getClosingCash() {
+    public Double getClosingCash() {
         return closingCash;
     }
 
-    public void setClosingCash(BigDecimal closingCash) {
+    public void setClosingCash(Double closingCash) {
         this.closingCash = closingCash;
-    }
-
-    public BigDecimal getExpectedCash() {
-        return expectedCash;
-    }
-
-    public void setExpectedCash(BigDecimal expectedCash) {
-        this.expectedCash = expectedCash;
-    }
-
-    public BigDecimal getDiscrepancy() {
-        return discrepancy;
-    }
-
-    public void setDiscrepancy(BigDecimal discrepancy) {
-        this.discrepancy = discrepancy;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     public String getStatus() {
@@ -139,6 +147,24 @@ public class Shift {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Long getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(Long durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public Double getCashDiscrepancy() {
+        return cashDiscrepancy;
+    }
+
+    public void setCashDiscrepancy(Double cashDiscrepancy) {
+        this.cashDiscrepancy = cashDiscrepancy;
+    }
+
+    // Helper Methods
 
     /**
      * Check if shift is currently open
@@ -158,29 +184,45 @@ public class Shift {
      * Get formatted duration string (e.g., "8h 30m")
      */
     public String getFormattedDuration() {
-        if (duration == null || duration == 0) {
+        if (durationMinutes == null || durationMinutes == 0) {
             return "N/A";
         }
-        int hours = duration / 60;
-        int minutes = duration % 60;
+        long hours = durationMinutes / 60;
+        long minutes = durationMinutes % 60;
         return String.format("%dh %dm", hours, minutes);
     }
 
     /**
-     * Get discrepancy color code for UI
-     * @return 0 for no discrepancy (green), 1 for minor (<50k, yellow), 2 for major (>=50k, red)
+     * Get discrepancy level for UI color coding
+     * @return 0 for zero/positive (green), 1 for minor negative (orange), 2 for major negative (red)
      */
     public int getDiscrepancyLevel() {
-        if (discrepancy == null) {
-            return 0;
+        if (cashDiscrepancy == null) {
+            return 0; // No discrepancy yet - green
         }
-        BigDecimal absDiscrepancy = discrepancy.abs();
-        if (absDiscrepancy.compareTo(BigDecimal.ZERO) == 0) {
-            return 0; // Perfect - green
-        } else if (absDiscrepancy.compareTo(new BigDecimal("50000")) < 0) {
-            return 1; // Minor - yellow
+        if (cashDiscrepancy >= 0) {
+            return 0; // Zero or positive - green
+        } else if (cashDiscrepancy >= -50.0) {
+            return 1; // Minor negative (<$50) - orange
         } else {
-            return 2; // Major - red
+            return 2; // Major negative (>=$50) - red
         }
+    }
+
+    /**
+     * Check if there is a cash discrepancy
+     */
+    public boolean hasDiscrepancy() {
+        return cashDiscrepancy != null && Math.abs(cashDiscrepancy) > 0.01;
+    }
+
+    /**
+     * Get user display name (full name or email as fallback)
+     */
+    public String getUserDisplayName() {
+        if (userFullName != null && !userFullName.trim().isEmpty()) {
+            return userFullName;
+        }
+        return userEmail != null ? userEmail : "Unknown User";
     }
 }

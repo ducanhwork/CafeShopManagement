@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         
-        authRepository = new AuthRepository(getApplicationContext());
+        authRepository = new AuthRepository((android.app.Application) getApplication());
         
         // Check authentication after delay
         new Handler(Looper.getMainLooper()).postDelayed(this::checkAuthentication, SPLASH_DELAY);

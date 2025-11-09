@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
 import com.group3.application.model.entity.Ingredient;
-import com.group3.application.viewmodel.ImageUtils;
+import com.group3.application.common.util.ImageUtils;
 
 /**
  * Dialog fragment for adding stock transactions (Incoming, Outgoing, Adjustment)
@@ -70,7 +70,7 @@ public class AddStockDialog extends DialogFragment {
          * @param type Transaction type (INCOMING, OUTGOING, ADJUSTMENT)
          * @param notes Optional notes for the transaction
          */
-        void onStockAdded(int ingredientId, double quantity, String type, String notes);
+        void onStockAdded(String ingredientId, double quantity, String type, String notes);
     }
 
     /**

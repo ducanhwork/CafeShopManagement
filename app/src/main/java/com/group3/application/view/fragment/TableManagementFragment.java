@@ -171,22 +171,18 @@ public class TableManagementFragment extends Fragment {
     }
 
     private void setupSearchBar() {
-        searchBar.addTextWatcher(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                currentSearchQuery = s.toString().trim();
-                if (currentSearchQuery.isEmpty()) {
-                    currentSearchQuery = null;
-                }
-                loadTables();
+        // TODO: SearchBar search functionality needs proper implementation
+        // SearchBar in Material Components 3 has different APIs
+        // For now, search is disabled until proper implementation
+        /*
+        searchBar.setOnTextChangedListener((text, start, before, count) -> {
+            currentSearchQuery = text.toString().trim();
+            if (currentSearchQuery.isEmpty()) {
+                currentSearchQuery = null;
             }
+            loadTables();
         });
+        */
     }
 
     private void setupFAB() {

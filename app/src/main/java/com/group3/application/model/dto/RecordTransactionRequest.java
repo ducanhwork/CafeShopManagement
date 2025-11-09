@@ -1,7 +1,5 @@
 package com.group3.application.model.dto;
 
-import java.math.BigDecimal;
-
 /**
  * Request DTO for recording a cash transaction during a shift.
  * Matches the API endpoint: POST /shifts/cash/record
@@ -9,7 +7,7 @@ import java.math.BigDecimal;
  */
 public class RecordTransactionRequest {
     
-    private BigDecimal amount;
+    private Double amount;
     
     private String transactionType; // CASH_IN, CASH_OUT, REFUND
     
@@ -20,7 +18,7 @@ public class RecordTransactionRequest {
     // Constructors
     public RecordTransactionRequest() {}
 
-    public RecordTransactionRequest(BigDecimal amount, String transactionType, 
+    public RecordTransactionRequest(Double amount, String transactionType, 
                                    String description, String referenceNumber) {
         this.amount = amount;
         this.transactionType = transactionType;
@@ -29,11 +27,11 @@ public class RecordTransactionRequest {
     }
 
     // Getters and Setters
-    public BigDecimal getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

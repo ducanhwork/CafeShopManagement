@@ -358,9 +358,9 @@ public class InventoryViewModel extends AndroidViewModel {
     }
     
     /**
-     * Get low stock alerts (Manager only)
+     * Load low stock alerts from server (Manager only)
      */
-    public void getLowStockAlerts() {
+    public void loadLowStockAlerts() {
         loading.setValue(true);
         error.setValue(null);
         

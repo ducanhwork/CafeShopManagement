@@ -188,7 +188,7 @@ public class ShiftRepository {
             public void onResponse(@NonNull Call<CashBalance> call, @NonNull Response<CashBalance> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     CashBalance balance = response.body();
-                    Log.d(TAG, "Cash balance retrieved: " + balance.getCurrentBalance());
+                    Log.d(TAG, "Cash balance retrieved - Expected Balance: " + balance.getExpectedBalance());
                     listener.onGetCashBalanceComplete(new APIResult(
                             true,
                             "Lấy số dư tiền mặt thành công",

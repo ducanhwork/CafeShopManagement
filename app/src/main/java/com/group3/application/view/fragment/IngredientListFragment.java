@@ -329,7 +329,7 @@ public class IngredientListFragment extends Fragment {
      * Check if current user is Manager
      */
     private boolean isManager() {
-        String role = PreferenceManager.getRole(requireContext());
+        String role = PreferenceManager.getUserRole(requireContext());
         return "MANAGER".equals(role);
     }
     
@@ -350,7 +350,7 @@ public class IngredientListFragment extends Fragment {
         AddStockDialog dialog = AddStockDialog.newInstance(ingredient);
         dialog.setOnStockAddedListener((ingredientId, quantity, type, notes) -> {
             // Add stock transaction via ViewModel
-            viewModel.addStockTransaction(ingredientId, quantity, type, notes);
+            viewModel.addStockTransaction(ingredientId, (int) quantity, type, notes);
         });
         dialog.show(getChildFragmentManager(), "AddStockDialog");
     }

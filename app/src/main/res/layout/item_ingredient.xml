@@ -32,14 +32,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_ingredient_placeholder"/>
 
-        <!-- Low Stock Badge -->
-        <com.google.android.material.badge.BadgeDrawable
-            android:id="@+id/badge_low_stock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/img_ingredient"
-            app:layout_constraintTop_toTopOf="@id/img_ingredient"/>
-
         <!-- Ingredient Name -->
         <TextView
             android:id="@+id/txt_ingredient_name"

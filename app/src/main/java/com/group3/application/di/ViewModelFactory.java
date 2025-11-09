@@ -1,5 +1,7 @@
 package com.group3.application.di;
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,10 +18,12 @@ import javax.inject.Singleton;
 @Singleton
 public class ViewModelFactory implements ViewModelProvider.Factory {
     
+    private final Application application;
     private final TableRepository tableRepository;
     
     @Inject
-    public ViewModelFactory(TableRepository tableRepository) {
+    public ViewModelFactory(Application application, TableRepository tableRepository) {
+        this.application = application;
         this.tableRepository = tableRepository;
     }
     
@@ -27,7 +31,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(TableViewModel.class)) {
-            return (T) new TableViewModel();
+            return (T) new TableViewModel(application);
         }
         
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());

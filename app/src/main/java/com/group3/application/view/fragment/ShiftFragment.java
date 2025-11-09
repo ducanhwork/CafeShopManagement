@@ -3,7 +3,7 @@ package com.group3.application.view.fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android:view.ViewGroup;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +23,6 @@ import com.group3.application.model.entity.CashBalance;
 import com.group3.application.model.entity.Shift;
 import com.group3.application.viewmodel.ShiftViewModel;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -185,7 +184,7 @@ public class ShiftFragment extends Fragment {
         }
 
         EndShiftBottomSheet bottomSheet = new EndShiftBottomSheet();
-        bottomSheet.setShiftData(currentShift.getOpeningCash(), cashBalance.getExpectedCash());
+        bottomSheet.setShiftData(currentShift.getOpeningCash(), cashBalance.getExpectedBalance());
         bottomSheet.setOnEndShiftListener((closingCash, callback) -> {
             viewModel.endShift(closingCash);
             
@@ -239,7 +238,7 @@ public class ShiftFragment extends Fragment {
             }
 
             // Duration (only if shift has duration field)
-            if (shift.getDuration() != null && shift.getDuration() > 0) {
+            if (shift.getDurationMinutes() != null && shift.getDurationMinutes() > 0) {
                 tvShiftDuration.setText(String.format("Thời gian: %s", shift.getFormattedDuration()));
                 tvShiftDuration.setVisibility(View.VISIBLE);
             } else {
@@ -260,8 +259,16 @@ public class ShiftFragment extends Fragment {
         }
 
         layoutCashBalance.setVisibility(View.VISIBLE);
-        tvCurrentBalance.setText(formatCurrency(balance.getCurrentBalance()));
-        tvExpectedCash.setText(formatCurrency(balance.getExpectedCash()));
+        
+        // Calculate current balance from expected balance and display it
+        // Current balance = expectedBalance (which is opening + cashIn - cashOut - refunds)
+        if (balance.getExpectedBalance() != null) {
+            tvCurrentBalance.setText(formatCurrency(balance.getExpectedBalance()));
+        } else {
+            tvCurrentBalance.setText(formatCurrency(0.0));
+        }
+        
+        tvExpectedCash.setText(formatCurrency(balance.getExpectedBalance()));
         
         if (balance.getTransactionCount() != null) {
             tvTransactionCount.setText(String.valueOf(balance.getTransactionCount()));
@@ -275,7 +282,7 @@ public class ShiftFragment extends Fragment {
         btnRecordTransaction.setVisibility(hasOpenShift ? View.VISIBLE : View.GONE);
     }
 
-    private String formatCurrency(BigDecimal amount) {
+    private String formatCurrency(Double amount) {
         if (amount == null) {
             return "0₫";
         }

@@ -23,7 +23,7 @@ public class InventoryRepository extends BaseRepository {
     private final InventoryApiService apiService;
     
     public InventoryRepository() {
-        this.apiService = ApiClient.getClient().create(InventoryApiService.class);
+        this.apiService = ApiClient.get().create(InventoryApiService.class);
     }
     
     /**

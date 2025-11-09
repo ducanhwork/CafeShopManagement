@@ -4,6 +4,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray_300">#E0E0E0</color>
 
+    <!-- Legacy theme colors (for compatibility) -->
+    <color name="colorPrimary">#5D4037</color>
+    <color name="colorPrimaryDark">#3E2723</color>
+    <color name="colorAccent">#8D6E63</color>
+
     <color name="coffee_primary">#5D4037</color>
     <color name="coffee_primary_dark">#3E2723</color>
     <color name="coffee_accent">#8D6E63</color>
@@ -12,6 +17,10 @@
     <color name="ripple_dark">#33000000</color>
     <color name="link_color">#FF7043</color>
     <color name="error_red">#FF0000</color>
+    
+    <!-- Common UI Colors -->
+    <color name="background">#FFFDE7</color>
+    <color name="primary">#5D4037</color>
 
     <!-- Material Design 3 Theme Colors -->
     <color name="md_theme_primary">#6B4226</color>
@@ -60,6 +69,11 @@
     <color name="stock_low_stock_bg">#FFF3E0</color>
     <color name="stock_out_of_stock">#F44336</color>        <!-- Red - out of stock -->
     <color name="stock_out_of_stock_bg">#FFEBEE</color>
+    
+    <!-- Inventory color aliases (for layouts) -->
+    <color name="inventory_out_of_stock">@color/stock_out_of_stock</color>
+    <color name="inventory_info">#2196F3</color>
+    <color name="inventory_info_background">#E3F2FD</color>
     
     <!-- Transaction Type Colors -->
     <color name="transaction_incoming">#4CAF50</color>       <!-- Green - stock received -->

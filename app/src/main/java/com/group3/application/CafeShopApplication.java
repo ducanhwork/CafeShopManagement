@@ -3,7 +3,7 @@ package com.group3.application;
 import android.app.Application;
 
 import com.group3.application.di.AppComponent;
-import com.group3.application.di.DaggerAppComponent;
+// import com.group3.application.di.DaggerAppComponent;
 import com.group3.application.model.webservice.ApiClient;
 
 /**
@@ -19,10 +19,11 @@ public class CafeShopApplication extends Application {
         super.onCreate();
         
         // Initialize Dagger
-        appComponent = DaggerAppComponent.builder()
-            .application(this)
-            .build();
-        appComponent.inject(this);
+        // TODO: Fix Dagger configuration
+        // appComponent = DaggerAppComponent.builder()
+        //     .application(this)
+        //     .build();
+        // appComponent.inject(this);
         
         // Initialize API Client with application context
         ApiClient.init(this);

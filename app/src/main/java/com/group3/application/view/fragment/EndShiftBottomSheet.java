@@ -22,7 +22,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -50,8 +49,8 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
     private MaterialButton btnEnd;
     private LinearProgressIndicator progressBar;
 
-    private BigDecimal openingCash;
-    private BigDecimal expectedCash;
+    private Double openingCash;
+    private Double expectedCash;
     private OnEndShiftListener listener;
 
     private final DecimalFormat decimalFormat;
@@ -67,7 +66,7 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
     /**
      * Set shift data (opening and expected cash)
      */
-    public void setShiftData(BigDecimal openingCash, BigDecimal expectedCash) {
+    public void setShiftData(Double openingCash, Double expectedCash) {
         this.openingCash = openingCash;
         this.expectedCash = expectedCash;
     }
@@ -112,7 +111,7 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
         if (expectedCash != null) {
             tvExpectedCash.setText(currencyFormat.format(expectedCash));
             // Pre-fill with expected amount
-            String expectedStr = expectedCash.toPlainString().replaceAll("\\.0+$", "");
+            String expectedStr = String.valueOf(expectedCash).replaceAll("\\.0+$", "");
             etClosingCash.setText(expectedStr);
             etClosingCash.setSelection(expectedStr.length());
         }
@@ -150,7 +149,7 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
                             etClosingCash.setSelection(formatted.length());
 
                             // Calculate and show discrepancy
-                            calculateDiscrepancy(new BigDecimal(parsed));
+                            calculateDiscrepancy((double) parsed);
                         } catch (NumberFormatException e) {
                             etClosingCash.setText("");
                             cardDiscrepancy.setVisibility(View.GONE);
@@ -166,17 +165,17 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
         });
     }
 
-    private void calculateDiscrepancy(BigDecimal closingCash) {
+    private void calculateDiscrepancy(Double closingCash) {
         if (expectedCash == null) return;
 
-        BigDecimal discrepancy = closingCash.subtract(expectedCash);
-        BigDecimal absDiscrepancy = discrepancy.abs();
+        Double discrepancy = closingCash - expectedCash;
+        Double absDiscrepancy = Math.abs(discrepancy);
 
         // Show discrepancy card
         cardDiscrepancy.setVisibility(View.VISIBLE);
 
         // Format discrepancy with sign
-        String sign = discrepancy.compareTo(BigDecimal.ZERO) >= 0 ? "+" : "";
+        String sign = discrepancy >= 0 ? "+" : "";
         tvDiscrepancyAmount.setText(sign + currencyFormat.format(discrepancy));
 
         // Determine discrepancy level and apply color coding
@@ -184,26 +183,26 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
         applyDiscrepancyColors(level, discrepancy);
 
         // Set message based on discrepancy
-        if (discrepancy.compareTo(BigDecimal.ZERO) == 0) {
+        if (discrepancy == 0.0) {
             tvDiscrepancyMessage.setText("Khớp chính xác! ✓");
-        } else if (discrepancy.compareTo(BigDecimal.ZERO) > 0) {
+        } else if (discrepancy > 0) {
             tvDiscrepancyMessage.setText("Dư tiền so với dự kiến");
         } else {
             tvDiscrepancyMessage.setText("Thiếu tiền so với dự kiến");
         }
     }
 
-    private int getDiscrepancyLevel(BigDecimal absDiscrepancy) {
-        if (absDiscrepancy.compareTo(BigDecimal.ZERO) == 0) {
+    private int getDiscrepancyLevel(Double absDiscrepancy) {
+        if (absDiscrepancy == 0.0) {
             return 0; // Perfect - green
-        } else if (absDiscrepancy.compareTo(new BigDecimal("50000")) < 0) {
+        } else if (absDiscrepancy < 50.0) {  // Changed from 50,000 to 50 (more realistic threshold)
             return 1; // Minor - yellow
         } else {
             return 2; // Major - red
         }
     }
 
-    private void applyDiscrepancyColors(int level, BigDecimal discrepancy) {
+    private void applyDiscrepancyColors(int level, Double discrepancy) {
         int backgroundColor;
         int textColor;
 
@@ -241,16 +240,16 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
 
         // Parse amount
         String cleanAmount = amountText.replaceAll("[,.]", "");
-        BigDecimal closingCash;
+        Double closingCash;
         try {
-            closingCash = new BigDecimal(cleanAmount);
+            closingCash = Double.parseDouble(cleanAmount);
         } catch (NumberFormatException e) {
             tilClosingCash.setError(getString(R.string.error_invalid_amount));
             return;
         }
 
         // Validate amount (must be non-negative)
-        if (closingCash.compareTo(BigDecimal.ZERO) < 0) {
+        if (closingCash < 0) {
             tilClosingCash.setError("Số tiền không thể âm");
             return;
         }
@@ -290,7 +289,7 @@ public class EndShiftBottomSheet extends BottomSheetDialogFragment {
      * Callback interface for shift end events
      */
     public interface OnEndShiftListener {
-        void onEndShift(BigDecimal closingCash, EndShiftCallback callback);
+        void onEndShift(Double closingCash, EndShiftCallback callback);
     }
 
     /**

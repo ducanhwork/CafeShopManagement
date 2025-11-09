@@ -24,6 +24,8 @@ paging = "3.2.1"
 swiperefreshlayout = "1.1.0"
 workmanager = "2.9.0"
 cardview = "1.0.0"
+circleimageview = "3.1.0"
+coreI18n = "1.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -34,6 +36,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
+core-i18n = { group = "androidx.core", name = "core-i18n", version.ref = "coreI18n" }
 
 # Lifecycle
 lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }

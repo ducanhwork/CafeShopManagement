@@ -1,8 +1,6 @@
-<resources><resources>
+<resources>
+    <string name="app_name">Cafe Management Application</string>
 
-    <string name="app_name">Cafe Management</string>    <string name="app_name">Cafe Management Application</string>
-
-    </resources>
     <!-- Navigation -->
     <string name="nav_shift">Shift</string>
     <string name="nav_tables">Tables</string>
@@ -23,6 +21,8 @@
     <string name="confirm">Confirm</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="description">Description</string>
+    <string name="version_info">Version 1.0.0</string>
     
     <!-- Auth -->
     <string name="login">Login</string>
@@ -55,6 +55,21 @@
     <string name="shift_closing_cash_hint">Enter closing cash amount</string>
     <string name="shift_opening_cash_hint">Enter opening cash amount</string>
     <string name="shift_quick_amounts">Quick amounts</string>
+    <string name="shift_start_shift">Start Shift</string>
+    <string name="shift_end_shift">End Shift</string>
+    <string name="shift_opening_cash">Opening Cash</string>
+    <string name="shift_expected_cash">Expected Cash</string>
+    <string name="shift_closing_cash">Closing Cash</string>
+    <string name="shift_current_status">Current Status</string>
+    <string name="shift_no_active">No Active Shift</string>
+    <string name="shift_current_balance">Current Balance</string>
+    <string name="shift_transaction_summary">Transaction Summary</string>
+    <string name="shift_total_transactions">Total Transactions</string>
+    <string name="shift_record_transaction">Record Transaction</string>
+    <string name="shift_no_active_shift">No Active Shift</string>
+    <string name="shift_start_shift_to_begin">Start a shift to begin managing transactions</string>
+    <string name="shift_open">Open</string>
+    <string name="shift_closed">Closed</string>
     
     <!-- Tables -->
     <string name="table_management">Table Management</string>
@@ -68,24 +83,10 @@
     <string name="edit_table">Edit Table</string>
     <string name="delete_table">Delete Table</string>
     
-    <!-- Inventory -->
-    <string name="inventory_management">Inventory Management</string>
-    <string name="ingredient_name">Ingredient Name</string>
-    <string name="quantity">Quantity</string>
-    <string name="unit">Unit</string>
-    <string name="reorder_level">Reorder Level</string>
-    <string name="add_ingredient">Add Ingredient</string>
-    <string name="edit_ingredient">Edit Ingredient</string>
-    <string name="record_incoming">Record Incoming Stock</string>
-    <string name="low_stock_alerts">Low Stock Alerts</string>
-    <string name="incoming_quantity">Incoming Quantity</string>
-    <string name="supplier">Supplier</string>
-    
     <!-- Reports -->
     <string name="reports_analytics">Reports &amp; Analytics</string>
     <string name="sales_report">Sales Report</string>
     <string name="shift_statistics">Shift Statistics</string>
-    <string name="inventory_report">Inventory Report</string>
     
     <!-- Error Messages -->
     <string name="error_network">Network error. Please check your connection.</string>
@@ -135,7 +136,6 @@
     <string name="initial_stock">Initial Stock</string>
     <string name="initial_stock_helper">Starting quantity for new ingredient</string>
     <string name="reorder_level_helper">Minimum quantity before low stock alert</string>
-    <string name="image_url">Image URL</string>
     <string name="image_url_helper">Enter a valid HTTP/HTTPS image URL</string>
     <string name="load_image">Load Image</string>
     <string name="active_status">Active</string>
@@ -168,10 +168,8 @@
     <string name="transaction">Transaction</string>
     <string name="transactions">Transactions</string>
     <string name="transaction_history">Transaction History</string>
-    <string name="transaction_type">Transaction Type</string>
     <string name="quantity">Quantity</string>
     <string name="notes">Notes</string>
-    <string name="transaction_notes">Transaction Notes (Optional)</string>
     <string name="performed_by">Performed By</string>
     <string name="timestamp">Timestamp</string>
     <string name="no_transactions">No transactions yet</string>

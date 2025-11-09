@@ -1,7 +1,5 @@
 package com.group3.application.model.dto;
 
-import java.math.BigDecimal;
-
 /**
  * Request DTO for ending a shift.
  * Matches the API endpoint: POST /shifts/end
@@ -9,21 +7,21 @@ import java.math.BigDecimal;
  */
 public class EndShiftRequest {
     
-    private BigDecimal closingCash;
+    private Double closingCash;
 
     // Constructors
     public EndShiftRequest() {}
 
-    public EndShiftRequest(BigDecimal closingCash) {
+    public EndShiftRequest(Double closingCash) {
         this.closingCash = closingCash;
     }
 
     // Getters and Setters
-    public BigDecimal getClosingCash() {
+    public Double getClosingCash() {
         return closingCash;
     }
 
-    public void setClosingCash(BigDecimal closingCash) {
+    public void setClosingCash(Double closingCash) {
         this.closingCash = closingCash;
     }
 }

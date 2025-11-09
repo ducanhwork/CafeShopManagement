@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -146,22 +145,22 @@ public class StartShiftBottomSheet extends BottomSheetDialogFragment {
 
         // Parse amount
         String cleanAmount = amountText.replaceAll("[,.]", "");
-        BigDecimal openingCash;
+        Double openingCash;
         try {
-            openingCash = new BigDecimal(cleanAmount);
+            openingCash = Double.parseDouble(cleanAmount);
         } catch (NumberFormatException e) {
             tilOpeningCash.setError(getString(R.string.error_invalid_amount));
             return;
         }
 
         // Validate amount (must be positive)
-        if (openingCash.compareTo(BigDecimal.ZERO) <= 0) {
+        if (openingCash <= 0) {
             tilOpeningCash.setError("Số tiền phải lớn hơn 0");
             return;
         }
 
         // Validate amount (reasonable max: 100 million)
-        if (openingCash.compareTo(new BigDecimal("100000000")) > 0) {
+        if (openingCash > 100000000.0) {
             tilOpeningCash.setError("Số tiền quá lớn (tối đa 100,000,000₫)");
             return;
         }
@@ -205,7 +204,7 @@ public class StartShiftBottomSheet extends BottomSheetDialogFragment {
      * Callback interface for shift start events
      */
     public interface OnStartShiftListener {
-        void onStartShift(BigDecimal openingCash, StartShiftCallback callback);
+        void onStartShift(Double openingCash, StartShiftCallback callback);
     }
 
     /**

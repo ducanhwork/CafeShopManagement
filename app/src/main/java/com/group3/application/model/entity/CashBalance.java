@@ -1,43 +1,55 @@
 package com.group3.application.model.entity;
 
-import java.math.BigDecimal;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * CashBalance entity representing the current cash balance state for a shift.
- * Used by the /shifts/cash/balance endpoint.
+ * Matches backend API response from /shifts/cash/balance endpoint.
+ * 
+ * Backend fields:
+ * - shiftId (String/UUID)
+ * - openingCash (BigDecimal/Double)
+ * - totalCashIn (BigDecimal/Double)
+ * - totalCashOut (BigDecimal/Double)
+ * - totalRefunds (BigDecimal/Double)
+ * - expectedBalance (BigDecimal/Double) - formula: openingCash + totalCashIn - totalCashOut - totalRefunds
+ * - transactionCount (Integer)
  */
 public class CashBalance {
     
+    @SerializedName("shiftId")
     private String shiftId;
     
-    private BigDecimal openingCash;
+    @SerializedName("openingCash")
+    private Double openingCash;
     
-    private BigDecimal totalCashIn;
+    @SerializedName("totalCashIn")
+    private Double totalCashIn;
     
-    private BigDecimal totalCashOut;
+    @SerializedName("totalCashOut")
+    private Double totalCashOut;
     
-    private BigDecimal totalRefunds;
+    @SerializedName("totalRefunds")
+    private Double totalRefunds;
     
-    private BigDecimal currentBalance;
+    @SerializedName("expectedBalance")
+    private Double expectedBalance; // openingCash + totalCashIn - totalCashOut - totalRefunds
     
-    private BigDecimal expectedCash;
-    
+    @SerializedName("transactionCount")
     private Integer transactionCount;
 
     // Constructors
     public CashBalance() {}
 
-    public CashBalance(String shiftId, BigDecimal openingCash, BigDecimal totalCashIn,
-                      BigDecimal totalCashOut, BigDecimal totalRefunds,
-                      BigDecimal currentBalance, BigDecimal expectedCash,
-                      Integer transactionCount) {
+    public CashBalance(String shiftId, Double openingCash, Double totalCashIn,
+                      Double totalCashOut, Double totalRefunds,
+                      Double expectedBalance, Integer transactionCount) {
         this.shiftId = shiftId;
         this.openingCash = openingCash;
         this.totalCashIn = totalCashIn;
         this.totalCashOut = totalCashOut;
         this.totalRefunds = totalRefunds;
-        this.currentBalance = currentBalance;
-        this.expectedCash = expectedCash;
+        this.expectedBalance = expectedBalance;
         this.transactionCount = transactionCount;
     }
 
@@ -50,52 +62,44 @@ public class CashBalance {
         this.shiftId = shiftId;
     }
 
-    public BigDecimal getOpeningCash() {
+    public Double getOpeningCash() {
         return openingCash;
     }
 
-    public void setOpeningCash(BigDecimal openingCash) {
+    public void setOpeningCash(Double openingCash) {
         this.openingCash = openingCash;
     }
 
-    public BigDecimal getTotalCashIn() {
+    public Double getTotalCashIn() {
         return totalCashIn;
     }
 
-    public void setTotalCashIn(BigDecimal totalCashIn) {
+    public void setTotalCashIn(Double totalCashIn) {
         this.totalCashIn = totalCashIn;
     }
 
-    public BigDecimal getTotalCashOut() {
+    public Double getTotalCashOut() {
         return totalCashOut;
     }
 
-    public void setTotalCashOut(BigDecimal totalCashOut) {
+    public void setTotalCashOut(Double totalCashOut) {
         this.totalCashOut = totalCashOut;
     }
 
-    public BigDecimal getTotalRefunds() {
+    public Double getTotalRefunds() {
         return totalRefunds;
     }
 
-    public void setTotalRefunds(BigDecimal totalRefunds) {
+    public void setTotalRefunds(Double totalRefunds) {
         this.totalRefunds = totalRefunds;
     }
 
-    public BigDecimal getCurrentBalance() {
-        return currentBalance;
+    public Double getExpectedBalance() {
+        return expectedBalance;
     }
 
-    public void setCurrentBalance(BigDecimal currentBalance) {
-        this.currentBalance = currentBalance;
-    }
-
-    public BigDecimal getExpectedCash() {
-        return expectedCash;
-    }
-
-    public void setExpectedCash(BigDecimal expectedCash) {
-        this.expectedCash = expectedCash;
+    public void setExpectedBalance(Double expectedBalance) {
+        this.expectedBalance = expectedBalance;
     }
 
     public Integer getTransactionCount() {
@@ -106,20 +110,22 @@ public class CashBalance {
         this.transactionCount = transactionCount;
     }
 
+    // Helper Methods
+
     /**
-     * Calculate current discrepancy (current - expected)
+     * Get total net cash flow (cashIn - cashOut - refunds)
      */
-    public BigDecimal getDiscrepancy() {
-        if (currentBalance == null || expectedCash == null) {
-            return BigDecimal.ZERO;
-        }
-        return currentBalance.subtract(expectedCash);
+    public Double getTotalNetCashFlow() {
+        double cashIn = totalCashIn != null ? totalCashIn : 0.0;
+        double cashOut = totalCashOut != null ? totalCashOut : 0.0;
+        double refunds = totalRefunds != null ? totalRefunds : 0.0;
+        return cashIn - cashOut - refunds;
     }
 
     /**
-     * Check if there's a discrepancy
+     * Check if balance has been calculated
      */
-    public boolean hasDiscrepancy() {
-        return getDiscrepancy().compareTo(BigDecimal.ZERO) != 0;
+    public boolean hasBalance() {
+        return expectedBalance != null;
     }
 }
