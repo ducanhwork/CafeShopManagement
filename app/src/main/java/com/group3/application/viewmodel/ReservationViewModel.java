@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.group3.application.model.entity.TableInfo;
-import com.group3.application.model.repository.TableRepository;
+import com.group3.application.model.entity.Reservation;
+import com.group3.application.model.repository.ReservationRepository;
 
 import java.util.List;
 
@@ -14,13 +14,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReservationViewModel extends ViewModel {
-    private TableRepository tableRepository = new TableRepository();
-    private MutableLiveData<List<TableInfo>> tables = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<String> error = new MutableLiveData<>();
 
-    public LiveData<List<TableInfo>> getTables() {
-        return tables;
+    private ReservationRepository reservationRepository = new ReservationRepository();
+
+    private final MutableLiveData<List<Reservation>> reservations = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private final MutableLiveData<String> error = new MutableLiveData<>(null);
+
+    public LiveData<List<Reservation>> getReservations() {
+        return reservations;
     }
 
     public LiveData<Boolean> getIsLoading() {
@@ -31,23 +33,23 @@ public class ReservationViewModel extends ViewModel {
         return error;
     }
 
-    public void fetchTables() {
+    public void fetchReservationsByTable(String tableId) {
         isLoading.setValue(true);
-        tableRepository.getTables(null, null).enqueue(new Callback<List<TableInfo>>() {
+        reservationRepository.getReservationsByTable(tableId).enqueue(new Callback<List<Reservation>>() {
             @Override
-            public void onResponse(Call<List<TableInfo>> call, Response<List<TableInfo>> response) {
-                isLoading.setValue(false);
+            public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 if (response.isSuccessful()) {
-                    tables.setValue(response.body());
+                    reservations.setValue(response.body());
                 } else {
-                    error.setValue("Failed to fetch tables " + response.code());
+                    error.setValue("Failed to fetch reservations");
                 }
+                isLoading.setValue(false);
             }
 
             @Override
-            public void onFailure(Call<List<TableInfo>> call, Throwable t) {
-                isLoading.setValue(false);
+            public void onFailure(Call<List<Reservation>> call, Throwable t) {
                 error.setValue(t.getMessage());
+                isLoading.setValue(false);
             }
         });
     }
