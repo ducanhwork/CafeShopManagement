@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,6 +16,16 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.ProductUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.CreateReservationActivity"
+            android:exported="true" />
+        <activity android:name=".view.activity.ReservationListActivity" />
+        <activity android:name=".view.activity.ReservationDetailActivity" />
             android:name=".view.ReservationActivity"
             android:exported="true">
         </activity>
