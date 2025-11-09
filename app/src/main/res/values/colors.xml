@@ -12,4 +12,33 @@
     <color name="ripple_dark">#33000000</color>
     <color name="link_color">#FF7043</color>
     <color name="error_red">#FF0000</color>
+
+    <!-- Material Design 3 Theme Colors -->
+    <color name="md_theme_primary">#6B4226</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#FFDCC2</color>
+    <color name="md_theme_onPrimaryContainer">#251A00</color>
+    
+    <color name="md_theme_secondary">#D4A574</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FFF0E0</color>
+    <color name="md_theme_onSecondaryContainer">#2B1700</color>
+    
+    <color name="md_theme_error">#F44336</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onErrorContainer">#410002</color>
+    
+    <color name="md_theme_success">#4CAF50</color>
+    <color name="md_theme_onSuccess">#FFFFFF</color>
+    <color name="md_theme_successContainer">#C8E6C9</color>
+    <color name="md_theme_onSuccessContainer">#1B5E20</color>
+    
+    <color name="md_theme_warning">#FF9800</color>
+    <color name="md_theme_onWarning">#FFFFFF</color>
+    <color name="md_theme_warningContainer">#FFE0B2</color>
+    <color name="md_theme_onWarningContainer">#E65100</color>
+    
+    <color name="md_theme_surfaceVariant">#E7E0EC</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
 </resources>

@@ -142,22 +142,67 @@ public class ShiftFragment extends Fragment {
         swipeRefresh.setOnRefreshListener(() -> viewModel.refreshData());
 
         // Start Shift button
-        btnStartShift.setOnClickListener(v -> {
-            // TODO: Show StartShiftBottomSheet
-            Toast.makeText(requireContext(), "Start Shift dialog coming soon", Toast.LENGTH_SHORT).show();
-        });
+        btnStartShift.setOnClickListener(v -> showStartShiftDialog());
 
         // End Shift button
-        btnEndShift.setOnClickListener(v -> {
-            // TODO: Show EndShiftBottomSheet
-            Toast.makeText(requireContext(), "End Shift dialog coming soon", Toast.LENGTH_SHORT).show();
-        });
+        btnEndShift.setOnClickListener(v -> showEndShiftDialog());
 
         // Record Transaction button
         btnRecordTransaction.setOnClickListener(v -> {
             // TODO: Show RecordTransactionDialog
             Toast.makeText(requireContext(), "Record Transaction dialog coming soon", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void showStartShiftDialog() {
+        StartShiftBottomSheet bottomSheet = new StartShiftBottomSheet();
+        bottomSheet.setOnStartShiftListener((openingCash, callback) -> {
+            viewModel.startShift(openingCash);
+            
+            // Observe the result
+            viewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success -> {
+                if (success != null && !success.isEmpty()) {
+                    callback.onStartShiftComplete(true, success);
+                }
+            });
+            
+            viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+                if (error != null && !error.isEmpty()) {
+                    callback.onStartShiftComplete(false, error);
+                }
+            });
+        });
+        bottomSheet.show(getParentFragmentManager(), "StartShiftBottomSheet");
+    }
+
+    private void showEndShiftDialog() {
+        Shift currentShift = viewModel.getCurrentShift().getValue();
+        CashBalance cashBalance = viewModel.getCashBalance().getValue();
+        
+        if (currentShift == null || cashBalance == null) {
+            Toast.makeText(requireContext(), "Không thể kết thúc ca: Thiếu thông tin ca làm việc", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EndShiftBottomSheet bottomSheet = new EndShiftBottomSheet();
+        bottomSheet.setShiftData(currentShift.getOpeningCash(), cashBalance.getExpectedCash());
+        bottomSheet.setOnEndShiftListener((closingCash, callback) -> {
+            viewModel.endShift(closingCash);
+            
+            // Observe the result
+            viewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success -> {
+                if (success != null && !success.isEmpty()) {
+                    callback.onEndShiftComplete(true, success);
+                }
+            });
+            
+            viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+                if (error != null && !error.isEmpty()) {
+                    callback.onEndShiftComplete(false, error);
+                }
+            });
+        });
+        bottomSheet.show(getParentFragmentManager(), "EndShiftBottomSheet");
     }
 
     private void updateShiftUI(Shift shift) {

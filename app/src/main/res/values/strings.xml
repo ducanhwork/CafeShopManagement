@@ -50,6 +50,11 @@
     <string name="transaction_amount">Transaction Amount</string>
     <string name="transaction_type">Transaction Type</string>
     <string name="transaction_notes">Transaction Notes</string>
+    <string name="shift_summary">Shift Summary</string>
+    <string name="shift_discrepancy">Discrepancy</string>
+    <string name="shift_closing_cash_hint">Enter closing cash amount</string>
+    <string name="shift_opening_cash_hint">Enter opening cash amount</string>
+    <string name="shift_quick_amounts">Quick amounts</string>
     
     <!-- Tables -->
     <string name="table_management">Table Management</string>
@@ -90,6 +95,8 @@
     <string name="error_invalid_password">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_login_failed">Login failed. Please check your credentials.</string>
+    <string name="error_required_field">This field is required</string>
+    <string name="error_invalid_amount">Invalid amount entered</string>
     
     <!-- Success Messages -->
     <string name="success_shift_started">Shift started successfully</string>
