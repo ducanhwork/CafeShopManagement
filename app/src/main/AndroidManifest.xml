@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Cho Android cũ hơn -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
 
+    <!-- Quyền truy cập Camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.ProductCreateActivity"
+            android:exported="false" />
         <activity
             android:name=".view.StaffDetailActivity"
             android:exported="false"
@@ -27,7 +37,7 @@
             android:exported="false" />
         <activity 
             android:name=".view.ReservationActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
         <activity
             android:name=".view.ReservationListActivity"
