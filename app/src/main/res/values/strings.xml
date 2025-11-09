@@ -112,4 +112,134 @@
     <string name="confirm_logout">Are you sure you want to logout?</string>
     <string name="confirm_delete_table">Are you sure you want to delete this table?</string>
     <string name="confirm_end_shift">Are you sure you want to end the current shift?</string>
+    <string name="confirm_delete_ingredient">Are you sure you want to delete this ingredient?</string>
+    
+    <!-- Inventory Management -->
+    <string name="inventory_management">Inventory Management</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="ingredient_description">Description</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="edit_ingredient">Edit Ingredient</string>
+    <string name="delete_ingredient">Delete Ingredient</string>
+    <string name="ingredient_details">Ingredient Details</string>
+    <string name="ingredient_info">Ingredient Info</string>
+    <string name="search_ingredients">Search ingredients…</string>
+    <string name="no_ingredients">No ingredients found</string>
+    <string name="no_ingredients_message">Add ingredients to manage your inventory</string>
+    
+    <!-- Stock Management -->
+    <string name="stock">Stock</string>
+    <string name="current_stock">Current Stock</string>
+    <string name="quantity_in_stock">Quantity in Stock</string>
+    <string name="reorder_level">Reorder Level</string>
+    <string name="add_stock">Add Stock</string>
+    <string name="stock_level">Stock Level</string>
+    <string name="stock_status">Stock Status</string>
+    <string name="in_stock">In Stock</string>
+    <string name="low_stock">Low Stock</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="low_stock_warning">Stock level is below reorder point</string>
+    <string name="low_stock_alerts">Low Stock Alerts</string>
+    <string name="view_low_stock">View Low Stock</string>
+    <string name="no_low_stock">No low stock items</string>
+    <string name="no_low_stock_message">All ingredients have sufficient stock</string>
+    <string name="deficit">Deficit</string>
+    <string name="quantity_needed">Quantity Needed</string>
+    
+    <!-- Transactions -->
+    <string name="transaction">Transaction</string>
+    <string name="transactions">Transactions</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="quantity">Quantity</string>
+    <string name="notes">Notes</string>
+    <string name="transaction_notes">Transaction Notes (Optional)</string>
+    <string name="performed_by">Performed By</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="no_transactions">No transactions yet</string>
+    <string name="no_transactions_message">Stock transactions will appear here</string>
+    
+    <!-- Transaction Types -->
+    <string name="incoming">Incoming</string>
+    <string name="outgoing">Outgoing</string>
+    <string name="adjustment">Adjustment</string>
+    <string name="incoming_stock">Incoming Stock</string>
+    <string name="outgoing_stock">Outgoing Stock</string>
+    <string name="stock_adjustment">Stock Adjustment</string>
+    <string name="incoming_desc">Stock received from supplier</string>
+    <string name="outgoing_desc">Stock used or consumed</string>
+    <string name="adjustment_desc">Manual stock correction</string>
+    
+    <!-- Ingredient Fields -->
+    <string name="price">Price</string>
+    <string name="unit_price">Unit Price</string>
+    <string name="price_per_unit">Price per Unit</string>
+    <string name="status">Status</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="image">Image</string>
+    <string name="image_url">Image URL</string>
+    <string name="select_image">Select Image</string>
+    <string name="change_image">Change Image</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="enter_image_url">Enter Image URL</string>
+    
+    <!-- Stock Filters -->
+    <string name="filter_all">All</string>
+    <string name="filter_low_stock">Low Stock</string>
+    <string name="filter_out_of_stock">Out of Stock</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="clear_filters">Clear Filters</string>
+    
+    <!-- Quick Actions -->
+    <string name="quick_actions">Quick Actions</string>
+    <string name="view_details">View Details</string>
+    <string name="quick_add_stock">Quick Add Stock</string>
+    <string name="quick_quantity">Quick Quantity</string>
+    
+    <!-- Stock Dialog -->
+    <string name="add_stock_transaction">Add Stock Transaction</string>
+    <string name="enter_quantity">Enter Quantity</string>
+    <string name="new_stock_level">New Stock Level</string>
+    <string name="stock_preview">Stock Preview: %1$d units</string>
+    <string name="insufficient_stock_warning">Warning: Quantity exceeds current stock</string>
+    
+    <!-- Analytics & Reports -->
+    <string name="analytics">Analytics</string>
+    <string name="reports">Reports</string>
+    <string name="inventory_report">Inventory Report</string>
+    <string name="stock_value">Stock Value</string>
+    <string name="total_stock_value">Total Stock Value</string>
+    <string name="total_ingredients">Total Ingredients</string>
+    <string name="low_stock_count">Low Stock Count</string>
+    <string name="out_of_stock_count">Out of Stock Count</string>
+    <string name="export_report">Export Report</string>
+    <string name="export_csv">Export as CSV</string>
+    <string name="export_pdf">Export as PDF</string>
+    
+    <!-- Validation Messages -->
+    <string name="error_empty_name">Ingredient name is required</string>
+    <string name="error_name_too_long">Name must be less than 100 characters</string>
+    <string name="error_description_too_long">Description must be less than 500 characters</string>
+    <string name="error_invalid_price">Price must be greater than 0</string>
+    <string name="error_invalid_reorder_level">Reorder level must be 0 or greater</string>
+    <string name="error_invalid_quantity">Quantity must be between 1 and 10000</string>
+    <string name="error_notes_too_long">Notes must be less than 500 characters</string>
+    <string name="error_select_transaction_type">Please select a transaction type</string>
+    <string name="error_duplicate_ingredient">Ingredient with this name already exists</string>
+    
+    <!-- Empty States -->
+    <string name="empty_state_title">No data available</string>
+    <string name="empty_state_subtitle">Get started by adding items</string>
+    
+    <!-- Units -->
+    <string name="units">units</string>
+    <string name="kg">kg</string>
+    <string name="gram">g</string>
+    <string name="liter">L</string>
+    <string name="ml">ml</string>
+    <string name="pieces">pcs</string>
 </resources>

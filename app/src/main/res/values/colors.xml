@@ -52,4 +52,20 @@
     <color name="status_maintenance">#9E9E9E</color>       <!-- Gray - maintenance -->
     <color name="status_maintenance_bg">#F5F5F5</color>
     <color name="status_unknown">#607D8B</color>           <!-- Blue Gray - unknown -->
+    
+    <!-- Inventory Stock Status Colors -->
+    <color name="stock_in_stock">#4CAF50</color>            <!-- Green - sufficient stock -->
+    <color name="stock_in_stock_bg">#E8F5E9</color>
+    <color name="stock_low_stock">#FF9800</color>           <!-- Orange - low stock warning -->
+    <color name="stock_low_stock_bg">#FFF3E0</color>
+    <color name="stock_out_of_stock">#F44336</color>        <!-- Red - out of stock -->
+    <color name="stock_out_of_stock_bg">#FFEBEE</color>
+    
+    <!-- Transaction Type Colors -->
+    <color name="transaction_incoming">#4CAF50</color>       <!-- Green - stock received -->
+    <color name="transaction_incoming_bg">#E8F5E9</color>
+    <color name="transaction_outgoing">#F44336</color>       <!-- Red - stock used -->
+    <color name="transaction_outgoing_bg">#FFEBEE</color>
+    <color name="transaction_adjustment">#2196F3</color>     <!-- Blue - manual adjustment -->
+    <color name="transaction_adjustment_bg">#E3F2FD</color>
 </resources>

@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Background circle -->
+    <path
+        android:fillColor="#FFEBEE"
+        android:pathData="M100,100m-100,0a100,100 0,1 1,200 0a100,100 0,1 1,-200 0"/>
+    
+    <!-- Error X icon -->
+    <path
+        android:strokeColor="#F44336"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:pathData="M70,70 L130,130"/>
+    <path
+        android:strokeColor="#F44336"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:pathData="M130,70 L70,130"/>
+</vector>
