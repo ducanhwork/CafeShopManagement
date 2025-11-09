@@ -1,37 +1,29 @@
 package com.group3.application.model.dto;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.math.BigDecimal;
 
 /**
- * DTO for starting a new shift
+ * Request DTO for starting a new shift.
+ * Matches the API endpoint: POST /shifts/start
+ * API expects camelCase field: openingCash
  */
 public class StartShiftRequest {
     
-    @SerializedName("opening_cash")
     private BigDecimal openingCash;
-    
-    private String notes;
 
-    public StartShiftRequest(BigDecimal openingCash, String notes) {
+    // Constructors
+    public StartShiftRequest() {}
+
+    public StartShiftRequest(BigDecimal openingCash) {
         this.openingCash = openingCash;
-        this.notes = notes;
     }
 
+    // Getters and Setters
     public BigDecimal getOpeningCash() {
         return openingCash;
     }
 
     public void setOpeningCash(BigDecimal openingCash) {
         this.openingCash = openingCash;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }
