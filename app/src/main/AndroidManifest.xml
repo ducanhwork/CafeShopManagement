@@ -9,6 +9,7 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
+
     <!-- Quyền truy cập Camera -->
     <uses-permission android:name="android.permission.CAMERA" />
     <application
@@ -24,6 +25,10 @@
         <activity
             android:name=".view.ProductCreateActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.StaffDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.StaffListActivity"/>
         <activity
             android:name=".view.ProductUpdateActivity"
             android:exported="false" />
@@ -48,14 +53,33 @@
             android:name=".view.ProductListActivity"
             android:exported="false" />
         <activity
+            android:name=".view.VoucherManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoyaltyListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HomeMenuActivity"
+            android:exported="true"/>
+        <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true" />
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.StaffListActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.group3.application.viewmodel;
 
 import android.util.Pair;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
