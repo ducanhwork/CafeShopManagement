@@ -28,13 +28,17 @@
         <activity
             android:name=".view.StaffDetailActivity"
             android:exported="false"
-            android:parentActivityName=".view.StaffListActivity"/>
+            android:parentActivityName=".view.StaffListActivity" />
         <activity
             android:name=".view.ProductUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
+        <activity 
+            android:name=".view.ReservationActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".view.ReservationListActivity"
             android:exported="false"
@@ -78,8 +82,7 @@
             android:exported="false" />
         <activity
             android:name=".view.StaffListActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false"/>
     </application>
 
 </manifest>

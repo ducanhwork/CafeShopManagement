@@ -7,6 +7,7 @@ import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
+import com.group3.application.model.entity.Role;
 import com.group3.application.model.bean.LoyaltyMemberDetailResponse;
 import com.group3.application.model.bean.LoyaltyMemberListItem;
 import com.group3.application.model.bean.PointsHistoryItem;
@@ -88,6 +89,12 @@ public interface ApiService {
 
     @GET("api/users")
     Call<List<User>> getAllUsers();
+
+    @POST("api/users")
+    Call<User> createUser(@Body User newStaff);
+
+    @GET("api/roles")
+    Call<List<Role>> getRoles();
 
     @POST("api/v1/vouchers")
     Call<VoucherResponse> createVoucher(@Body VoucherRequest request);
