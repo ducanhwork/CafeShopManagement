@@ -5,11 +5,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.group3.application.R;
 import com.group3.application.model.entity.User;
+import com.group3.application.viewmodel.StaffListViewModel;
 
 public class StaffDetailActivity extends AppCompatActivity {
+
+    private StaffListViewModel staffListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class StaffDetailActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("Staff Detail");
             }
         }
+
+        staffListViewModel = new ViewModelProvider(this).get(StaffListViewModel.class);
 
         if (staff != null) {
             TextView fullNameTextView = findViewById(R.id.fullNameTextView);
