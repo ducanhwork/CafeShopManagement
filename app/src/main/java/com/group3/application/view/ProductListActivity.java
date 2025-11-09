@@ -1,16 +1,50 @@
 package com.group3.application.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
+import com.group3.application.model.entity.Category;
+import com.group3.application.model.entity.Product;
+import com.group3.application.model.repository.CategoryRepository;
+import com.group3.application.view.adapter.ProductAdapter;
+import com.group3.application.viewmodel.ProductListViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity {
+    private List<Product> products = new ArrayList<>();
+
+    private ProductAdapter adapter;
+
+    private RecyclerView recyclerView;
+    private ProductListViewModel viewModel;
+    private TextInputEditText et_search_name;
+    private Spinner spinner_category_filter;
+
+    private String selectedCategory = "All";
+    //set up spinner
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +55,93 @@ public class ProductListActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        initView();
+        viewModel = new ViewModelProvider(this).get(ProductListViewModel.class);
+        String keyword = et_search_name.getText().toString();
+        setUpSpinner();
+        trackOnChangeKeyword();
+        viewModel.getProducts(keyword, selectedCategory == "All" ? null : selectedCategory);
+        viewModel.products.observe(this, products -> {
+            this.products.clear();
+            this.products.addAll(products);
+            adapter.setData(products);
+            adapter.notifyDataSetChanged();
+        });
+        adapter = new ProductAdapter(products, updateProduct -> {
+            Intent intent = new Intent(this, ProductUpdateActivity.class);
+            intent.putExtra("productName", updateProduct.getName());
+            intent.putExtra("productPrice", updateProduct.getPrice());
+            intent.putExtra("productDescription", updateProduct.getDescription());
+            intent.putExtra("productStatus", updateProduct.getStatus());
+            intent.putExtra("productId", updateProduct.getId());
+            intent.putExtra("productImage", updateProduct.getImageLink());
+            startActivity(intent);
+        }, viewModel);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void initView() {
+        recyclerView = findViewById(R.id.recycler_view_products);
+        et_search_name = findViewById(R.id.et_search_name);
+        spinner_category_filter = findViewById(R.id.spinner_category_filter);
+    }
+
+    public void setUpSpinner() {
+        List<String> categoriesList = new ArrayList<>();
+        categoriesList.add("All");
+        viewModel.getCategories();
+        viewModel.categories.observe(this, categories -> {
+            for (Category category : categories) {
+                categoriesList.add(category.getName());
+            }
+        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriesList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_category_filter.setAdapter(adapter);
+        spinner_category_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory = categoriesList.get(position);
+                String keyword = et_search_name.getText().toString();
+                viewModel.getProducts(keyword, selectedCategory == "All" ? null : selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    public void trackOnChangeKeyword() {
+        et_search_name.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 500;
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(() -> {
+                            String keyword = s.toString().trim();
+                            String category = "All".equals(selectedCategory) ? null : selectedCategory;
+                            viewModel.getProducts(keyword.isEmpty() ? null : keyword, category);
+                        });
+                    }
+                }, DELAY);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         });
     }
 }

@@ -2,6 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="coffee_on_primary">#FFFFFF</color>
+    <color name="coffee_primary_variant">#5D4037</color>
+    <color name="coffee_on_accent">#3E2723</color>
+
+    <color name="coffee_surface">#F9F5F2</color>        <!-- Creamy background -->
+    <color name="coffee_surface_variant">#EFE5DD</color>
+    <color name="coffee_outline">#C7B7A6</color>
+
+    <color name="coffee_text_primary">#3E2723</color>
+    <color name="coffee_text_secondary">#6A4F4B</color>
+    <color name="chip_inactive_background">#757575</color> <!-- Tương đương material_grey_600 -->
+    <color name="chip_inactive_text">#99000000</color>
+    <color name="positive_points">#4CAF50</color>
+    <color name="negative_points">#F44336</color>
     <color name="gray_300">#E0E0E0</color>
 
     <color name="coffee_primary">#5D4037</color>
@@ -12,4 +26,14 @@
     <color name="ripple_dark">#33000000</color>
     <color name="link_color">#FF7043</color>
     <color name="error_red">#FF0000</color>
+    <!-- Glass Morphism Colors -->
+    <color name="glass_card_background">#15FFFFFF</color>
+    <color name="glass_input_background">#10FFFFFF</color>
+    <color name="glass_stroke">#30FFFFFF</color>
+    <color name="glass_button_primary">#25C9A96E</color>
+    <color name="glass_secondary_text">#B3FFFFFF</color>
+    <color name="glass_hint_text">#80FFFFFF</color>
+    <color name="glass_icon">#B3FFFFFF</color>
+
+    <color name="search_background">#F5F5F5</color> <!-- A very light gray for search bar background -->
 </resources>

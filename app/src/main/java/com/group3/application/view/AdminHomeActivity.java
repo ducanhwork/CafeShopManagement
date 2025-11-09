@@ -2,14 +2,10 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -30,6 +26,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private CircleImageView ivAvatar;
     private MaterialCardView cardManageProducts;
     private MaterialCardView cardManageOrders;
+    private MaterialCardView cardManageVouchers;
     private TextView tvCurrentDate;
 
     @Override
@@ -53,6 +50,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         ivAvatar = findViewById(R.id.iv_avatar);
         cardManageProducts = findViewById(R.id.card_manage_products);
         cardManageOrders = findViewById(R.id.card_manage_orders);
+        cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         tvCurrentDate = findViewById(R.id.tv_current_date);
     }
 
@@ -63,7 +61,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "EEEE, dd 'tháng' MM, yyyy HH:mm",
-                Locale.US
+            new Locale("vi", "VN")
         );
 
         String formattedDateTime = currentDateTime.format(formatter);
@@ -86,8 +84,6 @@ public class AdminHomeActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // Sự kiện click vào Avatar trên Toolbar
         ivAvatar.setOnClickListener(v -> {
-            // TODO: Tạo ProfileActivity và điều hướng đến đó
-            Toast.makeText(this, "Navigate to Profile Screen", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
@@ -100,8 +96,17 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         // Sự kiện click vào Card Quản lý Đơn hàng
         cardManageOrders.setOnClickListener(v -> {
-            // TODO: Tạo OrderManagementActivity và điều hướng đến đó
             Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();
+        });
+
+        cardManageVouchers.setOnClickListener(v -> {
+            // TODO: Tạo VoucherManagementActivity (layout thứ 2 bạn gửi) và điều hướng
+
+             Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
+             startActivity(intent);
+
+            // Tạm thời hiển thị Toast
+            Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
         });
     }
 
