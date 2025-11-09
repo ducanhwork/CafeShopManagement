@@ -2,8 +2,10 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,8 +24,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdminHomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private CircleImageView ivAvatar;
-    private BottomNavigationView bottomNavigation;
-    private AuthRepository authRepository;
+    private MaterialCardView cardManageProducts;
+    private MaterialCardView cardManageOrders;
+    private MaterialCardView cardManageVouchers;
+    private TextView tvCurrentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,28 @@ public class AdminHomeActivity extends AppCompatActivity {
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         ivAvatar = findViewById(R.id.iv_avatar);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+        cardManageProducts = findViewById(R.id.card_manage_products);
+        cardManageOrders = findViewById(R.id.card_manage_orders);
+        cardManageVouchers = findViewById(R.id.card_manage_vouchers);
+        tvCurrentDate = findViewById(R.id.tv_current_date);
+    }
+
+    private void setCurrentDateTime() {
+        // Sử dụng API java.time hiện đại, yêu cầu API level 26+ (đã có trong project của bạn)
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "EEEE, dd 'tháng' MM, yyyy HH:mm",
+            new Locale("vi", "VN")
+        );
+
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        // Viết hoa chữ cái đầu tiên của ngày trong tuần (ví dụ: "thứ tư" -> "Thứ tư")
+        formattedDateTime = formattedDateTime.substring(0, 1).toUpperCase() + formattedDateTime.substring(1);
+
+        tvCurrentDate.setText(formattedDateTime);
     }
 
     private void setupToolbar() {
@@ -88,50 +113,32 @@ public class AdminHomeActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Click on avatar to go to Profile or show logout dialog
-        ivAvatar.setOnClickListener(v -> showProfileMenu());
-    }
+        // Sự kiện click vào Avatar trên Toolbar
+        ivAvatar.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
 
-    private void showProfileMenu() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Profile")
-                .setItems(new String[]{"View Profile", "Logout"}, (dialog, which) -> {
-                    if (which == 0) {
-                        // Navigate to profile
-                        Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                    } else {
-                        // Logout
-                        showLogoutConfirmation();
-                    }
-                })
-                .show();
-    }
+        // Sự kiện click vào Card Quản lý Sản phẩm
+        cardManageProducts.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, ProductListActivity.class);
+            startActivity(intent);
+        });
 
-    private void showLogoutConfirmation() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.logout)
-                .setMessage(R.string.confirm_logout)
-                .setPositiveButton(R.string.yes, (dialog, which) -> performLogout())
-                .setNegativeButton(R.string.no, null)
-                .show();
-    }
+        // Sự kiện click vào Card Quản lý Đơn hàng
+        cardManageOrders.setOnClickListener(v -> {
+            Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();
+        });
 
-    private void performLogout() {
-        // Clear auth token
-        authRepository.clearAuthToken();
+        cardManageVouchers.setOnClickListener(v -> {
+            // TODO: Tạo VoucherManagementActivity (layout thứ 2 bạn gửi) và điều hướng
 
-        // Navigate to login
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
+             Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
+             startActivity(intent);
 
-    @Override
-    public void onBackPressed() {
-        // Show logout confirmation on back press
-        showLogoutConfirmation();
+            // Tạm thời hiển thị Toast
+            Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
+        });
     }
 }
 

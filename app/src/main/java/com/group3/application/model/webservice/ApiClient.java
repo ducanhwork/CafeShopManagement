@@ -1,13 +1,14 @@
 package com.group3.application.model.webservice;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.group3.application.common.util.PreferenceManager;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.group3.application.view.adapter.LocalDateTimeAdapter;
 
-import okhttp3.Interceptor;
+import java.time.LocalDateTime;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -16,61 +17,56 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static Retrofit instance;
+    private static volatile Retrofit instance;
+    private static volatile ApiService apiService;
+
+    @SuppressLint("StaticFieldLeak")
     private static Context appContext;
 
-    public static void init(Context context) {
-        appContext = context.getApplicationContext();
-    }
+    public static void init(Context context) { appContext = context.getApplicationContext(); }
 
     public static Retrofit get() {
         if (instance == null) {
-            HttpLoggingInterceptor log = new HttpLoggingInterceptor();
-            log.setLevel(HttpLoggingInterceptor.Level.BODY);
+            synchronized (ApiClient.class) {
+                if (instance == null) {
+                    HttpLoggingInterceptor log = new HttpLoggingInterceptor();
+                    log.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new AuthInterceptor())
-                    .addInterceptor(log)
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .build();
+                    Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                        .create();
 
-            instance = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080/api/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(client)
-                    .build();
+                    OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(20, TimeUnit.SECONDS)
+                        .writeTimeout(20, TimeUnit.SECONDS)
+                        .addInterceptor(log)
+                        // .addInterceptor(new AuthInterceptor(appContext)) // nếu có
+                        .build();
+
+                    instance = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8080/")
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                }
+            }
         }
         return instance;
     }
 
-    public static <S> S createService(Class<S> serviceClass) {
-        return get().create(serviceClass);
-    }
+    public static Retrofit get(Context ctx) { return get(); }
 
-    private static class AuthInterceptor implements Interceptor {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request original = chain.request();
-
-            if (appContext != null) {
-                String token = PreferenceManager.getToken(appContext);
-                if (token != null) {
-                    Request.Builder builder = original.newBuilder()
-                            .header("Authorization", "Bearer " + token)
-                            .method(original.method(), original.body());
-                    Request request = builder.build();
-                    return chain.proceed(request);
+    public static ApiService getApi() {
+        if (apiService == null) {
+            synchronized (ApiClient.class) {
+                if (apiService == null) {
+                    apiService = get().create(ApiService.class);
                 }
             }
-
-            return chain.proceed(original);
         }
+        return apiService;
     }
 
-    public static void resetClient() {
-        instance = null;
-    }
+    public static ApiService getApi(Context ctx) { return getApi(); }
 }
-

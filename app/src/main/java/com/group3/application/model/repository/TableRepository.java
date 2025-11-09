@@ -8,6 +8,7 @@ import com.group3.application.model.bean.UpdateTableStatusRequest;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.TableApiService;
+import com.group3.application.model.webservice.ApiService;
 
 import java.util.List;
 
@@ -18,10 +19,17 @@ import retrofit2.Call;
  * Handles JWT token and executes API calls
  */
 public class TableRepository extends BaseRepository {
+
     private final TableApiService api;
+
+    private final ApiService apiService;
 
     public TableRepository() {
         this.api = ApiClient.get().create(TableApiService.class);
+    }
+
+    public Call<List<TableInfo>> getTables(String status, String keyword) {
+        return apiService.listTables(status, keyword);
     }
 
     /**

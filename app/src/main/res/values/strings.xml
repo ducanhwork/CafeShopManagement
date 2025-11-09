@@ -268,4 +268,6 @@
     <string name="liter">L</string>
     <string name="ml">ml</string>
     <string name="pieces">pcs</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -38,12 +39,27 @@
         
         <!-- Additional Activities from main branch -->
         <activity
+            android:name=".view.ProductUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.CreateReservationActivity"
+            android:exported="true" />
+        <activity android:name=".view.activity.ReservationListActivity" />
+        <activity android:name=".view.activity.ReservationDetailActivity" />
+        <activity
             android:name=".view.ReservationActivity"
             android:exported="false" />
         <activity
             android:name=".view.ReservationListActivity"
-            android:exported="false"
+            android:exported="false" 
             android:parentActivityName=".view.ReservationActivity" />
+        <activity
+            android:name=".view.ReservationDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationListActivity" />
         <activity
             android:name=".view.ProfileActivity"
             android:exported="false" />
@@ -55,8 +71,26 @@
             android:name=".view.ProductListActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.VoucherManagementActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.LoyaltyListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HomeMenuActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".view.TableListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />

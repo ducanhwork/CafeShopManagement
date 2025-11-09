@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="roles_array">
-        <item>STAFF</item>
-        <item>MANAGER</item>
-        <item>CASHIER</item>
+    <string-array name="voucher_types">
+        <item>PERCENT</item>
+        <item>FIXED_AMOUNT</item>
+    </string-array>
+
+    <string-array name="voucher_statuses">
+        <item>ACTIVE</item>
+        <item>INACTIVE</item>
     </string-array>
 </resources>
