@@ -129,6 +129,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_product_name"
                     android:layout_width="match_parent"
+                    android:textColor="@color/coffee_primary_dark"
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:textColorHint="@color/coffee_accent" />
@@ -140,6 +141,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/coffee_primary_dark"
                 android:layout_marginBottom="16dp"
                 android:hint="Product Price (VND)"
                 app:boxStrokeColor="@color/coffee_primary"
@@ -150,6 +152,7 @@
                     android:id="@+id/et_product_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/coffee_primary_dark"
                     android:inputType="number"
                     android:textColorHint="@color/coffee_accent" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -195,6 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:gravity="top|start"
+                    android:textColor="@color/coffee_primary_dark"
                     android:inputType="textMultiLine"
                     android:textColorHint="@color/coffee_accent" />
             </com.google.android.material.textfield.TextInputLayout>
