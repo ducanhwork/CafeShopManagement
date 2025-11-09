@@ -23,6 +23,10 @@
             android:exported="false"
             android:parentActivityName=".view.ReservationActivity" />
         <activity
+            android:name=".view.ReservationDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationListActivity" />
+        <activity
             android:name=".view.ProfileActivity"
             android:exported="false" />
         <activity

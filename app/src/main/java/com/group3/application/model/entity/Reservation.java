@@ -1,10 +1,11 @@
 
 package com.group3.application.model.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Reservation {
+public class Reservation implements Serializable {
     private UUID id;
     private String customerName;
     private String customerPhone;
