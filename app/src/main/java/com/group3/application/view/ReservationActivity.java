@@ -13,9 +13,9 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.view.adapter.TableAdapter;
 import com.group3.application.viewmodel.ReservationViewModel;
 
-public class ReservationActivity extends AppCompatActivity implements TableAdapter.OnItemClick {
+public class ReservationActivity /*extends AppCompatActivity implements TableAdapter.OnItemClick*/ {
 
-    private ReservationViewModel viewModel;
+    /*private ReservationViewModel viewModel;
     private TableAdapter tableAdapter;
 
     @Override
@@ -53,5 +53,5 @@ public class ReservationActivity extends AppCompatActivity implements TableAdapt
     @Override
     public void onClick(TableInfo table) {
         Toast.makeText(this, "Clicked: " + table.getName(), Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }

@@ -1,13 +1,13 @@
 package com.group3.application.common.utils;
 
-
 /**
- * Được sử dụng làm wrapper cho dữ liệu được hiển thị trong LiveData
- * và chỉ nên được tiêu thụ một lần (ví dụ: điều hướng, hiển thị Toast).
+ * Lớp tiện ích để bao bọc dữ liệu của LiveData, đại diện cho một sự kiện.
+ * Đảm bảo một sự kiện chỉ được xử lý một lần.
  */
 public class Event<T> {
 
     private T content;
+
     private boolean hasBeenHandled = false;
 
     public Event(T content) {
@@ -15,7 +15,8 @@ public class Event<T> {
     }
 
     /**
-     * Trả về nội dung và ngăn chặn việc sử dụng lại nó.
+     * Trả về nội dung và đánh dấu là đã được xử lý.
+     * Nếu đã xử lý rồi, trả về null.
      */
     public T getContentIfNotHandled() {
         if (hasBeenHandled) {
@@ -27,9 +28,9 @@ public class Event<T> {
     }
 
     /**
-     * Trả về nội dung ngay cả khi nó đã được xử lý.
+     * Kiểm tra xem sự kiện đã được xử lý chưa.
      */
-    public T peekContent() {
-        return content;
+    public boolean hasBeenHandled() {
+        return hasBeenHandled;
     }
 }

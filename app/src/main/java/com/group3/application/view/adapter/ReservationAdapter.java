@@ -16,16 +16,17 @@ import com.group3.application.model.entity.Reservation;
 
 import java.util.List;
 
-public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder> {
+public class ReservationAdapter /*extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>*/ {
 
-    private List<Reservation> reservationList;
+    /*private List<Reservation> reservationList;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(Reservation reservation);
     }
 
-    public ReservationAdapter(OnItemClickListener listener) {
+    public ReservationAdapter(List<Reservation> reservationList, OnItemClickListener listener) {
+        this.reservationList = reservationList;
         this.listener = listener;
     }
 
@@ -67,11 +68,11 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
         public void bind(final Reservation reservation, final OnItemClickListener listener) {
             customerName.setText(reservation.getCustomerName());
-            time.setText(reservation.getReservationTime());
+            time.setText(reservation.getTime());
             status.setText(reservation.getStatus());
-            date.setText(reservation.getReservationTime());
-            pax.setText(reservation.getNumGuests() + " Pax");
-            table.setText("Table " + reservation.getTableName());
+            date.setText(reservation.getDate());
+            pax.setText(reservation.getPax() + " Pax");
+            table.setText("Table " + reservation.getTableNumber());
 
             GradientDrawable statusBackground = (GradientDrawable) status.getBackground();
             switch (reservation.getStatus()) {
@@ -91,5 +92,5 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
             itemView.setOnClickListener(v -> listener.onItemClick(reservation));
         }
-    }
+    }*/
 }
