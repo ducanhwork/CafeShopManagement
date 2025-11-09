@@ -30,6 +30,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private CircleImageView ivAvatar;
     private MaterialCardView cardManageProducts;
     private MaterialCardView cardManageOrders;
+    private MaterialCardView cardManageVouchers;
     private TextView tvCurrentDate;
 
     @Override
@@ -53,6 +54,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         ivAvatar = findViewById(R.id.iv_avatar);
         cardManageProducts = findViewById(R.id.card_manage_products);
         cardManageOrders = findViewById(R.id.card_manage_orders);
+        cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         tvCurrentDate = findViewById(R.id.tv_current_date);
     }
 
@@ -63,7 +65,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "EEEE, dd 'tháng' MM, yyyy HH:mm",
-                Locale.US
+            new Locale("vi", "VN")
         );
 
         String formattedDateTime = currentDateTime.format(formatter);
@@ -102,6 +104,16 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageOrders.setOnClickListener(v -> {
             // TODO: Tạo OrderManagementActivity và điều hướng đến đó
             Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();
+        });
+
+        cardManageVouchers.setOnClickListener(v -> {
+            // TODO: Tạo VoucherManagementActivity (layout thứ 2 bạn gửi) và điều hướng
+
+             Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
+             startActivity(intent);
+
+            // Tạm thời hiển thị Toast
+            Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
         });
     }
 

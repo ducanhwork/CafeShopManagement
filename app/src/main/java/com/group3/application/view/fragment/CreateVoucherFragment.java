@@ -55,7 +55,6 @@ public class CreateVoucherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         bindViews(view);
-        clearFormFields();
         setupDropdowns();
         observeState();
 
@@ -136,7 +135,7 @@ public class CreateVoucherFragment extends Fragment {
                     progress.setVisibility(View.GONE);
                     btnSave.setEnabled(true);
                     Toast.makeText(getContext(), "Tạo thành công!", Toast.LENGTH_SHORT).show();
-
+                    clearFormFields();
                     viewModel.clearSaveState();
                     if (getActivity() != null) {
                         getActivity().getSupportFragmentManager().popBackStack();
@@ -190,6 +189,8 @@ public class CreateVoucherFragment extends Fragment {
         etValue.setText("");
         etStart.setText("");
         etEnd.setText("");
+        actType.setText("", false);
+        actStatus.setText("", false);
 
         clearErrors();
     }

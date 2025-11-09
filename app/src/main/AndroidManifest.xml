@@ -43,29 +43,20 @@
             android:name=".view.LoyaltyListActivity"
             android:exported="false" />
         <activity
-            android:name=".view.EditVoucherActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.VoucherListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.CreateVoucherActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.HomeMenuActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true"/>
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true" />
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
