@@ -2,6 +2,7 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,11 +48,10 @@ public class LoginActivity extends AppCompatActivity {
             APIResult result = event.getContentIfNotHandled();
             if (result != null) {
                 if (result.isSuccess()) {
-                    // Hiển thị thông báo thành công từ ViewModel
                     Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    // Hiển thị thông báo lỗi từ ViewModel
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + result.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("LoginActivity", result.getMessage());
+                    Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

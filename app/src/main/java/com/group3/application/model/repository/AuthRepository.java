@@ -2,6 +2,7 @@ package com.group3.application.model.repository;
 
 import static com.group3.application.viewmodel.LoginViewModel.KEY_AUTH_TOKEN;
 import static com.group3.application.viewmodel.LoginViewModel.KEY_IS_LOGGED_IN;
+import static com.group3.application.viewmodel.LoginViewModel.KEY_USER_EMAIL;
 import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
 
 import android.app.Application;
@@ -12,12 +13,17 @@ import android.widget.Toast;
 
 import retrofit2.Callback;
 
+import com.google.gson.Gson;
+import com.group3.application.common.constant.IConstants;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.APIResult;
+import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -44,37 +50,34 @@ public class AuthRepository {
 
                     if (token != null && !token.isEmpty()) {
                         saveAuthToken(token);
-                        // Tạo LoginResult thành công với token và email đã nhập
                         listener.onLoginComplete(new APIResult(
                                 true,
                                 "Đăng nhập thành công!",
                                 token
                         ));
                     } else {
-                        // Phản hồi thành công (HTTP 200) nhưng token bị thiếu hoặc rỗng
                         String errorMessage = "Đăng nhập thất bại: Token không hợp lệ từ server.";
                         listener.onLoginComplete(new APIResult(false, errorMessage, null));
                         Log.e(TAG, "Login successful but no token: " + response.message());
                     }
                 } else {
-                    // Phản hồi HTTP không thành công (4xx, 5xx)
-                    String errorMessage = "Đăng nhập thất bại. Mã lỗi: " + response.code();
+                    String errorMessage = "";
                     try {
                         if (response.errorBody() != null) {
-                            // Cố gắng đọc thông báo lỗi từ errorBody
-                            errorMessage += " - " + response.errorBody().string();
+                            errorMessage = response.errorBody().string();
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing error body: " + e.getMessage());
                     }
-                    Log.e(TAG, "Login API failed: " + errorMessage);
-                    listener.onLoginComplete(new APIResult(false, errorMessage, null));
+                    Gson gson = new Gson();
+                    APIResult apiResult = gson.fromJson(errorMessage, APIResult.class);
+                    Log.e(TAG, "Login API failed: " + apiResult.getMessage());
+                    listener.onLoginComplete(apiResult);
                 }
             }
 
             @Override
             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-                // Lỗi mạng hoặc lỗi không xác định
                 Log.e(TAG, "Login API network error: " + t.getMessage(), t);
                 listener.onLoginComplete(new APIResult(false, "Lỗi kết nối mạng: " + t.getMessage(), null));
             }
@@ -84,7 +87,7 @@ public class AuthRepository {
     private void saveAuthToken(String token) {
         SharedPreferences.Editor editor = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
         editor.putString(KEY_AUTH_TOKEN, token);
-        editor.putBoolean(KEY_IS_LOGGED_IN, true); // Đảm bảo cờ loggedIn cũng được lưu
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
         Log.d(TAG, "Auth token saved: " + token);
     }
@@ -108,16 +111,20 @@ public class AuthRepository {
                         listener.onResetPasswordComplete(new APIResult(true, message, null));
                     }
                 } else {
-                    String errorMessage = "Đăng nhập thất bại. Mã lỗi: " + response.code();
+                    String errorResponse = "";
                     try {
                         if (response.errorBody() != null) {
-                            errorMessage += " - " + response.errorBody().string();
+                            errorResponse = response.errorBody().string();
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing error body: " + e.getMessage());
                     }
-                    Log.e(TAG, "Login API failed: " + errorMessage);
-                    listener.onResetPasswordComplete(new APIResult(false, errorMessage, null));
+                    Gson gson = new Gson();
+                    APIResult apiResult = gson.fromJson(errorResponse, APIResult.class);
+
+                    Log.e(TAG, "Login API failed: " + apiResult.getMessage());
+
+                    listener.onResetPasswordComplete(new APIResult(false, apiResult.getMessage(), null));
                 }
             }
 
@@ -154,6 +161,55 @@ public class AuthRepository {
         });
     }
 
+    public void changePassword(String currentPassword, String newPassword, String confirmPassword, onChangePasswordListener listener) {
+        //extract email
+        SharedPreferences prefs = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String email = prefs.getString(KEY_USER_EMAIL, null);
+        if (email == null) {
+            listener.onChangePasswordComplete(new APIResult(false, IConstants.EMAIL_NOT_IN_PREFS, null));
+            return;
+        }
+        UpdatePassWordRequest request = new UpdatePassWordRequest(email, currentPassword, newPassword);
+        apiService.changePassword(request).enqueue(new Callback<APIResult>() {
+            @Override
+            public void onResponse(Call<APIResult> call, Response<APIResult> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    APIResult result = response.body();
+                    if (result != null) {
+                        if (result.getData() != null) {
+                            Log.d(TAG, "Password changed successfully.");
+                            listener.onChangePasswordComplete(new APIResult(true, IConstants.CHANGED_PASSWORD_SUCCESS, null));
+                        }
+                        if (result.getMessage() != null) {
+                            Log.e(TAG, "Change password failed: " + result.getMessage());
+                            listener.onChangePasswordComplete(new APIResult(false, result.getMessage(), null));
+                        }
+                    } else {
+                        Log.e(TAG, "Change password failed: Response body is null.");
+                    }
+                } else {
+                    String errorResponse = null;
+                    try {
+                        errorResponse = response.errorBody().string();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Gson gson = new Gson();
+                    APIResult apiResult = gson.fromJson(errorResponse, APIResult.class);
+                    String errorMessage = apiResult.getMessage();
+                    listener.onChangePasswordComplete(new APIResult(false, errorMessage, null));
+                    Log.e(TAG, "Change password failed: " + errorMessage);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResult> call, Throwable throwable) {
+                Log.e(TAG, "onFailure change password: " + throwable.getMessage());
+                listener.onChangePasswordComplete(new APIResult(false, IConstants.CHANGED_PASSWORD_FAILED, null));
+            }
+        });
+    }
+
     public interface OnLoginCompleteListener {
         void onLoginComplete(APIResult result);
     }
@@ -164,6 +220,10 @@ public class AuthRepository {
 
     public interface OnGetProfileCompleteListener {
         void onGetProfileComplete(APIResult result);
+    }
+
+    public interface onChangePasswordListener {
+        void onChangePasswordComplete(APIResult result);
     }
 
 }
