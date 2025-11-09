@@ -94,6 +94,14 @@ public class AuthRepository {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false) && (prefs.getString(KEY_AUTH_TOKEN, null) != null);
     }
 
+    public void clearAuthToken() {
+        SharedPreferences.Editor editor = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.remove(KEY_AUTH_TOKEN);
+        editor.putBoolean(KEY_IS_LOGGED_IN, false);
+        editor.apply();
+        Log.d(TAG, "Auth token cleared");
+    }
+
 
     public void forgotPassword(String email, OnResetPasswordCompleteListener listener) {
         apiService.resetPassword(email).enqueue(new Callback<APIResult>() {

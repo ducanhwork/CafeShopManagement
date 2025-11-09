@@ -2,110 +2,137 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
-import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.group3.application.R;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import com.group3.application.model.repository.AuthRepository;
+import com.group3.application.view.fragment.InventoryFragment;
+import com.group3.application.view.fragment.ReportsFragment;
+import com.group3.application.view.fragment.ShiftFragment;
+import com.group3.application.view.fragment.TablesFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdminHomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private CircleImageView ivAvatar;
-    private MaterialCardView cardManageProducts;
-    private MaterialCardView cardManageOrders;
-    private TextView tvCurrentDate;
+    private BottomNavigationView bottomNavigation;
+    private AuthRepository authRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        
+        authRepository = new AuthRepository(getApplication());
+        
         initViews();
         setupToolbar();
+        setupBottomNavigation();
         setupClickListeners();
-        setCurrentDateTime();
+        
+        // Load default fragment (Shift)
+        if (savedInstanceState == null) {
+            loadFragment(new ShiftFragment());
+            bottomNavigation.setSelectedItemId(R.id.navigation_shift);
+        }
     }
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         ivAvatar = findViewById(R.id.iv_avatar);
-        cardManageProducts = findViewById(R.id.card_manage_products);
-        cardManageOrders = findViewById(R.id.card_manage_orders);
-        tvCurrentDate = findViewById(R.id.tv_current_date);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
     }
-
-    private void setCurrentDateTime() {
-        // Sử dụng API java.time hiện đại, yêu cầu API level 26+ (đã có trong project của bạn)
-        LocalDateTime currentDateTime = LocalDateTime.now();
-
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                "EEEE, dd 'tháng' MM, yyyy HH:mm",
-                Locale.US
-        );
-
-        String formattedDateTime = currentDateTime.format(formatter);
-
-        // Viết hoa chữ cái đầu tiên của ngày trong tuần (ví dụ: "thứ tư" -> "Thứ tư")
-        formattedDateTime = formattedDateTime.substring(0, 1).toUpperCase() + formattedDateTime.substring(1);
-
-        tvCurrentDate.setText(formattedDateTime);
-    }
-
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        // Bỏ tiêu đề mặc định vì chúng ta đã có tiêu đề tùy chỉnh
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
 
-    private void setupClickListeners() {
-        // Sự kiện click vào Avatar trên Toolbar
-        ivAvatar.setOnClickListener(v -> {
-            // TODO: Tạo ProfileActivity và điều hướng đến đó
-            Toast.makeText(this, "Navigate to Profile Screen", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
-            startActivity(intent);
-        });
+    private void setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int itemId = item.getItemId();
 
-        // Sự kiện click vào Card Quản lý Sản phẩm
-        cardManageProducts.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminHomeActivity.this, ProductListActivity.class);
-            startActivity(intent);
-        });
+            if (itemId == R.id.navigation_shift) {
+                selectedFragment = new ShiftFragment();
+            } else if (itemId == R.id.navigation_tables) {
+                selectedFragment = new TablesFragment();
+            } else if (itemId == R.id.navigation_inventory) {
+                selectedFragment = new InventoryFragment();
+            } else if (itemId == R.id.navigation_reports) {
+                selectedFragment = new ReportsFragment();
+            }
 
-        // Sự kiện click vào Card Quản lý Đơn hàng
-        cardManageOrders.setOnClickListener(v -> {
-            // TODO: Tạo OrderManagementActivity và điều hướng đến đó
-            Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment);
+                return true;
+            }
+            return false;
         });
     }
 
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+    }
 
+    private void setupClickListeners() {
+        // Click on avatar to go to Profile or show logout dialog
+        ivAvatar.setOnClickListener(v -> showProfileMenu());
+    }
+
+    private void showProfileMenu() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Profile")
+                .setItems(new String[]{"View Profile", "Logout"}, (dialog, which) -> {
+                    if (which == 0) {
+                        // Navigate to profile
+                        Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                    } else {
+                        // Logout
+                        showLogoutConfirmation();
+                    }
+                })
+                .show();
+    }
+
+    private void showLogoutConfirmation() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.logout)
+                .setMessage(R.string.confirm_logout)
+                .setPositiveButton(R.string.yes, (dialog, which) -> performLogout())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    private void performLogout() {
+        // Clear auth token
+        authRepository.clearAuthToken();
+
+        // Navigate to login
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Show logout confirmation on back press
+        showLogoutConfirmation();
+    }
 }
 
 
