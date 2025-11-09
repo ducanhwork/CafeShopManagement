@@ -57,7 +57,6 @@
             android:name=".view.activity.ReservationDetailActivity" 
             android:exported="false"/>
         <activity
-        <activity 
             android:name=".view.ReservationActivity"
             android:exported="true"></activity>
         <activity
