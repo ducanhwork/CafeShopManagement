@@ -176,6 +176,8 @@
     <string name="timestamp">Timestamp</string>
     <string name="no_transactions">No transactions yet</string>
     <string name="no_transactions_message">Stock transactions will appear here</string>
+    <string name="stock_history">Stock History</string>
+    <string name="stock_deficit">Stock Deficit</string>
     
     <!-- Transaction Types -->
     <string name="incoming">Incoming</string>
