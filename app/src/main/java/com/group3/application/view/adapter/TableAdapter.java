@@ -39,6 +39,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public TableAdapter(List<Table> tableList, OnTableClickListener onTableClickListener) {
         this.tableList = tableList;
         this.onTableClickListener = onTableClickListener;
+        this.listener = null;
     }
 
     public TableAdapter(OnItemClick listener) {

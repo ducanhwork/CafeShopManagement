@@ -69,7 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
         btnBack.setOnClickListener(v -> finish());
         btnChangePassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Change password clicked.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            startActivity(intent);
         });
 
     }

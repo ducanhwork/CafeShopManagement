@@ -1,6 +1,5 @@
 package com.group3.application.model.webservice;
 
-import android.content.SharedPreferences;
 
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
@@ -15,7 +14,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -32,7 +30,7 @@ public interface ApiService {
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 
     @PUT("/api/auth/change-password")
-    Call<String> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
+    Call<APIResult> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
 
     @POST("/api/auth/reset-password")
     Call<APIResult> resetPassword(@Body String email);

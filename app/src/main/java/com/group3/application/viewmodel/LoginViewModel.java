@@ -60,32 +60,26 @@ public class LoginViewModel extends AndroidViewModel {
 
         // SỬA LỖI: Sử dụng android.text.TextUtils
         if (TextUtils.isEmpty(email)) {
-            _emailError.postValue("Email là bắt buộc.");
+            _emailError.postValue("Email is required.");
             isValid = false;
             // SỬA LỖI: Sử dụng android.util.Patterns
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailError.postValue("Vui lòng nhập địa chỉ email hợp lệ.");
+            _emailError.postValue("Invalid email format.");
             isValid = false;
         }
 
         // SỬA LỖI: Sử dụng android.text.TextUtils
         if (TextUtils.isEmpty(password)) {
-            _passwordError.postValue("Mật khẩu là bắt buộc.");
+            _passwordError.postValue("Password is required.");
             isValid = false;
-        } else if (password.length() < 6) {
-            _passwordError.postValue("Mật khẩu phải có ít nhất 6 ký tự.");
+        } else if (password.length() < 8) {
+            _passwordError.postValue("Password must be at least 8 characters.");
             isValid = false;
-        }
-
-        if (!isValid) {
-            _loginResult.postValue(new Event<>(new APIResult(false, "Lỗi xác thực cục bộ.")));
-            return;
         }
 
         authRepository.login(email, password, result -> {
             if (result.isSuccess()) {
-                // AuthRepository đã tự lưu token và cờ isLoggedIn
-                // Ở đây, bạn có thể lưu userEmail vào SharedPreferences nếu bạn muốn
+                //save email to prefs
                 saveUserEmailToPrefs(email);
                 _loginResult.postValue(new Event<>(result));
                 _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
