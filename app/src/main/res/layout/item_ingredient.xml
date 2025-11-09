@@ -10,88 +10,116 @@
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="?attr/colorSurface"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
     app:strokeColor="?attr/colorOutline"
     app:strokeWidth="1dp"
     app:rippleColor="?attr/colorPrimaryContainer">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="12dp">
 
-        <!-- Ingredient Image -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_ingredient"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_ingredient_placeholder"/>
-
-        <!-- Ingredient Name -->
-        <TextView
-            android:id="@+id/txt_ingredient_name"
-            android:layout_width="0dp"
+        <!-- Top Section: Image + Name + Price -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:textColor="?attr/colorOnSurface"
-            android:maxLines="2"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_ingredient"
-            app:layout_constraintTop_toTopOf="@id/img_ingredient"
-            tools:text="Arabica Coffee Beans"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <!-- Ingredient Description -->
+            <!-- Ingredient Image -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_ingredient"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+                tools:src="@drawable/ic_ingredient_placeholder"/>
+
+            <!-- Name + Price -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <!-- Ingredient Name -->
+                <TextView
+                    android:id="@+id/txt_ingredient_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="Arabica Coffee"/>
+
+                <!-- Price -->
+                <TextView
+                    android:id="@+id/txt_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_primary"
+                    tools:text="$25.50"/>
+            </LinearLayout>
+
+            <!-- Stock Status Chip -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_stock_status"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/in_stock"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                app:chipBackgroundColor="@color/stock_in_stock_bg"
+                app:chipStrokeWidth="0dp"
+                app:chipMinHeight="28dp"
+                tools:text="Low Stock"/>
+        </LinearLayout>
+
+        <!-- Description (if exists) -->
         <TextView
             android:id="@+id/txt_ingredient_description"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/txt_ingredient_name"
-            app:layout_constraintTop_toBottomOf="@id/txt_ingredient_name"
-            tools:text="Premium arabica beans from Colombia"/>
+            android:visibility="gone"
+            tools:text="Premium arabica beans"
+            tools:visibility="visible"/>
 
-        <!-- Price -->
-        <TextView
-            android:id="@+id/txt_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="?attr/textAppearanceTitleSmall"
-            android:textColor="@color/md_theme_primary"
-            app:layout_constraintStart_toStartOf="@id/txt_ingredient_name"
-            app:layout_constraintTop_toBottomOf="@id/txt_ingredient_description"
-            tools:text="$25.50"/>
-
-        <!-- Stock Info Container -->
-        <LinearLayout
-            android:id="@+id/layout_stock_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_ingredient">
+            android:layout_marginBottom="12dp"
+            android:background="?attr/colorOutlineVariant"/>
+
+        <!-- Stock Info Grid -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <!-- Current Stock -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,18 +132,33 @@
                     android:id="@+id/txt_current_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textStyle="bold"
                     android:textColor="?attr/colorOnSurface"
-                    tools:text="120 units"/>
+                    tools:text="0"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="units"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"/>
             </LinearLayout>
+
+            <!-- Vertical Divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?attr/colorOutlineVariant"/>
 
             <!-- Reorder Level -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,54 +171,39 @@
                     android:id="@+id/txt_reorder_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textStyle="bold"
                     android:textColor="?attr/colorOnSurface"
-                    tools:text="50 units"/>
+                    tools:text="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="units"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"/>
             </LinearLayout>
-
-            <!-- Stock Status Chip -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_stock_status"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/in_stock"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                app:chipBackgroundColor="@color/stock_in_stock_bg"
-                app:chipStrokeWidth="0dp"
-                tools:text="In Stock"/>
         </LinearLayout>
 
-        <!-- Quick Action Buttons -->
-        <LinearLayout
-            android:id="@+id/layout_actions"
-            android:layout_width="0dp"
+        <!-- Add Stock Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_stock"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_stock_info">
+            android:layout_marginTop="12dp"
+            android:text="@string/add_stock"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconGravity="textStart"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_stock"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_stock"
-                app:icon="@android:drawable/ic_input_add"/>
+        <!-- Hidden view details button (accessible via long press) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_view_details"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/view_details"/>
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

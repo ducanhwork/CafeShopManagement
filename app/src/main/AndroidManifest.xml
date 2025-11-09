@@ -102,6 +102,13 @@
             android:name=".view.StaffListActivity"
             android:exported="true">
         </activity>
+        
+        <!-- Ingredient Management -->
+        <activity
+            android:name=".view.AddEditIngredientActivity"
+            android:exported="false"
+            android:parentActivityName=".view.AdminHomeActivity"
+            android:theme="@style/Theme.CafeApp" />
 
     </application>
 

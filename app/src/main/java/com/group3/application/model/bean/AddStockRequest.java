@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Request DTO for adding stock transaction
+ * Used for POST /api/inventory/stock/incoming endpoint
  */
 public class AddStockRequest {
     
@@ -13,21 +14,21 @@ public class AddStockRequest {
     @SerializedName("quantity")
     private Integer quantity;
     
-    @SerializedName("transactionType")
-    private String transactionType;
-    
-    @SerializedName("notes")
-    private String notes;
-    
     // Constructors
     public AddStockRequest() {
     }
     
+    public AddStockRequest(String productId, Integer quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+    
+    // Legacy constructor for backward compatibility
+    @Deprecated
     public AddStockRequest(String productId, Integer quantity, String transactionType, String notes) {
         this.productId = productId;
         this.quantity = quantity;
-        this.transactionType = transactionType;
-        this.notes = notes;
+        // transactionType and notes are ignored - /incoming endpoint doesn't use them
     }
     
     // Getters and Setters
@@ -45,21 +46,5 @@ public class AddStockRequest {
     
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-    
-    public String getTransactionType() {
-        return transactionType;
-    }
-    
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
-    
-    public String getNotes() {
-        return notes;
-    }
-    
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }

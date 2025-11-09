@@ -148,6 +148,16 @@ public class AdminHomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
         });
     }
+    
+    /**
+     * Switch to Shift tab programmatically
+     * Can be called from fragments when user needs to start a shift
+     */
+    public void switchToShiftTab() {
+        if (bottomNavigation != null) {
+            bottomNavigation.setSelectedItemId(R.id.navigation_shift);
+        }
+    }
 }
 
 

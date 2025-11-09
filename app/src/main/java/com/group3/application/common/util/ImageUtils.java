@@ -98,6 +98,12 @@ public class ImageUtils {
             return;
         }
         
+        // Check if URL is null or empty, use error placeholder
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            imageView.setImageResource(DEFAULT_ERROR);
+            return;
+        }
+        
         RequestOptions options = new RequestOptions()
                 .placeholder(DEFAULT_PLACEHOLDER)
                 .error(DEFAULT_ERROR)

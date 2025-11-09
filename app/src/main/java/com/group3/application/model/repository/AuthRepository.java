@@ -90,6 +90,39 @@ public class AuthRepository {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
         Log.d(TAG, "Auth token saved: " + token);
+        
+        // Extract and save role from JWT token
+        try {
+            String role = extractRoleFromJWT(token);
+            if (role != null) {
+                com.group3.application.common.util.PreferenceManager.saveUserRole(application, role);
+                Log.d(TAG, "User role saved: " + role);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error extracting role from JWT: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Extract role from JWT token payload
+     * JWT format: header.payload.signature
+     */
+    private String extractRoleFromJWT(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length >= 2) {
+                // Decode the payload (second part)
+                String payload = new String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE));
+                Log.d(TAG, "JWT Payload: " + payload);
+                
+                // Parse JSON to extract role
+                org.json.JSONObject json = new org.json.JSONObject(payload);
+                return json.optString("role", null);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to extract role from JWT: " + e.getMessage());
+        }
+        return null;
     }
 
     public boolean isUserLoggedIn() {

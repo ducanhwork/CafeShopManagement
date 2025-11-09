@@ -147,10 +147,31 @@ public class ShiftFragment extends Fragment {
         btnEndShift.setOnClickListener(v -> showEndShiftDialog());
 
         // Record Transaction button
-        btnRecordTransaction.setOnClickListener(v -> {
-            // TODO: Show RecordTransactionDialog
-            Toast.makeText(requireContext(), "Record Transaction dialog coming soon", Toast.LENGTH_SHORT).show();
+        btnRecordTransaction.setOnClickListener(v -> showRecordTransactionDialog());
+    }
+
+    private void showRecordTransactionDialog() {
+        RecordTransactionBottomSheet bottomSheet = new RecordTransactionBottomSheet();
+        bottomSheet.setOnRecordTransactionListener((amount, type, description, callback) -> {
+            // referenceNumber can be null or auto-generated
+            viewModel.recordTransaction(amount, type, description, null);
+            
+            // Observe the result
+            viewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success -> {
+                if (success != null && !success.isEmpty()) {
+                    callback.onRecordComplete(true, success);
+                    viewModel.clearSuccess();
+                }
+            });
+            
+            viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+                if (error != null && !error.isEmpty()) {
+                    callback.onRecordComplete(false, error);
+                    viewModel.clearError();
+                }
+            });
         });
+        bottomSheet.show(getParentFragmentManager(), "RecordTransactionBottomSheet");
     }
 
     private void showStartShiftDialog() {

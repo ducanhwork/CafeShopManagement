@@ -30,7 +30,7 @@ public interface InventoryApiService {
      * Get all active ingredients
      * GET /inventory/ingredients
      */
-    @GET("inventory/ingredients")
+    @GET("api/inventory/ingredients")
     Call<List<Ingredient>> getAllIngredients(
             @Header("Authorization") String authorization
     );
@@ -39,7 +39,7 @@ public interface InventoryApiService {
      * Get a single ingredient by ID
      * GET /inventory/ingredients/{id}
      */
-    @GET("inventory/ingredients/{id}")
+    @GET("api/inventory/ingredients/{id}")
     Call<Ingredient> getIngredientById(
             @Header("Authorization") String authorization,
             @Path("id") String id
@@ -49,7 +49,7 @@ public interface InventoryApiService {
      * Search ingredients by name
      * GET /inventory/ingredients/search?name={name}
      */
-    @GET("inventory/ingredients/search")
+    @GET("api/inventory/ingredients/search")
     Call<List<Ingredient>> searchIngredients(
             @Header("Authorization") String authorization,
             @Query("name") String name
@@ -59,7 +59,7 @@ public interface InventoryApiService {
      * Create a new ingredient (Manager only)
      * POST /inventory/ingredients
      */
-    @POST("inventory/ingredients")
+    @POST("api/inventory/ingredients")
     Call<Ingredient> createIngredient(
             @Header("Authorization") String authorization,
             @Body CreateIngredientRequest request
@@ -69,7 +69,7 @@ public interface InventoryApiService {
      * Update an existing ingredient (Manager only)
      * PUT /inventory/ingredients/{id}
      */
-    @PUT("inventory/ingredients/{id}")
+    @PUT("api/inventory/ingredients/{id}")
     Call<Ingredient> updateIngredient(
             @Header("Authorization") String authorization,
             @Path("id") String id,
@@ -80,7 +80,7 @@ public interface InventoryApiService {
      * Delete an ingredient - soft delete (Manager only)
      * DELETE /inventory/ingredients/{id}
      */
-    @DELETE("inventory/ingredients/{id}")
+    @DELETE("api/inventory/ingredients/{id}")
     Call<Void> deleteIngredient(
             @Header("Authorization") String authorization,
             @Path("id") String id
@@ -90,7 +90,7 @@ public interface InventoryApiService {
      * Add stock transaction (INCOMING, OUTGOING, ADJUSTMENT)
      * POST /inventory/stock/incoming
      */
-    @POST("inventory/stock/incoming")
+    @POST("api/inventory/stock/incoming")
     Call<StockTransaction> addStockTransaction(
             @Header("Authorization") String authorization,
             @Body AddStockRequest request
@@ -100,7 +100,7 @@ public interface InventoryApiService {
      * Get current stock level for a product
      * GET /inventory/stock/{productId}
      */
-    @GET("inventory/stock/{productId}")
+    @GET("api/inventory/stock/{productId}")
     Call<Ingredient> getStockLevel(
             @Header("Authorization") String authorization,
             @Path("productId") String productId
@@ -110,7 +110,7 @@ public interface InventoryApiService {
      * Get transaction history for a product
      * GET /inventory/transactions/{productId}
      */
-    @GET("inventory/transactions/{productId}")
+    @GET("api/inventory/transactions/{productId}")
     Call<List<StockTransaction>> getTransactionHistory(
             @Header("Authorization") String authorization,
             @Path("productId") String productId
@@ -120,7 +120,7 @@ public interface InventoryApiService {
      * Get ingredients with low stock (Manager only)
      * GET /inventory/low-stock
      */
-    @GET("inventory/low-stock")
+    @GET("api/inventory/low-stock")
     Call<List<LowStockAlert>> getLowStockAlerts(
             @Header("Authorization") String authorization
     );

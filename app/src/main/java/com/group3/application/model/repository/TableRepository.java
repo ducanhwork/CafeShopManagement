@@ -3,6 +3,7 @@ package com.group3.application.model.repository;
 import com.group3.application.common.base.BaseRepository;
 import com.group3.application.model.bean.BulkCreateResponse;
 import com.group3.application.model.bean.CreateTableRequest;
+import com.group3.application.model.bean.PagedResponse;
 import com.group3.application.model.bean.UpdateTableRequest;
 import com.group3.application.model.bean.UpdateTableStatusRequest;
 import com.group3.application.model.entity.TableInfo;
@@ -44,8 +45,22 @@ public class TableRepository extends BaseRepository {
      */
     public void getTables(String token, String status, String location, Integer minSeatCount,
                           Integer page, Integer size, String sort, ApiCallback<List<TableInfo>> callback) {
-        Call<List<TableInfo>> call = api.getTables(status, location, minSeatCount, page, size, sort, token);
-        executeCall(call, callback);
+        Call<PagedResponse<TableInfo>> call = api.getTables(status, location, minSeatCount, page, size, sort, token);
+        
+        // Wrap the callback to extract content from PagedResponse
+        executeCall(call, new ApiCallback<PagedResponse<TableInfo>>() {
+            @Override
+            public void onSuccess(PagedResponse<TableInfo> result) {
+                // Extract the content list from the paged response
+                List<TableInfo> tables = result.getContent();
+                callback.onSuccess(tables);
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                callback.onError(errorMsg);
+            }
+        });
     }
     
     /**

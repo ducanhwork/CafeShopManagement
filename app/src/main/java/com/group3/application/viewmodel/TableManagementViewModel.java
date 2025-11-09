@@ -1,6 +1,8 @@
 package com.group3.application.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -15,6 +17,9 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.repository.TableRepository;
 
 import java.util.List;
+
+import static com.group3.application.viewmodel.LoginViewModel.KEY_AUTH_TOKEN;
+import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
 
 /**
  * ViewModel for Table Management operations
@@ -79,9 +84,11 @@ public class TableManagementViewModel extends AndroidViewModel {
     
     /**
      * Get JWT token with Bearer prefix
+     * Uses the same SharedPreferences as ShiftRepository for consistency
      */
     private String getAuthToken() {
-        String rawToken = PreferenceManager.getToken(getApplication());
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String rawToken = prefs.getString(KEY_AUTH_TOKEN, null);
         return rawToken != null ? "Bearer " + rawToken : null;
     }
     

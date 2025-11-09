@@ -214,6 +214,7 @@
         android:layout_margin="16dp"
         android:text="@string/add_ingredient"
         android:contentDescription="@string/add_ingredient"
+        app:elevation="8dp"
         app:icon="@android:drawable/ic_input_add"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
 

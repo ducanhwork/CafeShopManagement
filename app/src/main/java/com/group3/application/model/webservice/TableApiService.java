@@ -2,6 +2,7 @@ package com.group3.application.model.webservice;
 
 import com.group3.application.model.bean.BulkCreateResponse;
 import com.group3.application.model.bean.CreateTableRequest;
+import com.group3.application.model.bean.PagedResponse;
 import com.group3.application.model.bean.UpdateTableRequest;
 import com.group3.application.model.bean.UpdateTableStatusRequest;
 import com.group3.application.model.entity.TableInfo;
@@ -34,9 +35,10 @@ public interface TableApiService {
      * @param size Page size (default: 20)
      * @param sort Sort field,direction (e.g., name,asc)
      * @param token JWT Bearer token
+     * @return PagedResponse containing list of tables
      */
-    @GET("tables")
-    Call<List<TableInfo>> getTables(
+    @GET("/api/tables/manager/all")
+    Call<PagedResponse<TableInfo>> getTables(
             @Query("status") String status,
             @Query("location") String location,
             @Query("minSeatCount") Integer minSeatCount,
@@ -51,7 +53,7 @@ public interface TableApiService {
      * @param id Table ID (UUID)
      * @param token JWT Bearer token
      */
-    @GET("tables/{id}")
+    @GET("api/tables/{id}")
     Call<TableInfo> getTableById(
             @Path("id") String id,
             @Header("Authorization") String token
@@ -62,7 +64,7 @@ public interface TableApiService {
      * @param request Create table request body
      * @param token JWT Bearer token
      */
-    @POST("tables")
+    @POST("api/tables")
     Call<TableInfo> createTable(
             @Body CreateTableRequest request,
             @Header("Authorization") String token
@@ -74,7 +76,7 @@ public interface TableApiService {
      * @param request Update table request body
      * @param token JWT Bearer token
      */
-    @PUT("tables/{id}")
+    @PUT("api/tables/{id}")
     Call<TableInfo> updateTable(
             @Path("id") String id,
             @Body UpdateTableRequest request,
@@ -87,7 +89,7 @@ public interface TableApiService {
      * @param request Status update request body
      * @param token JWT Bearer token
      */
-    @PATCH("tables/{id}/status")
+    @PATCH("api/tables/{id}/status")
     Call<TableInfo> updateTableStatus(
             @Path("id") String id,
             @Body UpdateTableStatusRequest request,
@@ -99,7 +101,7 @@ public interface TableApiService {
      * @param id Table ID to delete
      * @param token JWT Bearer token
      */
-    @DELETE("tables/{id}")
+    @DELETE("api/tables/{id}")
     Call<Void> deleteTable(
             @Path("id") String id,
             @Header("Authorization") String token
@@ -110,7 +112,7 @@ public interface TableApiService {
      * @param requests List of create table requests
      * @param token JWT Bearer token
      */
-    @POST("tables/bulk")
+    @POST("api/tables/bulk")
     Call<BulkCreateResponse> bulkCreateTables(
             @Body List<CreateTableRequest> requests,
             @Header("Authorization") String token
@@ -120,7 +122,7 @@ public interface TableApiService {
      * Get table usage statistics
      * @param token JWT Bearer token
      */
-    @GET("tables/statistics")
+    @GET("api/tables/statistics")
     Call<Object> getTableStatistics(
             @Header("Authorization") String token
     );
@@ -129,7 +131,7 @@ public interface TableApiService {
      * Get count of available tables
      * @param token JWT Bearer token
      */
-    @GET("tables/available-count")
+    @GET("api/tables/available-count")
     Call<Integer> getAvailableTableCount(
             @Header("Authorization") String token
     );

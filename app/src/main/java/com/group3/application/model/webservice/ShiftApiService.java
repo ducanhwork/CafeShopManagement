@@ -31,7 +31,7 @@ public interface ShiftApiService {
      * @param request StartShiftRequest with openingCash
      * @return Call<Shift> The created shift with OPEN status
      */
-    @POST("shifts/start")
+    @POST("api/shifts/start")
     Call<Shift> startShift(@Header("Authorization") String token, @Body StartShiftRequest request);
 
     /**
@@ -42,7 +42,7 @@ public interface ShiftApiService {
      * @param request EndShiftRequest with closingCash
      * @return Call<Shift> The closed shift with discrepancy calculated
      */
-    @POST("shifts/end")
+    @POST("api/shifts/end")
     Call<Shift> endShift(@Header("Authorization") String token, @Body EndShiftRequest request);
 
     /**
@@ -52,7 +52,7 @@ public interface ShiftApiService {
      * @param token JWT Bearer token for authentication
      * @return Call<Shift> The current open shift or null if no shift is open
      */
-    @GET("shifts/current")
+    @GET("api/shifts/current")
     Call<Shift> getCurrentShift(@Header("Authorization") String token);
 
     /**
@@ -63,7 +63,7 @@ public interface ShiftApiService {
      * @param request RecordTransactionRequest with amount, type, description
      * @return Call<CashTransaction> The recorded transaction with running balance
      */
-    @POST("shifts/cash/record")
+    @POST("api/shifts/cash/record")
     Call<CashTransaction> recordCashTransaction(@Header("Authorization") String token, @Body RecordTransactionRequest request);
 
     /**
@@ -73,7 +73,7 @@ public interface ShiftApiService {
      * @param token JWT Bearer token for authentication
      * @return Call<CashBalance> Current cash balance with breakdown
      */
-    @GET("shifts/cash/balance")
+    @GET("api/shifts/cash/balance")
     Call<CashBalance> getCashBalance(@Header("Authorization") String token);
 
     /**
@@ -86,7 +86,7 @@ public interface ShiftApiService {
      * @param status Optional status filter (OPEN, CLOSED)
      * @return Call<List<Shift>> Paginated list of shifts
      */
-    @GET("shifts")
+    @GET("api/shifts")
     Call<List<Shift>> getShifts(
         @Header("Authorization") String token,
         @Query("page") int page,

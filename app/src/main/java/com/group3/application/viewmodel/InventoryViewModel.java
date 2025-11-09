@@ -1,6 +1,8 @@
 package com.group3.application.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,6 +22,9 @@ import com.group3.application.model.repository.InventoryRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.group3.application.viewmodel.LoginViewModel.KEY_AUTH_TOKEN;
+import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
 
 /**
  * ViewModel for Inventory Management operations
@@ -91,9 +96,11 @@ public class InventoryViewModel extends AndroidViewModel {
     
     /**
      * Get JWT token with Bearer prefix
+     * Uses the same SharedPreferences as ShiftRepository for consistency
      */
     private String getAuthToken() {
-        String rawToken = PreferenceManager.getToken(getApplication());
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String rawToken = prefs.getString(KEY_AUTH_TOKEN, null);
         return rawToken != null ? "Bearer " + rawToken : null;
     }
     
@@ -296,6 +303,9 @@ public class InventoryViewModel extends AndroidViewModel {
     
     /**
      * Add stock transaction
+     * Uses POST /api/inventory/stock/incoming endpoint
+     * Note: transactionType and notes are kept for UI purposes but not sent to backend
+     * The /incoming endpoint only accepts productId and quantity
      */
     public void addStockTransaction(String productId, Integer quantity, String transactionType, String notes) {
         loading.setValue(true);
@@ -309,19 +319,28 @@ public class InventoryViewModel extends AndroidViewModel {
             return;
         }
         
+        // Create request with only productId and quantity (as per API spec)
         AddStockRequest request = new AddStockRequest(productId, quantity, transactionType, notes);
+        android.util.Log.d("InventoryViewModel", "Adding stock transaction: productId=" + productId + 
+            ", quantity=" + quantity + ", type=" + transactionType);
         
         repository.addStockTransaction(token, request, new BaseRepository.ApiCallback<StockTransaction>() {
             @Override
             public void onSuccess(StockTransaction result) {
+                android.util.Log.d("InventoryViewModel", "Stock transaction successful! " +
+                    "SignedQuantity: " + result.getSignedQuantity());
                 loading.postValue(false);
                 String message = transactionType + " transaction completed: " + result.getSignedQuantity() + " units";
                 successMessage.postValue(message);
-                loadIngredients(); // Reload to update stock levels
+                
+                // Reload ingredients to get updated stock levels
+                android.util.Log.d("InventoryViewModel", "Reloading ingredients after stock update...");
+                loadIngredients();
             }
             
             @Override
             public void onError(String errorMsg) {
+                android.util.Log.e("InventoryViewModel", "Stock transaction failed: " + errorMsg);
                 loading.postValue(false);
                 error.postValue(errorMsg);
             }
