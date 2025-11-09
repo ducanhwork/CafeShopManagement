@@ -1,27 +1,31 @@
 
 package com.group3.application.model.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Reservation {
+public class Reservation implements Serializable {
     private UUID id;
     private String customerName;
     private String customerPhone;
-    private String reservationTime;
-    private String numGuests;
+    private LocalDateTime reservationTime;
+    private Integer numGuests;
     private String status;
-    private String tableName;
-    private String userName;
+    private LocalDateTime createdAt;
+    private UUID tableId;
+    private UUID userId;
 
-    public Reservation(UUID id, String customerName, String customerPhone, String reservationTime, String numGuests, String status, String tableName, String userName) {
+    public Reservation(UUID id, String customerName, String customerPhone, LocalDateTime reservationTime, Integer numGuests, String status, LocalDateTime createdAt, UUID tableId, UUID userId) {
         this.id = id;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.reservationTime = reservationTime;
         this.numGuests = numGuests;
         this.status = status;
-        this.tableName = tableName;
-        this.userName = userName;
+        this.createdAt = createdAt;
+        this.tableId = tableId;
+        this.userId = userId;
     }
 
     public UUID getId() {
@@ -48,19 +52,19 @@ public class Reservation {
         this.customerPhone = customerPhone;
     }
 
-    public String getReservationTime() {
+    public LocalDateTime getReservationTime() {
         return reservationTime;
     }
 
-    public void setReservationTime(String reservationTime) {
+    public void setReservationTime(LocalDateTime reservationTime) {
         this.reservationTime = reservationTime;
     }
 
-    public String getNumGuests() {
+    public Integer getNumGuests() {
         return numGuests;
     }
 
-    public void setNumGuests(String numGuests) {
+    public void setNumGuests(Integer numGuests) {
         this.numGuests = numGuests;
     }
 
@@ -72,19 +76,27 @@ public class Reservation {
         this.status = status;
     }
 
-    public String getTableName() {
-        return tableName;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getUserName() {
-        return userName;
+    public UUID getTableId() {
+        return tableId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setTableId(UUID tableId) {
+        this.tableId = tableId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }
