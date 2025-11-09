@@ -41,4 +41,15 @@
     
     <color name="md_theme_surfaceVariant">#E7E0EC</color>
     <color name="md_theme_onSurfaceVariant">#49454F</color>
+    
+    <!-- Table Status Colors -->
+    <color name="status_available">#4CAF50</color>        <!-- Green - available -->
+    <color name="status_available_bg">#E8F5E9</color>
+    <color name="status_occupied">#F44336</color>          <!-- Red - occupied -->
+    <color name="status_occupied_bg">#FFEBEE</color>
+    <color name="status_reserved">#FF9800</color>          <!-- Orange - reserved -->
+    <color name="status_reserved_bg">#FFF3E0</color>
+    <color name="status_maintenance">#9E9E9E</color>       <!-- Gray - maintenance -->
+    <color name="status_maintenance_bg">#F5F5F5</color>
+    <color name="status_unknown">#607D8B</color>           <!-- Blue Gray - unknown -->
 </resources>

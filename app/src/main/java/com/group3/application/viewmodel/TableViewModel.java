@@ -1,23 +1,26 @@
 package com.group3.application.viewmodel;
 
+import android.app.Application;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.group3.application.common.base.BaseRepository;
+import com.group3.application.common.util.PreferenceManager;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.repository.TableRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-
-public class TableViewModel extends ViewModel {
+/**
+ * ViewModel for table list and selection.
+ * This version retrieves JWT from PreferenceManager and forwards it to repository calls.
+ */
+public class TableViewModel extends AndroidViewModel {
 
     public enum TableAction { SHOW_CONFIRM_RESERVED, OPEN_ORDER, SHOW_ERROR_SINGLE, SHOW_ERROR_MULTI }
 
@@ -33,33 +36,34 @@ public class TableViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
 
-    private Call<List<TableInfo>> inFlight;
-
     public LiveData<List<TableInfo>> getTables() { return tables; }
     public LiveData<Boolean> getLoading() { return loading; }
     public LiveData<String> getError() { return error; }
     private final MutableLiveData<List<TableInfo>> selectedTables = new MutableLiveData<>(new ArrayList<>());
     public LiveData<List<TableInfo>> getSelectedTables() { return selectedTables; }
+    public TableViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void loadTables(String status, String keyword) {
-        if (inFlight != null) inFlight.cancel();
         loading.setValue(true);
         error.setValue(null);
 
-        inFlight = repo.getTables(status, keyword);
-        inFlight.enqueue(new Callback<List<TableInfo>>() {
-            @Override public void onResponse(Call<List<TableInfo>> call, Response<List<TableInfo>> resp) {
+        // Retrieve token from PreferenceManager and prefix with Bearer if present
+        String rawToken = PreferenceManager.getToken(getApplication());
+        String bearer = rawToken == null ? null : "Bearer " + rawToken;
+
+        repo.getTables(bearer, status, null, null, 0, 100, null, new BaseRepository.ApiCallback<List<TableInfo>>() {
+            @Override
+            public void onSuccess(List<TableInfo> data) {
                 loading.postValue(false);
-                if (resp.isSuccessful() && resp.body() != null) {
-                    tables.postValue(resp.body());
-                } else {
-                    error.postValue("Load failed: " + resp.code());
-                }
+                tables.postValue(data);
             }
-            @Override public void onFailure(Call<List<TableInfo>> call, Throwable t) {
-                if (call.isCanceled()) return;
+
+            @Override
+            public void onError(String errorMsg) {
                 loading.postValue(false);
-                error.postValue(t.getMessage());
+                error.postValue(errorMsg);
             }
         });
     }
