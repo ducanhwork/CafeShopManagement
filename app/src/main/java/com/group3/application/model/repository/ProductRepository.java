@@ -112,6 +112,22 @@ public class ProductRepository {
         Call<Product> call = apiService.createProduct(productJson, image, token);
         call.enqueue(callback);
     }
+    public void updateProduct(
+            RequestBody productJson,
+            MultipartBody.Part image,
+            Callback<Product> callback
+    ) {
+        if (apiService == null) {
+            Log.e(TAG, "ApiService is not initialized.");
+            // Gọi callback với lỗi hoặc trả về một LiveData lỗi
+            callback.onFailure(null, new Throwable("ApiService not initialized"));
+            return;
+        }
+        SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
+        String token = "Bearer " + prefs.getString(KEY_AUTH_TOKEN, null);
+        Call<Product> call = apiService.createProduct(productJson, image, token);
+        call.enqueue(callback);
+    }
 
     public interface OnUpdateProductStatusListener {
         void onUpdateProductStatusComplete(APIResult result);

@@ -1,18 +1,23 @@
 package com.group3.application.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -46,7 +51,7 @@ public class ProductListActivity extends AppCompatActivity {
     private Spinner spinner_category_filter;
 
     private String selectedCategory = "All";
-
+    private ActivityResultLauncher<Intent> createProductLauncher;
     private Toolbar toolbar;
     private CircleImageView ivAvatar;
     private MaterialButton btnCreate;
@@ -86,6 +91,13 @@ public class ProductListActivity extends AppCompatActivity {
         }, viewModel);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        createProductLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                viewModel.getProducts(keyword, selectedCategory == "All" ? null : selectedCategory);
+            } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                Log.d("ProductListActivity", "Product creation cancelled.");
+            }
+        });
     }
 
     public void initView() {
@@ -105,7 +117,7 @@ public class ProductListActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnCreate.setOnClickListener(v -> {
             Intent intent = new Intent(this, ProductCreateActivity.class);
-            startActivity(intent);
+            createProductLauncher.launch(intent);
         });
 
     }
