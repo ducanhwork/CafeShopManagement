@@ -6,6 +6,7 @@ import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.UpdatePassWordRequest;
+import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 
@@ -18,6 +19,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -39,4 +41,7 @@ public interface ApiService {
 
     @GET("api/auth/me")
     Call<User> myProfile(@Header("Authorization") String token);
+
+    @GET("api/reservations/table/{tableId}")
+    Call<List<Reservation>> getReservationsByTable(@Path("tableId") String tableId);
 }
