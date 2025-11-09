@@ -206,6 +206,13 @@
     <string name="new_stock_level">New Stock Level</string>
     <string name="stock_preview">Stock Preview: %1$d units</string>
     <string name="insufficient_stock_warning">Warning: Quantity exceeds current stock</string>
+    <string name="notes_optional">Notes (Optional)</string>
+    <string name="quick_add">Quick Add</string>
+    <string name="quick_10">+10</string>
+    <string name="quick_50">+50</string>
+    <string name="quick_100">+100</string>
+    <string name="quick_500">+500</string>
+    <string name="current_stock_format">Current Stock: %.2f units</string>
     
     <!-- Analytics & Reports -->
     <string name="analytics">Analytics</string>
@@ -230,6 +237,9 @@
     <string name="error_notes_too_long">Notes must be less than 500 characters</string>
     <string name="error_select_transaction_type">Please select a transaction type</string>
     <string name="error_duplicate_ingredient">Ingredient with this name already exists</string>
+    <string name="error_quantity_required">Quantity is required</string>
+    <string name="error_quantity_must_be_positive">Quantity must be greater than 0</string>
+    <string name="error_quantity_exceeds_stock">Quantity cannot exceed current stock</string>
     
     <!-- Empty States -->
     <string name="empty_state_title">No data available</string>

@@ -345,9 +345,12 @@ public class IngredientListFragment extends Fragment {
      * Show add stock dialog
      */
     private void showAddStockDialog(Ingredient ingredient) {
-        // TODO: Show AddStockDialog
-        // AddStockDialog dialog = AddStockDialog.newInstance(ingredient.getId());
-        // dialog.show(getChildFragmentManager(), "AddStockDialog");
+        AddStockDialog dialog = AddStockDialog.newInstance(ingredient);
+        dialog.setOnStockAddedListener((ingredientId, quantity, type, notes) -> {
+            // Add stock transaction via ViewModel
+            viewModel.addStockTransaction(ingredientId, quantity, type, notes);
+        });
+        dialog.show(getChildFragmentManager(), "AddStockDialog");
     }
     
     /**
