@@ -1,53 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
-    <color name="colorPrimary">#6B4226</color>
-    <color name="colorPrimaryDark">#4A2E1A</color>
-    <color name="colorPrimaryLight">#8B5A3C</color>
-    <color name="colorSecondary">#D4A574</color>
-    <color name="colorSecondaryDark">#B8895E</color>
-    <color name="colorAccent">#8B4513</color>
-    
-    <!-- Aliases for easier reference -->
-    <color name="primary">@color/colorPrimary</color>
-    <color name="primary_dark">@color/colorPrimaryDark</color>
-    <color name="accent">@color/colorAccent</color>
-    <color name="background">#FAFAFA</color>
-    <color name="text_secondary">@color/textSecondary</color>
-    
-    <!-- Status Colors -->
-    <color name="colorSuccess">#4CAF50</color>
-    <color name="colorWarning">#FF9800</color>
-    <color name="colorError">#F44336</color>
-    <color name="colorInfo">#2196F3</color>
-    
-    <!-- Background Colors -->
-    <color name="colorBackground">#FAFAFA</color>
-    <color name="colorBackgroundDark">#F5F5F5</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorSurfaceDark">#EEEEEE</color>
-    
-    <!-- Table Status Colors -->
-    <color name="statusAvailable">#4CAF50</color>
-    <color name="statusOccupied">#F44336</color>
-    <color name="statusReserved">#FF9800</color>
-    <color name="statusMaintenance">#9E9E9E</color>
-    
-    <!-- Text Colors -->
-    <color name="textPrimary">#212121</color>
-    <color name="textSecondary">#757575</color>
-    <color name="textHint">#BDBDBD</color>
-    <color name="textWhite">#FFFFFF</color>
-    <color name="textBlack">#000000</color>
-    
-    <!-- Divider Colors -->
-    <color name="divider">#E0E0E0</color>
-    
-    <!-- Transparent -->
-    <color name="transparent">#00000000</color>
-    <color name="semi_transparent">#80000000</color>
-    
-    <!-- Default Android Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray_300">#E0E0E0</color>
+
+    <color name="coffee_primary">#5D4037</color>
+    <color name="coffee_primary_dark">#3E2723</color>
+    <color name="coffee_accent">#8D6E63</color>
+    <color name="cream_light">#FFFDE7</color>
+    <color name="gold_accent">#FFCC80</color>
+    <color name="ripple_dark">#33000000</color>
+    <color name="link_color">#FF7043</color>
+    <color name="error_red">#FF0000</color>
 </resources>

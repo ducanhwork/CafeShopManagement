@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -96,6 +97,12 @@ dependencies {
     
     // Work Manager
     implementation(libs.work.runtime)
+    
+    // Additional dependencies from main branch
+    implementation(libs.circleimageview)
+    implementation(libs.core.i18n)
+    implementation("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
     
     // Testing
     testImplementation(libs.junit)

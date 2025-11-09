@@ -46,6 +46,30 @@
         <activity
             android:name=".view.TableListActivity"
             android:exported="false" />
+        
+        <!-- Additional Activities from main branch -->
+        <activity
+            android:name=".view.ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ReservationListActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationActivity" />
+        <activity
+            android:name=".view.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AdminHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false" />
 
     </application>
 
