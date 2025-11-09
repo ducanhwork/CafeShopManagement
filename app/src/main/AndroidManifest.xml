@@ -25,6 +25,17 @@
             android:exported="true" />
         <activity android:name=".view.activity.ReservationListActivity" />
         <activity android:name=".view.activity.ReservationDetailActivity" />
+            android:name=".view.ReservationActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.ReservationListActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationActivity" />
+        <activity
+            android:name=".view.ReservationDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationListActivity" />
         <activity
             android:name=".view.ProfileActivity"
             android:exported="false" />
@@ -36,7 +47,7 @@
             android:exported="false" />
         <activity
             android:name=".view.TableListActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true" />

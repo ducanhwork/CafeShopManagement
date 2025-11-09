@@ -1,5 +1,11 @@
 package com.group3.application.model.webservice;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.group3.application.view.adapter.LocalDateTimeAdapter;
+
+import java.time.LocalDateTime;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -17,9 +23,13 @@ public class ApiClient {
                     .addInterceptor(log)
                     .build();
 
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .create();
+
             instance = new Retrofit.Builder()
                     .baseUrl("http://10.0.2.2:8080/") //
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build();
         }
