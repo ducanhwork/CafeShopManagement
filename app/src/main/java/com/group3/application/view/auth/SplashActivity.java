@@ -8,8 +8,9 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.group3.application.R;
-import com.group3.application.common.util.JWTUtils;
-import com.group3.application.common.util.PreferenceManager;
+import com.group3.application.model.repository.AuthRepository;
+import com.group3.application.view.AdminHomeActivity;
+import com.group3.application.view.LoginActivity;
 
 /**
  * Splash screen activity
@@ -18,6 +19,7 @@ import com.group3.application.common.util.PreferenceManager;
 public class SplashActivity extends AppCompatActivity {
     
     private static final long SPLASH_DELAY = 2000; // 2 seconds
+    private AuthRepository authRepository;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,8 @@ public class SplashActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         
+        authRepository = new AuthRepository(getApplicationContext());
+        
         // Check authentication after delay
         new Handler(Looper.getMainLooper()).postDelayed(this::checkAuthentication, SPLASH_DELAY);
     }
@@ -37,17 +41,11 @@ public class SplashActivity extends AppCompatActivity {
      * Check if user is authenticated and navigate accordingly
      */
     private void checkAuthentication() {
-        String token = PreferenceManager.getToken(this);
-        
-        if (token != null && !JWTUtils.isTokenExpired(token)) {
-            // Token is valid, navigate to dashboard
+        if (authRepository.isUserLoggedIn()) {
+            // User is logged in, navigate to admin home
             navigateToDashboard();
         } else {
-            // Token is invalid or missing, navigate to login
-            if (token != null) {
-                // Clear expired session
-                PreferenceManager.clearSession(this);
-            }
+            // User is not logged in, navigate to login
             navigateToLogin();
         }
     }
@@ -56,13 +54,10 @@ public class SplashActivity extends AppCompatActivity {
      * Navigate to dashboard
      */
     private void navigateToDashboard() {
-        // TODO: Navigate to DashboardActivity once created
-        // Intent intent = new Intent(this, DashboardActivity.class);
-        // startActivity(intent);
-        // finish();
-        
-        // Temporary: Navigate to login
-        navigateToLogin();
+        Intent intent = new Intent(this, AdminHomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
     
     /**
@@ -70,7 +65,9 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
 }
+
