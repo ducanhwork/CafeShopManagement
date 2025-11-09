@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray_300">#E0E0E0</color>
+
+    <color name="coffee_primary">#5D4037</color>
+    <color name="coffee_primary_dark">#3E2723</color>
+    <color name="coffee_accent">#8D6E63</color>
+    <color name="cream_light">#FFFDE7</color>
+    <color name="gold_accent">#FFCC80</color>
+    <color name="ripple_dark">#33000000</color>
+    <color name="link_color">#FF7043</color>
+    <color name="error_red">#FF0000</color>
 </resources>
