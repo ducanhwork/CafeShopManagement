@@ -2,9 +2,12 @@ package com.group3.application.view;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.view.adapter.ReservationListAdapter;
 import com.group3.application.viewmodel.ReservationViewModel;
@@ -21,6 +25,8 @@ public class ReservationListActivity extends AppCompatActivity {
     private ReservationViewModel viewModel;
     private ReservationListAdapter reservationListAdapter;
     private String tableId;
+    // TODO: Replace with actual user ID from session
+    private String userId = "21f2f0f3-6b62-470e-83d6-405ac6411523";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,15 @@ public class ReservationListActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
 
+        setupObservers();
+
+        viewModel.fetchReservationsByTable(tableId);
+
+        FloatingActionButton fabAddReservation = findViewById(R.id.fab_add_reservation);
+        fabAddReservation.setOnClickListener(view -> showAddReservationDialog());
+    }
+
+    private void setupObservers() {
         viewModel.getReservations().observe(this, reservations -> {
             if (reservations != null) {
                 reservationListAdapter.setReservations(reservations);
@@ -58,14 +73,37 @@ public class ReservationListActivity extends AppCompatActivity {
             // Show a progress bar or some other loading indicator
         });
 
-        viewModel.fetchReservationsByTable(tableId);
-
-        FloatingActionButton fabAddReservation = findViewById(R.id.fab_add_reservation);
-        fabAddReservation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ReservationListActivity.this, "Add new reservation clicked", Toast.LENGTH_SHORT).show();
+        viewModel.getCreatedReservation().observe(this, reservation -> {
+            if (reservation != null) {
+                Toast.makeText(this, "Reservation created successfully", Toast.LENGTH_SHORT).show();
+                viewModel.fetchReservationsByTable(tableId);
             }
         });
+    }
+
+    private void showAddReservationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_reservation, null);
+        builder.setView(dialogView);
+
+        final TextInputEditText etCustomerName = dialogView.findViewById(R.id.et_customer_name);
+        final TextInputEditText etCustomerPhone = dialogView.findViewById(R.id.et_customer_phone);
+        final TextInputEditText etReservationTime = dialogView.findViewById(R.id.et_reservation_time);
+        final TextInputEditText etNumGuests = dialogView.findViewById(R.id.et_number_of_guests);
+
+        builder.setTitle("Add New Reservation")
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String customerName = etCustomerName.getText().toString();
+                    String customerPhone = etCustomerPhone.getText().toString();
+                    String reservationTime = etReservationTime.getText().toString();
+                    int numGuests = Integer.parseInt(etNumGuests.getText().toString());
+
+                    viewModel.createReservation(customerName, customerPhone, reservationTime, numGuests, tableId, userId);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
