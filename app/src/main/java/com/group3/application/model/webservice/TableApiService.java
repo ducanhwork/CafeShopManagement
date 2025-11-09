@@ -29,7 +29,7 @@ public interface TableApiService {
      * Get all tables with optional filtering and pagination
      * @param status Filter by status (Available, Occupied, Reserved)
      * @param location Filter by location (Indoor, Outdoor, Balcony)
-     * @param minSheetCount Minimum number of seats
+     * @param minSeatCount Minimum number of seats
      * @param page Page number (default: 0)
      * @param size Page size (default: 20)
      * @param sort Sort field,direction (e.g., name,asc)

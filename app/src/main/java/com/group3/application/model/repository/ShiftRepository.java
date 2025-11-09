@@ -46,7 +46,13 @@ public class ShiftRepository {
      * POST /shifts/start
      */
     public void startShift(StartShiftRequest request, OnStartShiftListener listener) {
-        shiftApiService.startShift(request).enqueue(new Callback<Shift>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onStartShiftComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.startShift("Bearer " + token, request).enqueue(new Callback<Shift>() {
             @Override
             public void onResponse(@NonNull Call<Shift> call, @NonNull Response<Shift> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -78,7 +84,13 @@ public class ShiftRepository {
      * POST /shifts/end
      */
     public void endShift(EndShiftRequest request, OnEndShiftListener listener) {
-        shiftApiService.endShift(request).enqueue(new Callback<Shift>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onEndShiftComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.endShift("Bearer " + token, request).enqueue(new Callback<Shift>() {
             @Override
             public void onResponse(@NonNull Call<Shift> call, @NonNull Response<Shift> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -110,7 +122,13 @@ public class ShiftRepository {
      * GET /shifts/current
      */
     public void getCurrentShift(OnGetCurrentShiftListener listener) {
-        shiftApiService.getCurrentShift().enqueue(new Callback<Shift>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onGetCurrentShiftComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.getCurrentShift("Bearer " + token).enqueue(new Callback<Shift>() {
             @Override
             public void onResponse(@NonNull Call<Shift> call, @NonNull Response<Shift> response) {
                 if (response.isSuccessful()) {
@@ -131,9 +149,32 @@ public class ShiftRepository {
                         ));
                     }
                 } else {
-                    String errorMessage = handleErrorResponse(response, "Không thể lấy thông tin ca làm việc");
-                    Log.e(TAG, "Get current shift failed: " + errorMessage);
-                    listener.onGetCurrentShiftComplete(new APIResult(false, errorMessage, null));
+                    // Check if error is "no active shift found" which is actually a valid state
+                    String errorBody = "";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorBody = response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error reading error body: " + e.getMessage());
+                    }
+
+                    // Handle "No active shift found" as a successful response with null data
+                    if (errorBody.contains("No active shift found") || 
+                        errorBody.contains("Please start a shift first")) {
+                        Log.d(TAG, "No active shift - this is a valid state");
+                        listener.onGetCurrentShiftComplete(new APIResult(
+                                true,
+                                "Không có ca làm việc đang mở",
+                                null
+                        ));
+                    } else {
+                        String errorMessage = "Không thể lấy thông tin ca làm việc. Mã lỗi: " + 
+                                            response.code() + 
+                                            (errorBody.isEmpty() ? "" : " - " + errorBody);
+                        Log.e(TAG, "Get current shift failed: " + errorMessage);
+                        listener.onGetCurrentShiftComplete(new APIResult(false, errorMessage, null));
+                    }
                 }
             }
 
@@ -151,7 +192,13 @@ public class ShiftRepository {
      * POST /shifts/cash/record
      */
     public void recordCashTransaction(RecordTransactionRequest request, OnRecordTransactionListener listener) {
-        shiftApiService.recordCashTransaction(request).enqueue(new Callback<CashTransaction>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onRecordTransactionComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.recordCashTransaction("Bearer " + token, request).enqueue(new Callback<CashTransaction>() {
             @Override
             public void onResponse(@NonNull Call<CashTransaction> call, @NonNull Response<CashTransaction> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -183,7 +230,13 @@ public class ShiftRepository {
      * GET /shifts/cash/balance
      */
     public void getCashBalance(OnGetCashBalanceListener listener) {
-        shiftApiService.getCashBalance().enqueue(new Callback<CashBalance>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onGetCashBalanceComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.getCashBalance("Bearer " + token).enqueue(new Callback<CashBalance>() {
             @Override
             public void onResponse(@NonNull Call<CashBalance> call, @NonNull Response<CashBalance> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -215,7 +268,13 @@ public class ShiftRepository {
      * GET /shifts?page=0&size=20&status=CLOSED
      */
     public void getShiftHistory(int page, int size, String status, OnGetShiftHistoryListener listener) {
-        shiftApiService.getShifts(page, size, status).enqueue(new Callback<List<Shift>>() {
+        String token = getAuthToken();
+        if (token == null) {
+            listener.onGetShiftHistoryComplete(new APIResult(false, "Vui lòng đăng nhập lại", null));
+            return;
+        }
+
+        shiftApiService.getShifts("Bearer " + token, page, size, status).enqueue(new Callback<List<Shift>>() {
             @Override
             public void onResponse(@NonNull Call<List<Shift>> call, @NonNull Response<List<Shift>> response) {
                 if (response.isSuccessful() && response.body() != null) {

@@ -49,6 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
+            android:theme="@style/Theme.CafeApp.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".view.ProductListActivity"
