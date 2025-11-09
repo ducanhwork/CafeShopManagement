@@ -14,21 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
-      
         <activity
-            android:name=".view.activity.CreateReservationActivity"
+            android:name=".view.ReservationActivity"
             android:exported="true">
         </activity>
-        <activity
-            android:name=".view.activity.ReservationListActivity" />
-        <activity
-            android:name=".view.activity.ReservationDetailActivity" />
         <activity
             android:name=".ProductListActivity"
             android:exported="false" />
         <activity
             android:name=".view.TableListActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true" />

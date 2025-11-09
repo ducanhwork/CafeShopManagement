@@ -25,8 +25,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         void onItemClick(Reservation reservation);
     }
 
-    public ReservationAdapter(List<Reservation> reservationList, OnItemClickListener listener) {
-        this.reservationList = reservationList;
+    public ReservationAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -68,11 +67,11 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
         public void bind(final Reservation reservation, final OnItemClickListener listener) {
             customerName.setText(reservation.getCustomerName());
-            time.setText(reservation.getTime());
+            time.setText(reservation.getReservationTime());
             status.setText(reservation.getStatus());
-            date.setText(reservation.getDate());
-            pax.setText(reservation.getPax() + " Pax");
-            table.setText("Table " + reservation.getTableNumber());
+            date.setText(reservation.getReservationTime());
+            pax.setText(reservation.getNumGuests() + " Pax");
+            table.setText("Table " + reservation.getTableName());
 
             GradientDrawable statusBackground = (GradientDrawable) status.getBackground();
             switch (reservation.getStatus()) {

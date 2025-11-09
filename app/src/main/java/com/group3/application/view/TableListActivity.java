@@ -80,31 +80,31 @@ public class TableListActivity extends AppCompatActivity {
             }
         });
 
-        vm.getEvents().observe(this, ev -> {
-            var pair = ev.getIfNotHandled();
-            if(pair == null) return;
-            TableViewModel.TableAction action = pair.first;
-            TableInfo table = pair.second;
-
-            switch (action){
-                case SHOW_CONFIRM_RESERVED:
-                    new AlertDialog.Builder(this)
-                            .setTitle("Bàn đã đặt chỗ")
-                            .setMessage("Bàn " + table.getName() + " đang ở trạng thái ĐẶT CHỖ.\nBạn có muốn tiếp tục không?")
-                            .setNegativeButton("Hủy", null)
-                            .setPositiveButton("Tiếp tục", (d,w) -> vm.proceedReserved(table))
-                            .show();
-                    break;
-
-                case OPEN_ORDER:
-                    openOrderScreen(table.getId(), table.getName());
-                    break;
-
-                case SHOW_ERROR:
-                    Toast.makeText(this, "Trạng thái bàn không hỗ trợ", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        });
+//        vm.getEvents().observe(this, ev -> {
+//            var pair = ev.getIfNotHandled();
+//            if(pair == null) return;
+//            TableViewModel.TableAction action = pair.first;
+//            TableInfo table = pair.second;
+//
+//            switch (action){
+//                case SHOW_CONFIRM_RESERVED:
+//                    new AlertDialog.Builder(this)
+//                            .setTitle("Bàn đã đặt chỗ")
+//                            .setMessage("Bàn " + table.getName() + " đang ở trạng thái ĐẶT CHỖ.\nBạn có muốn tiếp tục không?")
+//                            .setNegativeButton("Hủy", null)
+//                            .setPositiveButton("Tiếp tục", (d,w) -> vm.proceedReserved(table))
+//                            .show();
+//                    break;
+//
+//                case OPEN_ORDER:
+//                    openOrderScreen(table.getId(), table.getName());
+//                    break;
+//
+//                case SHOW_ERROR:
+//                    Toast.makeText(this, "Trạng thái bàn không hỗ trợ", Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        });
     }
 
     private void openOrderScreen(String tableId, String tableName) {
