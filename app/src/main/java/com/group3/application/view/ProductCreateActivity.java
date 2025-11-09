@@ -307,6 +307,8 @@ public class ProductCreateActivity extends AppCompatActivity {
         viewModel.productCreated.observe(this, productResponse -> {
             if (productResponse != null) {
                 Toast.makeText(this, "Product created: " + productResponse.getName(), Toast.LENGTH_LONG).show();
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish(); // Đóng Activity hiện tại sau khi thành công
             }
         });
