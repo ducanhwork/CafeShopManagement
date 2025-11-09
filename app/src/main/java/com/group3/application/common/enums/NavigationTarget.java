@@ -5,5 +5,7 @@ public enum NavigationTarget {
     REGISTER,
     FORGOT_PASSWORD,
     PROFILE,
-    ADMIN_PAGE
+    ADMIN_PAGE,
+    CASHIER_PAGE,
+    WAITER_PAGE
 }
