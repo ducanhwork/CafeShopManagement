@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/main"
     tools:context=".view.AdminHomeActivity">
 
     <!-- Thanh AppBar tùy chỉnh -->
@@ -59,7 +59,6 @@
 
     <!-- Nội dung chính của màn hình -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -177,7 +176,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_manage_products"
                 app:strokeColor="@color/coffee_accent"
-                app:strokeWidth="1dp" />
+                app:strokeWidth="1dp"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_manage_vouchers"
@@ -234,36 +233,31 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_manage_staff"
+                android:id="@+id/card_manage_reservation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="148dp"
+                android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_manage_orders"
-                app:strokeColor="@color/coffee_accent"
+                app:layout_constraintTop_toBottomOf="@+id/card_manage_vouchers"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_manage_vouchers">
+                    android:padding="20dp">
 
                     <ImageView
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/btn_5" />
+                        android:src="@drawable/ic_reservations" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -275,7 +269,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quản lý Nhân Viên"
+                            android:text="Reservation Management"
                             android:textColor="@color/coffee_primary_dark"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -284,15 +278,71 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Tạo, xem nhân viên và quản lý khách hàng"
+                            android:text="Tạo, xem và quản lý đặt bàn"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_manage_staffs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_manage_reservation"
+                app:strokeColor="@color/coffee_accent"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_staff" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quản lý nhân viên"
+                            android:textColor="@color/coffee_primary_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tạo, xem và quản lý nhân viên"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

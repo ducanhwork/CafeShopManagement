@@ -1,12 +1,15 @@
 package com.group3.application.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.group3.application.R;
 import com.group3.application.model.entity.User;
 import com.group3.application.viewmodel.StaffListViewModel;
@@ -47,6 +50,16 @@ public class StaffDetailActivity extends AppCompatActivity {
             emailTextView.setText(staff.getEmail());
             mobileTextView.setText(staff.getMobile());
         }
+
+        FloatingActionButton editFab = findViewById(R.id.editFab);
+        editFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StaffDetailActivity.this, EditStaffActivity.class);
+                intent.putExtra("staff", staff);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
