@@ -112,7 +112,9 @@ public class ProductRepository {
         Call<Product> call = apiService.createProduct(productJson, image, token);
         call.enqueue(callback);
     }
+
     public void updateProduct(
+            UUID productId,
             RequestBody productJson,
             MultipartBody.Part image,
             Callback<Product> callback
@@ -125,7 +127,7 @@ public class ProductRepository {
         }
         SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
         String token = "Bearer " + prefs.getString(KEY_AUTH_TOKEN, null);
-        Call<Product> call = apiService.createProduct(productJson, image, token);
+        Call<Product> call = apiService.updateProduct(productId, productJson, image, token);
         call.enqueue(callback);
     }
 

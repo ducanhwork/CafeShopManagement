@@ -27,6 +27,8 @@ public class AdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardManageProducts;
     private MaterialCardView cardManageOrders;
     private MaterialCardView cardManageVouchers;
+
+    private MaterialCardView card_manage_staff;
     private TextView tvCurrentDate;
 
     @Override
@@ -52,6 +54,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageOrders = findViewById(R.id.card_manage_orders);
         cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         tvCurrentDate = findViewById(R.id.tv_current_date);
+        card_manage_staff = findViewById(R.id.card_manage_staff);
     }
 
     private void setCurrentDateTime() {
@@ -61,7 +64,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "EEEE, dd 'tháng' MM, yyyy HH:mm",
-            new Locale("vi", "VN")
+                new Locale("vi", "VN")
         );
 
         String formattedDateTime = currentDateTime.format(formatter);
@@ -102,11 +105,15 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageVouchers.setOnClickListener(v -> {
             // TODO: Tạo VoucherManagementActivity (layout thứ 2 bạn gửi) và điều hướng
 
-             Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
-             startActivity(intent);
+            Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
+            startActivity(intent);
 
             // Tạm thời hiển thị Toast
             Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
+        });
+        card_manage_staff.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, StaffListActivity.class);
+            startActivity(intent);
         });
     }
 

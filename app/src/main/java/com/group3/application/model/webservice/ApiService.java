@@ -59,7 +59,7 @@ public interface ApiService {
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
 
     @Multipart
-    @PUT("api/product/update{productId}")
+    @PUT("api/product/update/{productId}")
     Call<Product> updateProduct(
             @Path("productId") UUID productId,
             @Part("product") RequestBody productJson,
