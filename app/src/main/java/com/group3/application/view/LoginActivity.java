@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.navigationEvent.observe(this, event -> {
             NavigationTarget target = event.getContentIfNotHandled();
+            Log.e("Login", "Navigation target: " + target.toString());
             if (target != null) {
                 Intent intent;
                 switch (target) {

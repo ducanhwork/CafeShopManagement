@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.group3.application.model.dto.ProductCreateRequest;
+import com.group3.application.model.dto.ProductUpdateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
@@ -20,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -54,29 +56,37 @@ public class ProductUpdateViewModel extends AndroidViewModel {
     }
 
     // Hàm gọi API để tạo sản phẩm
-    public void createProduct(
-            ProductCreateRequest productData,
+
+    public void updateProduct(
+            UUID productId,
+            ProductUpdateRequest productData,
             Uri imageUri
     ) {
-        if (imageUri == null) {
-            _errorMessage.setValue("Product image is required.");
-            return;
-        }
+//        if (imageUri == null) {
+//            _errorMessage.setValue("Product image is required.");
+//            return;
+//        }
 
-        _isLoading.setValue(true); // Bắt đầu hiển thị loading
-        _errorMessage.setValue(null); // Reset error message
+
+        _isLoading.setValue(true);
+        _errorMessage.setValue(null);
 
         // Chuẩn bị RequestBody cho product data và MultipartBody.Part cho image
         RequestBody productRequestBody = convertProductToJsonRequestBody(productData);
-        MultipartBody.Part imagePart = convertImageUriToMultipart(imageUri);
+        MultipartBody.Part imagePart = null;
 
-        if (productRequestBody == null || imagePart == null) {
-            _errorMessage.setValue("Failed to prepare data for upload.");
-            _isLoading.setValue(false);
-            return;
+        if (imageUri != null) {
+
+            imagePart = convertImageUriToMultipart(imageUri);
+
+            if (productRequestBody == null || imagePart == null) {
+                _errorMessage.setValue("Failed to prepare data for upload.");
+                _isLoading.setValue(false);
+                return;
+            }
         }
 
-        productRepository.createProduct(productRequestBody, imagePart, new Callback<Product>() {
+        productRepository.updateProduct(productId, productRequestBody, imagePart, new Callback<Product>() {
             @Override
             public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response) {
                 _isLoading.setValue(false); // Kết thúc loading
@@ -85,7 +95,7 @@ public class ProductUpdateViewModel extends AndroidViewModel {
                     _productUpdated.setValue(response.body());
                 } else {
                     // Thất bại
-                    String errorMsg = "Failed to create product.";
+                    String errorMsg = "Failed to update product.";
                     try {
                         if (response.errorBody() != null) {
                             errorMsg = response.errorBody().string();
@@ -120,7 +130,7 @@ public class ProductUpdateViewModel extends AndroidViewModel {
     }
 
     // Helper method: Chuyển ProductCreateRequest sang RequestBody (JSON)
-    private RequestBody convertProductToJsonRequestBody(ProductCreateRequest data) {
+    private RequestBody convertProductToJsonRequestBody(ProductUpdateRequest data) {
         try {
             Gson gson = new Gson(); // Yêu cầu dependency 'com.google.code.gson:gson:2.x.x'
             String jsonString = gson.toJson(data);

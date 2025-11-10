@@ -24,8 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,9 +32,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
-import com.group3.application.model.dto.ProductCreateRequest;
+import com.group3.application.model.dto.ProductUpdateRequest;
 import com.group3.application.model.entity.Category;
-import com.group3.application.viewmodel.ProductCreateViewModel;
+import com.group3.application.viewmodel.ProductUpdateViewModel;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -48,6 +47,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class ProductUpdateActivity extends AppCompatActivity {
     private static final String TAG = "NewProductActivity";
@@ -71,7 +71,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
     private String selectedCategory = null;
 
     // ViewModel
-    private ProductCreateViewModel viewModel;
+    private ProductUpdateViewModel viewModel;
 
     // Activity result launchers
     private ActivityResultLauncher<Intent> galleryPickerLauncher;
@@ -83,7 +83,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_update);
 
         initViews();
-        viewModel = new ViewModelProvider(this).get(ProductCreateViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ProductUpdateViewModel.class);
         setupToolbar();
         List<String> categoryNames = new ArrayList<>();
         viewModel.getCategories();
@@ -91,14 +91,14 @@ public class ProductUpdateActivity extends AppCompatActivity {
             for (Category category : categories) {
                 categoryNames.add(category.getName());
             }
+            bindData(categoryNames);
+            setupCategorySpinner(categoryNames);
         });
-        setupCategorySpinner(categoryNames);
+
         setupImageUploadAreaListener();
         setupActivityResultLaunchers();
-
         setupObservers();
-        bindData(categoryNames);
-        setupCreateButtonListener();
+        setupUpdateButtonListener();
     }
 
     private void initViews() {
@@ -155,7 +155,6 @@ public class ProductUpdateActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory = categoryNames.get(position);
                 Log.d(TAG, "Selected category: " + selectedCategory);
-                // Cập nhật ViewModel hoặc làm gì đó với selectedCategoryName
             }
 
             @Override
@@ -165,9 +164,11 @@ public class ProductUpdateActivity extends AppCompatActivity {
             }
         });
 
-        // Đặt mục mặc định là "Select Category" nếu cần
         if (selectedCategory == null && !categoryNames.isEmpty()) {
             spinnerCategory.setSelection(0); // Chọn mục đầu tiên (Select Category)
+        } else {
+            int categoryIndex = categoryNames.indexOf(selectedCategory);
+            spinnerCategory.setSelection(categoryIndex);
         }
     }
 
@@ -201,7 +202,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
     }
 
     private void showImageSourceDialog() {
-        new MaterialAlertDialogBuilder(this).setTitle("Choose Image Source").setItems(new String[]{"Gallery", "Camera"}, (dialog, which) -> {
+        new MaterialAlertDialogBuilder(this).setTitle("Choose Image Source").setItems(new String[]{"Gallery"}, (dialog, which) -> {
             switch (which) {
                 case 0: // Gallery
                     if (checkStoragePermission()) {
@@ -231,26 +232,45 @@ public class ProductUpdateActivity extends AppCompatActivity {
             String productImage = intent.getStringExtra("productImage");
 
             etProductName.setText(productName);
-            etProductPrice.setText(productPrice);
+            etProductPrice.setText(productPrice.toString());
             etProductDescription.setText(productDescription);
-            spinnerCategory.setSelection(categoryNames.indexOf(productCategory));
-            try {
-                Picasso.get()
-                        .load(productImage)
-                        .placeholder(R.drawable.trends)
-                        .error(R.drawable.trends)
-                        .into(ivProductImage);
-            } catch (Exception e) {
-                ivProductImage.setImageResource(R.drawable.trends);
+            selectedCategory = productCategory;
+            if (productImage != null && !productImage.isEmpty()) {
+                try {
+                    Picasso.get().load(productImage).placeholder(R.drawable.trends).error(R.drawable.trends).into(ivProductImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d("ImageDebug", "Image loaded successfully");
+                            // Hiển thị ImageView và ẩn placeholder
+                            ivProductImage.setVisibility(View.VISIBLE);
+                            findViewById(R.id.layout_placeholder_content).setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("ImageDebug", "Error loading image: " + e.getMessage());
+                            ivProductImage.setVisibility(View.GONE);
+                            findViewById(R.id.layout_placeholder_content).setVisibility(View.VISIBLE);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("ImageDebug", "Exception: " + e.getMessage());
+                    ivProductImage.setImageResource(R.drawable.trends);
+                }
+            } else {
+                // Nếu không có ảnh, hiển thị placeholder
+                ivProductImage.setVisibility(View.GONE);
+                findViewById(R.id.layout_placeholder_content).setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private boolean checkStoragePermission() { /* ... */
+    private boolean checkStoragePermission() {
         return true;
-    } // Placeholder
+    }
 
-    private void requestStoragePermission() { /* ... */ } // Placeholder
+    private void requestStoragePermission() {
+    }
 
     private boolean checkCameraPermission() { /* ... */
         return true;
@@ -329,7 +349,7 @@ public class ProductUpdateActivity extends AppCompatActivity {
         });
 
         // Quan sát kết quả tạo sản phẩm thành công
-        viewModel.productCreated.observe(this, productResponse -> {
+        viewModel.productUpdated.observe(this, productResponse -> {
             if (productResponse != null) {
                 Toast.makeText(this, "Product created: " + productResponse.getName(), Toast.LENGTH_LONG).show();
                 Intent resultIntent = new Intent();
@@ -350,20 +370,20 @@ public class ProductUpdateActivity extends AppCompatActivity {
     private void showLoading(boolean show) {
         if (show) {
             btnCreateProduct.setEnabled(false); // Tắt nút
-            btnCreateProduct.setText("Creating..."); // Thay đổi text
+            btnCreateProduct.setText("Updating..."); // Thay đổi text
             // Có thể hiển thị ProgressBar ở đây
         } else {
             btnCreateProduct.setEnabled(true); // Bật lại nút
-            btnCreateProduct.setText("Create Product"); // Reset text
+            btnCreateProduct.setText("Update Product"); // Reset text
             // Có thể ẩn ProgressBar
         }
     }
 
     // --- Validation and Product Creation Trigger ---
-    private void setupCreateButtonListener() {
+    private void setupUpdateButtonListener() {
         btnCreateProduct.setOnClickListener(v -> {
             if (validateInput()) {
-                createProduct(); // Kích hoạt quy trình tạo sản phẩm
+                updateProduct(); // Kích hoạt quy trình tạo sản phẩm
             }
         });
     }
@@ -417,25 +437,26 @@ public class ProductUpdateActivity extends AppCompatActivity {
             Toast.makeText(this, "Please add a product image", Toast.LENGTH_SHORT).show();
             isValid = false;
         }
-
         return isValid;
     }
 
     // Hàm này chỉ chuẩn bị dữ liệu và gọi ViewModel
-    private void createProduct() {
+    private void updateProduct() {
         String name = etProductName.getText().toString().trim();
         Double price = Double.parseDouble(etProductPrice.getText().toString().trim());
         String description = etProductDescription.getText().toString().trim();
         String category = spinnerCategory.getSelectedItem().toString();
 
-        ProductCreateRequest productData = new ProductCreateRequest(name, description, price, category);
+//TODO: fix null product id pass from list to update
+        Intent intent = getIntent();
+        String productId = intent.getStringExtra("productId");
+        Log.e(TAG, "updateProductID: " + productId);
+        String status = intent.getStringExtra("productStatus");
+        ProductUpdateRequest productData = new ProductUpdateRequest(name, description, price, category, status);
 
-
-        // Gọi hàm trong ViewModel để thực hiện API call
-        viewModel.createProduct(productData, currentImageUri);
+        viewModel.updateProduct(UUID.fromString(productId), productData, currentImageUri);
     }
 
-    // Handle toolbar back button click (Giữ nguyên như cũ)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

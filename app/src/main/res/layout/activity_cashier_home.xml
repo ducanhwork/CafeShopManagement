@@ -193,7 +193,6 @@
                 app:strokeColor="@color/coffee_accent"
                 app:strokeWidth="1dp">
 
-
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

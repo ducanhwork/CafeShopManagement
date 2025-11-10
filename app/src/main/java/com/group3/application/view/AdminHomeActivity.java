@@ -65,7 +65,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "EEEE, dd 'tháng' MM, yyyy HH:mm",
-            new Locale("vi", "VN")
+                new Locale("us", "US")
         );
 
         String formattedDateTime = currentDateTime.format(formatter);
