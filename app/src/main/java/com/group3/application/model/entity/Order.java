@@ -3,7 +3,9 @@ package com.group3.application.model.entity;
 import com.google.gson.annotations.SerializedName;
 import com.group3.application.model.dto.OrderDetailItemDTO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Order {
 
@@ -23,14 +25,16 @@ public class Order {
     private String staffName;
 
     @SerializedName("tableNames")
-    private List<String> tableNames;
+    private List<String> tableNames = new ArrayList<>();
 
-    // SỬA: Thêm trường tableIds
-    @SerializedName("tableIds")
-    private List<String> tableIds;
+    @SerializedName("tables")
+    private List<TableInfo> tables = new ArrayList<>();
 
     @SerializedName("items")
-    private List<OrderDetailItemDTO> items;
+    private List<OrderDetailItemDTO> items = new ArrayList<>();
+
+    @SerializedName("note")
+    private String note;
 
     // Getters and Setters
     public String getId() {
@@ -81,13 +85,21 @@ public class Order {
         this.tableNames = tableNames;
     }
 
-    // SỬA: Thêm getter và setter cho tableIds
-    public List<String> getTableIds() {
-        return tableIds;
+    public List<TableInfo> getTables() {
+        return tables;
     }
 
-    public void setTableIds(List<String> tableIds) {
-        this.tableIds = tableIds;
+    public void setTables(List<TableInfo> tables) {
+        this.tables = tables;
+    }
+
+    public List<String> getTableIds() {
+        if (tables == null) {
+            return new ArrayList<>();
+        }
+        return tables.stream()
+                .map(TableInfo::getId)
+                .collect(Collectors.toList());
     }
 
     public List<OrderDetailItemDTO> getItems() {
@@ -96,5 +108,14 @@ public class Order {
 
     public void setItems(List<OrderDetailItemDTO> items) {
         this.items = items;
+    }
+
+    // SỬA: Thêm getter và setter cho note
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

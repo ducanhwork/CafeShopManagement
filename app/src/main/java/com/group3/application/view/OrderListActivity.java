@@ -21,6 +21,9 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 import com.group3.application.view.adapter.OrderListAdapter;
 import com.group3.application.viewmodel.OrderListViewModel;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +39,8 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
     private AutoCompleteTextView actvStatus, actvStaff, actvTable;
     private List<User> userList = new ArrayList<>();
     private List<TableInfo> tableList = new ArrayList<>();
+    private ActivityResultLauncher<Intent> detailLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,16 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        detailLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        Toast.makeText(this, "Đang cập nhật danh sách...", Toast.LENGTH_SHORT).show();
+                        viewModel.fetchOrders();
+                    }
+                }
+        );
 
         // Ánh xạ Views
         progressBar = findViewById(R.id.progress_bar);
@@ -150,11 +165,10 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         });
     }
 
-    @Override
     public void onOrderClick(Order order) {
         Intent intent = new Intent(this, OrderDetailActivity.class);
         intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getId());
-        startActivity(intent);
+        detailLauncher.launch(intent);
     }
 
     @Override

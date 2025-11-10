@@ -12,98 +12,105 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.group3.application.R;
+import com.group3.application.model.dto.OrderItemDTO;
 import com.group3.application.model.entity.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-    // 1. Interface mới để gửi sự kiện (Product, Quantity mới) lên ViewModel
-    public interface Listener {
+    public interface OnQuantityChangedListener {
         void onQuantityChanged(Product product, int newQuantity);
     }
 
-    // 2. Interface mới để lấy số lượng hiện tại từ ViewModel
-    public interface QuantityFetcher {
-        int getQuantity(String productId);
-    }
+    private final List<Product> productList = new ArrayList<>();
+    private List<OrderItemDTO> orderItems = new ArrayList<>(); // Danh sách giỏ hàng
+    private final OnQuantityChangedListener listener;
 
-    private final List<Product> data = new ArrayList<>();
-    private final Listener listener;
-    private final QuantityFetcher quantityFetcher; // Biến mới để lấy dữ liệu
-
-    // 3. Cập nhật Constructor
-    public ProductAdapter(Listener listener, QuantityFetcher fetcher) {
+    public ProductAdapter(OnQuantityChangedListener listener) {
         this.listener = listener;
-        this.quantityFetcher = fetcher;
     }
 
-    public void submit(List<Product> items) {
-        data.clear();
-        if (items != null) data.addAll(items);
+    public void setProductList(List<Product> products) {
+        this.productList.clear();
+        if (products != null) {
+            this.productList.addAll(products);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setOrderItems(List<OrderItemDTO> items) {
+        this.orderItems = (items == null) ? new ArrayList<>() : items;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_list_item_for_order, parent, false);
-        return new ProductViewHolder(v);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_item_for_order, parent, false);
+        return new ProductViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder h, int pos) {
-        Product p = data.get(pos);
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+        Product product = productList.get(position);
 
-        h.tvName.setText(p.getName()); // Nên dùng getName()
-        h.tvPrice.setText(String.format("%,.0f đ", p.getPrice())); // Nên dùng getPrice()
-        Glide.with(h.img).load(p.getImageLink()).into(h.img);
-
-        // 4. Lấy số lượng từ ViewModel thông qua QuantityFetcher
-        int currentQty = quantityFetcher.getQuantity(p.getId()); // Giả sử Product có getId()
-        h.tvQty.setText(String.valueOf(currentQty));
-
-        // --- Nút Giảm (-) ---
-        h.btnMinus.setOnClickListener(v -> {
-            int q = quantityFetcher.getQuantity(p.getId());
-            if (q > 0) {
-                int newQty = q - 1;
-                if (listener != null) listener.onQuantityChanged(p, newQty); // Gửi sự kiện
+        int currentQuantity = 0;
+        if (orderItems != null) {
+            for (OrderItemDTO item : orderItems) {
+                // SỬA: Sử dụng đúng tên trường "name"
+                if (item != null && Objects.equals(item.name, product.getName())) {
+                    currentQuantity = item.quantity;
+                    break;
+                }
             }
-        });
+        }
 
-        // --- Nút Tăng (+) ---
-        h.btnPlus.setOnClickListener(v -> {
-            int q = quantityFetcher.getQuantity(p.getId());
-            int newQty = q + 1;
-            if (listener != null) listener.onQuantityChanged(p, newQty); // Gửi sự kiện
-            // KHÔNG TỰ CẬP NHẬT TVQTY ở đây. ViewModel sẽ làm và Activity sẽ notify adapter.
-        });
-
-        h.itemView.setOnClickListener(v -> h.btnPlus.performClick());
+        holder.bind(product, currentQuantity, listener);
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return productList.size();
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
-        // ... (Giữ nguyên)
         ImageView img;
         TextView tvName, tvPrice, tvQty;
         ImageButton btnMinus, btnPlus;
 
-        ProductViewHolder(@NonNull View v) {
-            super(v);
-            img = v.findViewById(R.id.img);
-            tvName = v.findViewById(R.id.tvName);
-            tvPrice = v.findViewById(R.id.tvPrice);
-            tvQty = v.findViewById(R.id.tvQty);
-            btnMinus = v.findViewById(R.id.btnMinus);
-            btnPlus = v.findViewById(R.id.btnPlus);
+        ProductViewHolder(@NonNull View itemView) {
+            super(itemView);
+            img = itemView.findViewById(R.id.img);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvQty = itemView.findViewById(R.id.tvQty);
+            btnMinus = itemView.findViewById(R.id.btnMinus);
+            btnPlus = itemView.findViewById(R.id.btnPlus);
+        }
+
+        void bind(final Product product, final int currentQuantity, final OnQuantityChangedListener listener) {
+            tvName.setText(product.getName());
+            tvPrice.setText(String.format("%,.0f đ", product.getPrice()));
+            Glide.with(itemView.getContext()).load(product.getImageLink()).into(img);
+
+            tvQty.setText(String.valueOf(currentQuantity));
+
+            btnMinus.setOnClickListener(v -> {
+                if (currentQuantity > 0 && listener != null) {
+                    listener.onQuantityChanged(product, currentQuantity - 1);
+                }
+            });
+
+            btnPlus.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onQuantityChanged(product, currentQuantity + 1);
+                }
+            });
+
+            itemView.setOnClickListener(v -> btnPlus.performClick());
         }
     }
 }

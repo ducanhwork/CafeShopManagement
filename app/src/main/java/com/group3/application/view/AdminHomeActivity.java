@@ -43,6 +43,12 @@ public class AdminHomeActivity extends AppCompatActivity {
         setupToolbar();
         setupClickListeners();
         setCurrentDateTime();
+        MaterialCardView cardOrders = findViewById(R.id.card_manage_orders);
+        cardOrders.setOnClickListener(v -> {
+            // Mở Activity hoặc Fragment danh sách Order của bạn
+            Intent intent = new Intent(this, OrderListActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initViews() {

@@ -65,15 +65,15 @@ public class OrderListViewModel extends AndroidViewModel {
         });
     }
 
-    // Lấy danh sách đơn hàng dựa trên bộ lọc
+    // SỬA: Đồng bộ lại với OrderRepository mới
     public void fetchOrders() {
         _isLoading.setValue(true);
-        orderRepository.getOrders(statusFilter, tableIdFilter, staffIdFilter, (orders, error) -> {
+        orderRepository.getOrders(statusFilter, tableIdFilter, staffIdFilter, result -> {
             _isLoading.postValue(false);
-            if (error != null) {
-                _error.postValue(error);
+            if (result.isSuccess() && result.getData() != null) {
+                _orders.postValue(result.getData());
             } else {
-                _orders.postValue(orders);
+                _error.postValue(result.getMessage());
             }
         });
     }
