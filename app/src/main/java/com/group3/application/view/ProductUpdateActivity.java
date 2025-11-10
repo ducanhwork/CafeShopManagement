@@ -24,8 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,10 +32,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
-import com.group3.application.model.dto.ProductCreateRequest;
 import com.group3.application.model.dto.ProductUpdateRequest;
 import com.group3.application.model.entity.Category;
-import com.group3.application.model.entity.Product;
 import com.group3.application.viewmodel.ProductUpdateViewModel;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -241,26 +237,22 @@ public class ProductUpdateActivity extends AppCompatActivity {
             selectedCategory = productCategory;
             if (productImage != null && !productImage.isEmpty()) {
                 try {
-                    Picasso.get()
-                            .load(productImage)
-                            .placeholder(R.drawable.trends)
-                            .error(R.drawable.trends)
-                            .into(ivProductImage, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.d("ImageDebug", "Image loaded successfully");
-                                    // Hiển thị ImageView và ẩn placeholder
-                                    ivProductImage.setVisibility(View.VISIBLE);
-                                    findViewById(R.id.layout_placeholder_content).setVisibility(View.GONE);
-                                }
+                    Picasso.get().load(productImage).placeholder(R.drawable.trends).error(R.drawable.trends).into(ivProductImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d("ImageDebug", "Image loaded successfully");
+                            // Hiển thị ImageView và ẩn placeholder
+                            ivProductImage.setVisibility(View.VISIBLE);
+                            findViewById(R.id.layout_placeholder_content).setVisibility(View.GONE);
+                        }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    Log.e("ImageDebug", "Error loading image: " + e.getMessage());
-                                    ivProductImage.setVisibility(View.GONE);
-                                    findViewById(R.id.layout_placeholder_content).setVisibility(View.VISIBLE);
-                                }
-                            });
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("ImageDebug", "Error loading image: " + e.getMessage());
+                            ivProductImage.setVisibility(View.GONE);
+                            findViewById(R.id.layout_placeholder_content).setVisibility(View.VISIBLE);
+                        }
+                    });
                 } catch (Exception e) {
                     Log.e("ImageDebug", "Exception: " + e.getMessage());
                     ivProductImage.setImageResource(R.drawable.trends);
@@ -378,11 +370,11 @@ public class ProductUpdateActivity extends AppCompatActivity {
     private void showLoading(boolean show) {
         if (show) {
             btnCreateProduct.setEnabled(false); // Tắt nút
-            btnCreateProduct.setText("Creating..."); // Thay đổi text
+            btnCreateProduct.setText("Updating..."); // Thay đổi text
             // Có thể hiển thị ProgressBar ở đây
         } else {
             btnCreateProduct.setEnabled(true); // Bật lại nút
-            btnCreateProduct.setText("Create Product"); // Reset text
+            btnCreateProduct.setText("Update Product"); // Reset text
             // Có thể ẩn ProgressBar
         }
     }
@@ -445,7 +437,6 @@ public class ProductUpdateActivity extends AppCompatActivity {
             Toast.makeText(this, "Please add a product image", Toast.LENGTH_SHORT).show();
             isValid = false;
         }
-
         return isValid;
     }
 

@@ -56,30 +56,37 @@ public class ProductUpdateViewModel extends AndroidViewModel {
     }
 
     // Hàm gọi API để tạo sản phẩm
+
     public void updateProduct(
             UUID productId,
             ProductUpdateRequest productData,
             Uri imageUri
     ) {
-        if (imageUri == null) {
-            _errorMessage.setValue("Product image is required.");
-            return;
-        }
+//        if (imageUri == null) {
+//            _errorMessage.setValue("Product image is required.");
+//            return;
+//        }
+
 
         _isLoading.setValue(true);
         _errorMessage.setValue(null);
 
         // Chuẩn bị RequestBody cho product data và MultipartBody.Part cho image
         RequestBody productRequestBody = convertProductToJsonRequestBody(productData);
-        MultipartBody.Part imagePart = convertImageUriToMultipart(imageUri);
+        MultipartBody.Part imagePart = null;
 
-        if (productRequestBody == null || imagePart == null) {
-            _errorMessage.setValue("Failed to prepare data for upload.");
-            _isLoading.setValue(false);
-            return;
+        if (imageUri != null) {
+
+            imagePart = convertImageUriToMultipart(imageUri);
+
+            if (productRequestBody == null || imagePart == null) {
+                _errorMessage.setValue("Failed to prepare data for upload.");
+                _isLoading.setValue(false);
+                return;
+            }
         }
 
-        productRepository.updateProduct(productId,productRequestBody, imagePart, new Callback<Product>() {
+        productRepository.updateProduct(productId, productRequestBody, imagePart, new Callback<Product>() {
             @Override
             public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response) {
                 _isLoading.setValue(false); // Kết thúc loading
