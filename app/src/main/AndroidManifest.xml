@@ -33,6 +33,10 @@
             android:exported="false"
             android:parentActivityName=".view.StaffListActivity" />
         <activity
+            android:name=".view.EditStaffActivity"
+            android:exported="false"
+            android:parentActivityName=".view.StaffDetailActivity" />
+        <activity
             android:name=".view.ProductUpdateActivity"
             android:exported="false" />
         <activity
@@ -54,7 +58,8 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="false" />
+            android:exported="true">
+        </activity>
         <activity
             android:name=".view.ProductListActivity"
             android:exported="false" />
@@ -66,13 +71,13 @@
             android:exported="false" />
         <activity
             android:name=".view.HomeMenuActivity"
-            android:exported="true" />
+            android:exported="true"/>
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,7 +89,7 @@
             android:exported="false" />
         <activity
             android:name=".view.StaffListActivity"
-            android:exported="false" />
+            android:exported="false"/>
     </application>
 
 </manifest>
