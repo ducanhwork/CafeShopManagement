@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.view.adapter.ProductAdapter;
@@ -63,7 +64,7 @@ public class ProductListActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     viewModel.getProducts(null, selectedCategory == "All" ? null : selectedCategory);
                 } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                    Log.d("ProductListActivity", "Product creation cancelled.");
+                    Log.d("ProductListActivity", "Product update cancelled.");
                 }
             });
 
@@ -141,7 +142,7 @@ public class ProductListActivity extends AppCompatActivity {
         categoriesList.add("All");
         viewModel.getCategories();
         viewModel.categories.observe(this, categories -> {
-            for (Category category : categories) {
+            for (CategoryDTO category : categories) {
                 categoriesList.add(category.getName());
             }
         });
