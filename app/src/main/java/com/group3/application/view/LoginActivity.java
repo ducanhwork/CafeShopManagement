@@ -2,6 +2,7 @@ package com.group3.application.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,11 +48,10 @@ public class LoginActivity extends AppCompatActivity {
             APIResult result = event.getContentIfNotHandled();
             if (result != null) {
                 if (result.isSuccess()) {
-                    // Hiển thị thông báo thành công từ ViewModel
                     Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    // Hiển thị thông báo lỗi từ ViewModel
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + result.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("LoginActivity", result.getMessage());
+                    Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel.navigationEvent.observe(this, event -> {
             NavigationTarget target = event.getContentIfNotHandled();
+            Log.e("Login", "Navigation target: " + target.toString());
             if (target != null) {
                 Intent intent;
                 switch (target) {
@@ -75,6 +76,18 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case CASHIER_PAGE:
+                        intent = new Intent(LoginActivity.this, CashierHomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    case WAITER_PAGE:
+                        intent = new Intent(LoginActivity.this, WaiterHomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                        return;
                     case FORGOT_PASSWORD:
                         intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                         startActivity(intent);

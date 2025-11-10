@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.group3.application.common.utils.Event;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.OrderItemDTO;
+import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.User;
@@ -90,7 +91,7 @@ public class OrderViewModel extends AndroidViewModel {
         });
     }
 
-    public void addOrUpdateItem(Product product, int quantity) {
+    public void addOrUpdateItem(ProductForOrder product, int quantity) {
         List<OrderItemDTO> currentList = currentOrderItems.getValue();
         if (currentList == null) currentList = new ArrayList<>();
 

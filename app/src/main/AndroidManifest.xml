@@ -3,17 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Cho Android cũ hơn -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" /> <!-- Quyền truy cập Camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_group"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.CashierHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.WaiterHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ProductCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.StaffDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.StaffListActivity" />
+        <activity
+            android:name=".view.EditStaffActivity"
+            android:exported="false"
+            android:parentActivityName=".view.StaffDetailActivity" />
+        <activity
+            android:name=".view.ProductUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChangePasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".view.OrderListActivity"
             android:exported="true" />
@@ -22,6 +50,15 @@
             android:exported="false" />
         <activity
             android:name=".view.ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ReservationListActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationActivity" />
+        <activity
+            android:name=".view.ReservationDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".view.ReservationListActivity" />
             android:exported="true"/>
         <activity
             android:name=".view.OrderHostActivity"
@@ -31,16 +68,26 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="false" />
+            android:exported="true">
+        </activity>
         <activity
             android:name=".view.ProductListActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.VoucherManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoyaltyListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HomeMenuActivity"
+            android:exported="true"/>
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,6 +96,9 @@
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.StaffListActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

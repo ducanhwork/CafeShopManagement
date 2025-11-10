@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
@@ -17,11 +18,20 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import java.util.List;
+
+import retrofit2.Call;
+
 
 public class UserRepository {
     private static final String TAG = "UserRepository";
     private final ApiService apiService;
     private final SharedPreferences sharedPreferences;
+
+    public UserRepository(){
+        this.apiService = ApiClient.get().create(ApiService.class);
+        this.sharedPreferences = null;
+    }
 
     public UserRepository(Application application) {
         this.apiService = ApiClient.get().create(ApiService.class);
@@ -58,5 +68,17 @@ public class UserRepository {
 
     public interface OnUsersFetchListener {
         void onUsersFetchComplete(List<User> users, String error);
+    }
+
+    public Call<List<User>> getAllUsers() {
+        return apiService.getAllUsers();
+    }
+
+    public Call<User> createUser(User newStaff) {
+        return apiService.createUser(newStaff);
+    }
+
+    public Call<List<Role>> getRoles() {
+        return apiService.getRoles();
     }
 }

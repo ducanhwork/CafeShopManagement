@@ -1,21 +1,47 @@
 package com.group3.application.model.entity;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.UUID;
 
-public class Product implements Serializable {
-    public String id;
-    public String name;
-    public String description;
-    public double price;
-    public String imageLink;
-    public String status;
-    public String categoryId;
+public class Product {
+    private UUID id;
 
-    public String getId() {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", imageLink='" + imageLink + '\'' +
+                ", status='" + status + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
+
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private String imageLink;
+    private String status;
+    private String categoryName;
+
+    public Product(UUID id, String name, String description, BigDecimal price, String imageLink, String status, String categoryName) {
+
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imageLink = imageLink;
+        this.status = status;
+        this.categoryName = categoryName;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -35,20 +61,12 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getImageLink() {
@@ -59,11 +77,25 @@ public class Product implements Serializable {
         this.imageLink = imageLink;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public boolean isActive() {
+        return status.equals("active");
+    }
+
+
 }

@@ -1,9 +1,9 @@
 package com.group3.application.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group3.application.R;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.view.adapter.TableAdapter;
-import com.group3.application.viewmodel.ReservationViewModel;
+import com.group3.application.viewmodel.TableViewModel;
 
-public class ReservationActivity /*extends AppCompatActivity implements TableAdapter.OnItemClick*/ {
+public class ReservationActivity extends BaseDrawerActivity implements TableAdapter.OnItemClick {
 
-    /*private ReservationViewModel viewModel;
+    private TableViewModel viewModel;
     private TableAdapter tableAdapter;
 
     @Override
@@ -29,7 +29,7 @@ public class ReservationActivity /*extends AppCompatActivity implements TableAda
         tableAdapter = new TableAdapter(this);
         tablePanel.setAdapter(tableAdapter);
 
-        viewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
+        viewModel = new ViewModelProvider(this).get(TableViewModel.class);
 
         viewModel.getTables().observe(this, tables -> {
             if (tables != null) {
@@ -43,15 +43,17 @@ public class ReservationActivity /*extends AppCompatActivity implements TableAda
             }
         });
 
-        viewModel.getIsLoading().observe(this, isLoading -> {
+        viewModel.getLoading().observe(this, isLoading -> {
             // Show a progress bar or some other loading indicator
         });
 
-        viewModel.fetchTables();
+        viewModel.loadTables(null, null);
     }
 
     @Override
     public void onClick(TableInfo table) {
-        Toast.makeText(this, "Clicked: " + table.getName(), Toast.LENGTH_SHORT).show();
-    }*/
+        Intent intent = new Intent(this, ReservationListActivity.class);
+        intent.putExtra("TABLE_ID", table.getId());
+        startActivity(intent);
+    }
 }
