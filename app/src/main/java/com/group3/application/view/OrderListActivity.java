@@ -58,7 +58,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         // Setup RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new OrderListAdapter(this); 
+        adapter = new OrderListAdapter(this);
         recyclerView.setAdapter(adapter);
 
         // ViewModel
@@ -70,13 +70,13 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
 
         // Xử lý sự kiện click cho FAB
         fabAddOrder.setOnClickListener(v -> {
-            Intent intent = new Intent(OrderListActivity.this, OrderHostActivity.class);
+            Intent intent = new Intent(OrderListActivity.this, TableListActivity.class);
             startActivity(intent);
         });
 
         // Bắt đầu lấy tất cả dữ liệu
-        viewModel.fetchFilterData(); 
-        viewModel.fetchOrders();    
+        viewModel.fetchFilterData();
+        viewModel.fetchOrders();
     }
 
     private void observeViewModel() {
@@ -112,7 +112,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         viewModel.tables.observe(this, tables -> {
             tableList = tables;
             List<String> tableNames = new ArrayList<>();
-            tableNames.add("Tất cả bàn"); 
+            tableNames.add("Tất cả bàn");
             tableNames.addAll(tables.stream().map(TableInfo::getName).collect(Collectors.toList()));
             ArrayAdapter<String> tableAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, tableNames);
             actvTable.setAdapter(tableAdapter);
@@ -133,18 +133,18 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
 
         actvStaff.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
-                viewModel.setStaffIdFilter(null); 
+                viewModel.setStaffIdFilter(null);
             } else {
-                User selectedUser = userList.get(position - 1); 
+                User selectedUser = userList.get(position - 1);
                 viewModel.setStaffIdFilter(selectedUser.getId().toString());
             }
         });
 
         actvTable.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
-                viewModel.setTableIdFilter(null); 
+                viewModel.setTableIdFilter(null);
             } else {
-                TableInfo selectedTable = tableList.get(position - 1); 
+                TableInfo selectedTable = tableList.get(position - 1);
                 viewModel.setTableIdFilter(selectedTable.getId());
             }
         });
@@ -154,6 +154,13 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
     public void onOrderClick(Order order) {
         Intent intent = new Intent(this, OrderDetailActivity.class);
         intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onGenerateBillClick(Order order) {
+        Intent intent = new Intent(this, GenerateBillActivity.class);
+        intent.putExtra(GenerateBillActivity.EXTRA_ORDER_ID, order.getId().toString());
         startActivity(intent);
     }
 }

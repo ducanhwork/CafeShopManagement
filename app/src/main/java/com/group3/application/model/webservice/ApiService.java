@@ -1,12 +1,16 @@
 package com.group3.application.model.webservice;
 
+import com.group3.application.model.dto.BillCalculationResponse;
+import com.group3.application.model.dto.BillGenerationRequest;
+import com.group3.application.model.dto.BillResponse;
+import com.group3.application.model.dto.CustomerSearchResponse;
+import com.group3.application.model.dto.NewCustomerRequest;
 import com.group3.application.model.dto.OrderRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.UpdatePassWordRequest;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.bean.LoyaltyMemberDetailResponse;
@@ -16,7 +20,6 @@ import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.bean.VoucherRequest;
 import com.group3.application.model.bean.VoucherResponse;
 import com.group3.application.model.entity.Order;
-import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 
@@ -74,17 +77,14 @@ public interface ApiService {
     @POST("api/auth/login")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 
-    @PUT("api/auth/change-password")
-    Call<String> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
+    @PUT("/api/auth/change-password")
+    Call<APIResult> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
 
     @POST("api/auth/reset-password")
     Call<APIResult> resetPassword(@Body String email);
 
     @GET("api/auth/me")
     Call<User> myProfile(@Header("Authorization") String token);
-
-    @GET("/api/product")
-    Call<List<Product>> listProducts(@Header("Authorization") String token, @Query("keyword") String keyword, @Query("category") String category);
 
     @PUT("/api/product/update-status/{productId}")
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
@@ -134,4 +134,14 @@ public interface ApiService {
         @Path("customerId") UUID customerId
     );
 
+    @POST("/api/v1/loyalty/members")
+    Call<CustomerSearchResponse> addNewMember(@Body NewCustomerRequest request);
+    @GET("/api/v1/loyalty/search")
+    Call<CustomerSearchResponse> searchCustomer(@Query("phone") String phone);
+
+    @POST("/api/v1/bills/calculate")
+    Call<BillCalculationResponse> calculateBill(@Body BillGenerationRequest request);
+
+    @POST("/api/v1/bills/generate")
+    Call<BillResponse> generateBill(@Body BillGenerationRequest request);
 }
