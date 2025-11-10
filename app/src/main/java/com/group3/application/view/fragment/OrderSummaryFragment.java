@@ -53,7 +53,6 @@ public class OrderSummaryFragment extends Fragment {
 
         orderVM = new ViewModelProvider(requireActivity()).get(OrderViewModel.class);
 
-        // --- Toolbar Setup ---
         MaterialToolbar tb = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(tb);
         tb.setTitle("Summary - " + (orderVM.getTableNames() == null ? "" : orderVM.getTableNames()));
@@ -61,7 +60,6 @@ public class OrderSummaryFragment extends Fragment {
                 .setDisplayHomeAsUpEnabled(true);
         tb.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        // --- View Binding ---
         RecyclerView rv = view.findViewById(R.id.rvSummary);
         tvHeader = view.findViewById(R.id.tvHeader);
         tvSubtotal = view.findViewById(R.id.tvSubtotal);
@@ -73,7 +71,6 @@ public class OrderSummaryFragment extends Fragment {
 
         tvHeader.setText("Order summary for table: " + orderVM.getTableNames());
 
-        // --- Adapter Setup ---
         adapter = new OrderSummaryAdapter(new OrderSummaryAdapter.OnQuantityChangedListener() {
             @Override
             public void onIncrease(OrderItemDTO item) {
@@ -88,13 +85,10 @@ public class OrderSummaryFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         rv.setAdapter(adapter);
 
-        // --- ViewModel Observers ---
         observeViewModel();
 
-        // --- Event Listeners ---
         btnConfirm.setOnClickListener(v -> {
             String note = etNote.getText() != null ? etNote.getText().toString().trim() : "";
-            // SỬA: Cập nhật lại cách gọi submit
             orderVM.setNote(note);
             orderVM.submitOrder();
         });
@@ -105,7 +99,7 @@ public class OrderSummaryFragment extends Fragment {
             adapter.submit(items);
             if (items == null || items.isEmpty()) {
                 if (isAdded()) {
-                    // Optional: handle empty cart state
+
                 }
             }
         });
@@ -116,14 +110,12 @@ public class OrderSummaryFragment extends Fragment {
             tvTotal.setText(fmt(total) + " đ");
         });
 
-        // Lắng nghe thông tin người dùng hiện tại
         orderVM.currentUser.observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
                 tvStaffName.setText(user.getFullname());
             }
         });
 
-        // Lắng nghe kết quả gửi order
         orderVM.orderSubmissionResult.observe(getViewLifecycleOwner(), event -> {
             APIResult result = event.getContentIfNotHandled();
             if (result == null) return;

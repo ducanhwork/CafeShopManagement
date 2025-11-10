@@ -111,12 +111,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         );
 
         fabSaveChanges.setOnClickListener(v -> {
-            // 1. Lấy dữ liệu mới từ UI
             String newStatus = actStatus.getText().toString();
             String newNote = edtNote.getText().toString();
 
-            // 2. Ra lệnh cho ViewModel gửi lên server
-            // (ViewModel của bạn từ lần trước đã có hàm này)
             viewModel.updateOrderOnServer(newStatus, newNote);
         });
         actStatus.setAdapter(statusAdapter);
@@ -141,13 +138,13 @@ public class OrderDetailActivity extends AppCompatActivity {
                 }
         );
         actStatus.setOnItemClickListener((parent, view, position, id) -> {
-            fabSaveChanges.show(); // Hiện nút khi Status thay đổi
+            fabSaveChanges.show();
         });
         edtNote.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override public void afterTextChanged(Editable s) {
-                fabSaveChanges.show(); // Hiện nút khi Note thay đổi
+                fabSaveChanges.show();
             }
         });
     }
@@ -159,7 +156,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             intent.putExtra(OrderHostActivity.EXTRA_START_FRAGMENT, "PRODUCTS");
 
             List<OrderItemDTO> currentItems = order.getItems().stream()
-                    .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
+                    .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity(), null))
                     .collect(Collectors.toList());
 
             intent.putExtra("initialOrderItems", (Serializable) currentItems);
@@ -194,7 +191,6 @@ public class OrderDetailActivity extends AppCompatActivity {
             if (result != null) {
                 if (result.isSuccess()) {
                     Toast.makeText(this, "Lưu thay đổi thành công!", Toast.LENGTH_SHORT).show();
-                    // SỬA: Ẩn nút FAB
                     fabSaveChanges.hide();
                 } else {
                     Toast.makeText(this, "Lỗi khi lưu: " + result.getMessage(), Toast.LENGTH_LONG).show();

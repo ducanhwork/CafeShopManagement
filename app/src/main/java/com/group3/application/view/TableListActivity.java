@@ -24,14 +24,11 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.view.adapter.TableAdapter;
 import com.group3.application.viewmodel.TableViewModel;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TableListActivity extends AppCompatActivity {
-
-    public static final String EXTRA_INITIAL_TABLE_IDS = "EXTRA_INITIAL_TABLE_IDS";
 
     private SwipeRefreshLayout swipe;
     private RecyclerView rv;
@@ -40,8 +37,6 @@ public class TableListActivity extends AppCompatActivity {
     private ExtendedFloatingActionButton fabConfirm;
 
     private TableViewModel vm;
-    private boolean isEditMode = false;
-    private boolean initialSelectionApplied = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +59,7 @@ public class TableListActivity extends AppCompatActivity {
 
         fabConfirm = findViewById(R.id.fabConfirmTables);
 
-        if (getIntent().hasExtra(EXTRA_INITIAL_TABLE_IDS)) {
-            isEditMode = true;
-            getSupportActionBar().setTitle("Chỉnh sửa bàn");
-        } else {
-            getSupportActionBar().setTitle("Tạo đơn hàng");
-        }
+        getSupportActionBar().setTitle("Create Order");
 
         adapter = new TableAdapter(item -> vm.onTableClicked(item));
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -79,11 +69,6 @@ public class TableListActivity extends AppCompatActivity {
 
         vm.getTables().observe(this, list -> {
             adapter.setData(list);
-            if (isEditMode && !initialSelectionApplied && list != null && !list.isEmpty()) {
-                ArrayList<String> initialIds = getIntent().getStringArrayListExtra(EXTRA_INITIAL_TABLE_IDS);
-                vm.selectTablesByIds(initialIds);
-                initialSelectionApplied = true;
-            }
         });
 
         vm.getLoading().observe(this, isLoading -> swipe.setRefreshing(Boolean.TRUE.equals(isLoading)));
@@ -116,31 +101,8 @@ public class TableListActivity extends AppCompatActivity {
             }
         });
 
-        // SỬA: Trả về cả ID và TÊN BÀN
         fabConfirm.setOnClickListener(v -> {
-            if (isEditMode) {
-                List<TableInfo> selectedTables = vm.getSelectedTables().getValue();
-                if (selectedTables == null) {
-                    selectedTables = new ArrayList<>();
-                }
-
-                // 1. Kiểm tra (giữ nguyên)
-                if (selectedTables.isEmpty()) {
-                    Toast.makeText(this, "Bạn phải chọn ít nhất 1 bàn.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // 2. SỬA: Gửi về List<TableInfo>
-                Intent resultIntent = new Intent();
-
-                // Gửi cả List<TableInfo> với key là "updatedTables"
-                resultIntent.putExtra("updatedTables", (Serializable) selectedTables);
-
-                setResult(AppCompatActivity.RESULT_OK, resultIntent);
-                finish();
-            } else {
-                vm.confirmSelection();
-            }
+            vm.confirmSelection();
         });
 
         vm.getEvents().observe(this, ev -> {

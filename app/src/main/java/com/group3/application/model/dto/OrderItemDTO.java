@@ -7,13 +7,15 @@ public class OrderItemDTO implements Serializable {
     public String name;
     public double unitPrice;
     public int quantity;
+    public String imageUrl;
 
     public double getSubtotal(){ return unitPrice * quantity; }
 
-    public OrderItemDTO(String productId, String name, double unitPrice, int quantity) {
+    public OrderItemDTO(String productId, String name, double unitPrice, int quantity, String imageUrl) {
         this.productId = productId;
         this.name = name;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
     }
 }

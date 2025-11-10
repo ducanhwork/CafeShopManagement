@@ -48,7 +48,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         setCurrentDateTime();
         MaterialCardView cardOrders = findViewById(R.id.card_manage_orders);
         cardOrders.setOnClickListener(v -> {
-            // Mở Activity hoặc Fragment danh sách Order của bạn
             Intent intent = new Intent(this, OrderListActivity.class);
             startActivity(intent);
         });
@@ -63,7 +62,6 @@ public class AdminHomeActivity extends AppCompatActivity {
     }
 
     private void setCurrentDateTime() {
-        // Sử dụng API java.time hiện đại, yêu cầu API level 26+ (đã có trong project của bạn)
         LocalDateTime currentDateTime = LocalDateTime.now();
 
 
@@ -74,7 +72,6 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         String formattedDateTime = currentDateTime.format(formatter);
 
-        // Viết hoa chữ cái đầu tiên của ngày trong tuần (ví dụ: "thứ tư" -> "Thứ tư")
         formattedDateTime = formattedDateTime.substring(0, 1).toUpperCase() + formattedDateTime.substring(1);
 
         tvCurrentDate.setText(formattedDateTime);
@@ -83,28 +80,23 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        // Bỏ tiêu đề mặc định vì chúng ta đã có tiêu đề tùy chỉnh
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
 
     private void setupClickListeners() {
-        // Sự kiện click vào Avatar trên Toolbar
         ivAvatar.setOnClickListener(v -> {
-            // TODO: Tạo ProfileActivity và điều hướng đến đó
             Toast.makeText(this, "Navigate to Profile Screen", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
 
-        // Sự kiện click vào Card Quản lý Sản phẩm
         cardManageProducts.setOnClickListener(v -> {
             Intent intent = new Intent(AdminHomeActivity.this, ProductListActivity.class);
             startActivity(intent);
         });
 
-        // Sự kiện click vào Card Quản lý Đơn hàng
         cardManageOrders.setOnClickListener(v -> {
             // TODO: Tạo OrderManagementActivity và điều hướng đến đó
             Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();

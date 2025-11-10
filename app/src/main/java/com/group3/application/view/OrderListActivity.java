@@ -47,7 +47,6 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
 
-        // Toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -63,33 +62,27 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
                 }
         );
 
-        // Ánh xạ Views
         progressBar = findViewById(R.id.progress_bar);
         actvStatus = findViewById(R.id.actv_status);
         actvStaff = findViewById(R.id.actv_staff);
         actvTable = findViewById(R.id.actv_table);
         FloatingActionButton fabAddOrder = findViewById(R.id.fab_add_order);
 
-        // Setup RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new OrderListAdapter(this); 
         recyclerView.setAdapter(adapter);
 
-        // ViewModel
         viewModel = new ViewModelProvider(this).get(OrderListViewModel.class);
 
-        // Lắng nghe dữ liệu và sự kiện
         observeViewModel();
         setupFilterListeners();
 
-        // Xử lý sự kiện click cho FAB
         fabAddOrder.setOnClickListener(v -> {
             Intent intent = new Intent(OrderListActivity.this, TableListActivity.class);
             startActivity(intent);
         });
 
-        // Bắt đầu lấy tất cả dữ liệu
         viewModel.fetchFilterData(); 
         viewModel.fetchOrders();    
     }
@@ -114,7 +107,6 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
             }
         });
 
-        // Lắng nghe dữ liệu cho dropdowns
         viewModel.users.observe(this, users -> {
             userList = users;
             List<String> userNames = new ArrayList<>();
@@ -133,7 +125,6 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
             actvTable.setAdapter(tableAdapter);
         });
 
-        // Setup dữ liệu cứng cho Status
         List<String> statusList = Arrays.asList("ALL", "SERVING", "PAID");
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, statusList);
         actvStatus.setAdapter(statusAdapter);

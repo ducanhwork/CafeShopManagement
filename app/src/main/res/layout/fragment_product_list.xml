@@ -102,6 +102,9 @@
         android:layout_height="wrap_content"
         android:text="Thêm vào order"
         app:icon="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/coffee_accent"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
         app:layout_anchorGravity="bottom|end"
         android:layout_margin="16dp"
         app:layout_anchor="@id/rvProducts"/>

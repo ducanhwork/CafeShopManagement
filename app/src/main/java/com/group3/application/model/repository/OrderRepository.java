@@ -38,7 +38,6 @@ public class OrderRepository {
         void onResult(APIResult<T> result);
     }
 
-    // SỬA: Sửa lại logic để khớp với kiểu trả về của server
     public void getOrderDetails(String orderId, OnResultListener<Order> listener) {
         String authToken = getAuthToken();
         if (authToken == null) {
@@ -113,18 +112,15 @@ public class OrderRepository {
 
     public void updateOrder(String orderId, OrderUpdateDTO updateData, OnResultListener<APIResult> listener) {
 
-        // 1. Lấy token (Đúng pattern)
         String authToken = getAuthToken();
         if (authToken == null) {
             listener.onResult(new APIResult(false, "Người dùng chưa đăng nhập.", null));
             return;
         }
 
-        // 2. Gọi ApiService với token (Đúng pattern)
         apiService.updateOrder(authToken, orderId, updateData).enqueue(new Callback<APIResult>() {
             @Override
             public void onResponse(Call<APIResult> call, Response<APIResult> response) {
-                // 3. Dùng OnResultListener (Đúng pattern)
                 if (response.isSuccessful() && response.body() != null) {
                     listener.onResult(response.body());
                 } else {
@@ -136,7 +132,6 @@ public class OrderRepository {
 
             @Override
             public void onFailure(Call<APIResult> call, Throwable t) {
-                // 4. Dùng OnResultListener (Đúng pattern)
                 Log.e(TAG, "Network Failure: " + t.getMessage(), t);
                 listener.onResult(new APIResult(false, "Lỗi mạng: " + t.getMessage(), null));
             }

@@ -19,15 +19,10 @@ public class TableRepository {
     public TableRepository() {
         this.apiService = ApiClient.get().create(ApiService.class);
     }
-
-    // --- Phương thức cũ được giữ lại để không làm hỏng code hiện có ---
     public Call<List<TableInfo>> getTables(String status, String keyword) {
         return apiService.listTables(status, keyword);
     }
-
-    // --- Phương thức mới dùng cho màn hình OrderList ---
     public void getAllTables(OnTablesFetchListener listener) {
-        // Gọi API để lấy tất cả các bàn (truyền null để không lọc)
         apiService.listTables(null, null).enqueue(new Callback<List<TableInfo>>() {
             @Override
             public void onResponse(Call<List<TableInfo>> call, Response<List<TableInfo>> response) {

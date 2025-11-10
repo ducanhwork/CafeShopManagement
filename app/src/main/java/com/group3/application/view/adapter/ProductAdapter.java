@@ -26,7 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private final List<Product> productList = new ArrayList<>();
-    private List<OrderItemDTO> orderItems = new ArrayList<>(); // Danh sách giỏ hàng
+    private List<OrderItemDTO> orderItems = new ArrayList<>();
     private final OnQuantityChangedListener listener;
 
     public ProductAdapter(OnQuantityChangedListener listener) {
@@ -60,7 +60,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         int currentQuantity = 0;
         if (orderItems != null) {
             for (OrderItemDTO item : orderItems) {
-                // SỬA: Sử dụng đúng tên trường "name"
                 if (item != null && Objects.equals(item.name, product.getName())) {
                     currentQuantity = item.quantity;
                     break;

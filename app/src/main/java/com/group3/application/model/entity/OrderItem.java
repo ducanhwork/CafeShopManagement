@@ -7,6 +7,7 @@ public class OrderItem {
     private double price;
     private int quantity;
     private double subtotal;
+    private String imageUrl;
 
     // Getters and Setters
     public String getId() {
@@ -55,5 +56,13 @@ public class OrderItem {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

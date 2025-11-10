@@ -23,14 +23,12 @@ import java.util.TimeZone;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
 
     private List<Order> orderList = new ArrayList<>();
-    private final OnOrderClickListener clickListener; // SỬA: Thêm listener
+    private final OnOrderClickListener clickListener;
 
-    // SỬA: Interface cho sự kiện click
     public interface OnOrderClickListener {
         void onOrderClick(Order order);
     }
 
-    // SỬA: Constructor nhận listener
     public OrderListAdapter(OnOrderClickListener clickListener) {
         this.clickListener = clickListener;
     }
@@ -45,7 +43,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
-        // SỬA: Truyền order và listener vào hàm bind
         holder.bind(order, clickListener);
     }
 
@@ -78,7 +75,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             tvTotalAmount = itemView.findViewById(R.id.tv_total_amount);
         }
 
-        // SỬA: Hàm bind nhận thêm listener
         public void bind(final Order order, final OnOrderClickListener listener) {
             tvTableNames.setText("Bàn: " + String.join(", ", order.getTableNames()));
             tvStatus.setText(order.getStatus());
@@ -86,7 +82,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             tvOrderDate.setText("Ngày: " + formatDate(order.getOrderDate()));
             tvTotalAmount.setText(formatCurrency(order.getTotalAmount()));
 
-            // SỬA: Gán sự kiện click cho toàn bộ item
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onOrderClick(order);
@@ -103,7 +98,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                 SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
                 return newFormat.format(date);
             } catch (ParseException e) {
-                return isoDate; // Trả về ngày gốc nếu không parse được
+                return isoDate;
             }
         }
 

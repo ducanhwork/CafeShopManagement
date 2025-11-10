@@ -70,7 +70,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         h.tvStatus.getBackground().setTint(color);
 
         if (selectedTables.contains(t)) {
-            h.itemView.setBackgroundColor(Color.parseColor("#E0F7FA"));
+            h.itemView.setBackgroundColor(Color.parseColor("#BD8C4D"));
         } else {
             h.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
