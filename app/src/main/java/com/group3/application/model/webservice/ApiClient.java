@@ -40,11 +40,10 @@ public class ApiClient {
                         .readTimeout(20, TimeUnit.SECONDS)
                         .writeTimeout(20, TimeUnit.SECONDS)
                         .addInterceptor(log)
-                        // .addInterceptor(new AuthInterceptor(appContext)) // nếu có
                         .build();
 
                     instance = new Retrofit.Builder()
-                        .baseUrl("http://10.0.2.2:8080/")
+                        .baseUrl("http://192.168.33.104:8080/")
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .client(client)
                         .build();
