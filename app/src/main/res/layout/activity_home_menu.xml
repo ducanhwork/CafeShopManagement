@@ -28,5 +28,18 @@
         android:layout_height="wrap_content"
         android:text="Xem danh sách khách hàng"
         android:layout_marginTop="16dp" />
-</LinearLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOrderList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order List"
+        android:layout_marginTop="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBillList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bill List"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

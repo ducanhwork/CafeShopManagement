@@ -3,7 +3,6 @@ import android.text.TextUtils;
 import com.group3.application.model.bean.VoucherRequest;
 import java.math.BigDecimal;
 
-// Lớp Validator của bạn
 public class VoucherValidator {
     public static ValidationResult validate(VoucherRequest r) {
         if (isEmpty(r.code)) return ValidationResult.failure("code", "Bắt buộc");

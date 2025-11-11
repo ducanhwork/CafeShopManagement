@@ -39,7 +39,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_lock"
+            app:startIconDrawable="@drawable/ic_search_24"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -64,4 +64,12 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabConfirmTables"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Chọn bàn"
+        app:icon="@drawable/ic_check" android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

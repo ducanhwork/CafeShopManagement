@@ -31,13 +31,11 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- === KHU VỰC ĐÃ SỬA: Title và nút Close === -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp">
 
-                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -46,23 +44,9 @@
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                         android:textColor="@color/coffee_text_primary" />
 
-<!--                    &lt;!&ndash; NÚT CLOSE/BACK MỚI &ndash;&gt;-->
-<!--                    <ImageButton-->
-<!--                        android:id="@+id/btnClose"-->
-<!--                        android:layout_width="48dp"-->
-<!--                        android:layout_height="48dp"-->
-<!--                        android:layout_alignParentEnd="true"-->
-<!--                        android:layout_centerVertical="true"-->
-<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
-<!--                        android:contentDescription="Close"-->
-<!--                        android:src="@drawable/ic_close_24"-->
-<!--                        app:tint="@color/coffee_text_secondary" />-->
-
                 </RelativeLayout>
-                <!-- === KẾT THÚC KHU VỰC SỬA === -->
 
 
-                <!-- Voucher Code -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilCode"
                     style="@style/Cafe.FilledTextInput"
@@ -80,7 +64,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Type (PERCENT | FIXED_AMOUNT) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilType"
                     style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -100,7 +83,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Value -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilValue"
                     style="@style/Cafe.FilledTextInput"
@@ -118,7 +100,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Start Date -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilStart"
                     style="@style/Cafe.FilledTextInput"
@@ -138,7 +119,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- End Date -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilEnd"
                     style="@style/Cafe.FilledTextInput"
@@ -158,7 +138,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Status (ACTIVE | INACTIVE) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilStatus"
                     style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -177,7 +156,6 @@
                         android:textColor="@color/coffee_text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Save Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSave"
                     android:layout_width="match_parent"
@@ -190,7 +168,6 @@
                     app:backgroundTint="@color/coffee_primary"
                     app:cornerRadius="16dp" />
 
-                <!-- Progress -->
                 <ProgressBar
                     android:id="@+id/progress"
                     style="?android:attr/progressBarStyle"

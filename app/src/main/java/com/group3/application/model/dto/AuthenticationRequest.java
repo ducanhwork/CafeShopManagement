@@ -15,7 +15,6 @@ public class AuthenticationRequest {
         this.email = email;
         this.password = password;
     }
-    // Các getter và setter còn lại
 
     public AuthenticationRequest() {
     }

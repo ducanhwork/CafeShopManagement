@@ -21,6 +21,8 @@ public class HomeMenuActivity extends AppCompatActivity {
         MaterialButton btnCreate = findViewById(R.id.btnCreateVoucher);
         MaterialButton btnList   = findViewById(R.id.btnViewList);
         MaterialButton btnLoyaltyList = findViewById(R.id.btnLoyaltyList);
+        MaterialButton btnOrderList = findViewById(R.id.btnOrderList);
+        MaterialButton btnBillList = findViewById(R.id.btnBillList);
 
         btnLoyaltyList.setOnClickListener(v ->
             startActivity(new Intent(this, LoyaltyListActivity.class)));
@@ -36,5 +38,13 @@ public class HomeMenuActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        btnOrderList.setOnClickListener(v -> {
+            Intent i = new Intent(this, OrderListActivity.class);
+            startActivity(i);
+        });
+
+        btnBillList.setOnClickListener(v -> {
+            Intent i = new Intent(this, BillListActivity.class);
+            startActivity(i);        });
     }
 }

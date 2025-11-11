@@ -1,5 +1,17 @@
 package com.group3.application.model.webservice;
 
+import com.group3.application.model.dto.BillCalculationResponse;
+import com.group3.application.model.dto.BillDetailResponse;
+import com.group3.application.model.dto.BillGenerationRequest;
+import com.group3.application.model.dto.BillResponse;
+import com.group3.application.model.dto.BillSummaryDTO;
+import com.group3.application.model.dto.CustomerSearchResponse;
+import com.group3.application.model.dto.NewCustomerRequest;
+import com.group3.application.model.dto.OrderRequest;
+import com.group3.application.model.dto.OrderUpdateDTO;
+import com.group3.application.model.dto.PaymentConfirmationRequest;
+import com.group3.application.model.dto.PaymentConfirmationResponse;
+import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
@@ -16,6 +28,7 @@ import com.group3.application.model.bean.PointsHistoryItem;
 import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.bean.VoucherRequest;
 import com.group3.application.model.bean.VoucherResponse;
+import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 
@@ -38,11 +51,57 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+    @GET("api/tables?for=order")
+    Call<List<TableInfo>> listTables(
+            @Query("status") String status,
+            @Query("keyword") String keyword
+    );
 
-    @GET("api/tables")
-    Call<List<TableInfo>> listTables(@Query("status") String status, @Query("keyword") String keyword);
+    @GET("api/products")
+    Call<java.util.List<Product>> listProducts(
+            @Query("status") String status,
+            @Query("categoryId") String categoryId,
+            @Query("keyword") String keyword
+    );
 
-    @POST("/api/auth/login")
+    @GET("api/categories")
+    Call<List<Category>> getCategories();
+
+    @POST("api/orders")
+    Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
+
+    @GET("api/orders")
+    Call<List<Order>> getOrders(
+            @Header("Authorization") String authToken,
+            @Query("status") String status,
+            @Query("tableId") String tableId,
+            @Query("staffId") String staffId
+    );
+
+    @GET("api/orders/{id}")
+    Call<Order> getOrderDetails(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId
+    );
+
+    @PUT("api/orders/{id}")
+    Call<APIResult> updateOrder(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderUpdateDTO updateData
+    );
+
+    @PUT("api/orders/{id}/items")
+    Call<APIResult<Object>> updateOrderItems(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderRequest orderRequest
+    );
+
+    @GET("api/users")
+    Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
+
+    @POST("api/auth/login")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 
     @PUT("/api/auth/change-password")
@@ -136,4 +195,26 @@ public interface ApiService {
             @Path("customerId") UUID customerId
     );
 
+    @POST("api/v1/loyalty-members/add-member")
+    Call<CustomerSearchResponse> addNewMember(@Body NewCustomerRequest request);
+    @GET("api/v1/loyalty-members/search")
+    Call<CustomerSearchResponse> searchCustomer(@Query("phone") String phone);
+
+    @POST("api/v1/bills/calculate")
+    Call<BillCalculationResponse> calculateBill(@Body BillGenerationRequest request);
+
+    @POST("api/v1/bills/generate")
+    Call<BillResponse> generateBill(@Body BillGenerationRequest request);
+
+    @GET("api/v1/bills/{billId}")
+    Call<BillDetailResponse> getBillDetails(@Path("billId") String billId);
+
+    @POST("api/v1/bills/{billId}/confirm-payment")
+    Call<PaymentConfirmationResponse> confirmPayment(
+            @Path("billId") String billId,
+            @Body PaymentConfirmationRequest request
+    );
+
+    @GET("/api/v1/bills")
+    Call<List<BillSummaryDTO>> getBillList(@Query("date") String date);
 }

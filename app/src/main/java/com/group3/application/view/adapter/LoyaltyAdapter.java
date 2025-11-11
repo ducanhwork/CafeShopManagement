@@ -67,9 +67,7 @@ public class LoyaltyAdapter extends ListAdapter<LoyaltyMemberListItem, LoyaltyAd
             tvFullName.setText(item.getFullName());
             tvPhone.setText(item.getPhone());
 
-            // Format lại text điểm
             if (item.getPoints() != null) {
-                // Thêm " Điểm" vào sau số cho rõ ràng
                 tvPoints.setText(String.format("%,d Điểm", item.getPoints()));
             } else {
                 tvPoints.setText("0 Điểm");
