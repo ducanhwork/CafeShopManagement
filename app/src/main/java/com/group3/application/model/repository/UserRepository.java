@@ -24,6 +24,10 @@ public class UserRepository {
         return api.createUser(newStaff);
     }
 
+    public Call<User> updateUser(User staff) {
+        return api.updateUser(staff.getId().toString(), staff);
+    }
+
     public Call<List<Role>> getRoles() {
         return api.getRoles();
     }
