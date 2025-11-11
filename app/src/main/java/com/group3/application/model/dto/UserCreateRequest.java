@@ -1,31 +1,18 @@
-package com.group3.application.model.entity;
+package com.group3.application.model.dto;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-public class User implements Serializable {
-    private UUID id;
+public class UserCreateRequest {
     private String email;
     private String password;
     private String fullname;
     private String mobile;
-    private String role;
+    private String roleId;
 
-    public User(UUID id, String email, String password, String fullname, String mobile, String role) {
-        this.id = id;
+    public UserCreateRequest(String email, String password, String fullname, String mobile, String roleId) {
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.mobile = mobile;
-        this.role = role;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+        this.roleId = roleId;
     }
 
     public String getEmail() {
@@ -60,11 +47,11 @@ public class User implements Serializable {
         this.mobile = mobile;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

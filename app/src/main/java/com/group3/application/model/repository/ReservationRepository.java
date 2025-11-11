@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import retrofit2.Call;
+import retrofit2.http.Header;
 
 public class ReservationRepository {
 
@@ -21,8 +22,8 @@ public class ReservationRepository {
         return apiService.getReservationsByTable(tableId);
     }
 
-    public Call<Reservation> createReservation(Reservation reservation) {
-        return apiService.createReservation(reservation);
+    public Call<Reservation> createReservation(Reservation reservation, @Header("Authorization") String token) {
+        return apiService.createReservation(reservation, token);
     }
     
     public Call<Void> cancelReservation(UUID id) {

@@ -1,4 +1,3 @@
-
 package com.group3.application.view.adapter;
 
 import android.content.Intent;
@@ -58,6 +57,9 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.Staf
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), StaffDetailActivity.class);
                 intent.putExtra("staff", staff);
+                if (staff != null && staff.getId() != null) {
+                    intent.putExtra("staffId", staff.getId().toString());
+                }
                 itemView.getContext().startActivity(intent);
             });
         }

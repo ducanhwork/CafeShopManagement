@@ -46,7 +46,9 @@ public class StaffDetailActivity extends AppCompatActivity {
             TextView mobileTextView = findViewById(R.id.mobileTextView);
 
             fullNameTextView.setText(staff.getFullname());
-            roleTextView.setText(staff.getRole());
+            if (staff.getRole() != null) {
+                roleTextView.setText(staff.getRole().toString());
+            }
             emailTextView.setText(staff.getEmail());
             mobileTextView.setText(staff.getMobile());
         }
@@ -57,6 +59,10 @@ public class StaffDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(StaffDetailActivity.this, EditStaffActivity.class);
                 intent.putExtra("staff", staff);
+                // also send the id explicitly as a string to avoid cases where Serializable may not carry it
+                if (staff != null && staff.getId() != null) {
+                    intent.putExtra("staffId", staff.getId().toString());
+                }
                 startActivity(intent);
             }
         });

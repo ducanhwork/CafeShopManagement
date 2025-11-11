@@ -18,11 +18,13 @@ import com.group3.application.model.entity.User;
 import com.group3.application.viewmodel.StaffListViewModel;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EditStaffActivity extends AppCompatActivity {
 
     private StaffListViewModel staffListViewModel;
     private User staff;
+    private List<Role> roles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,15 @@ public class EditStaffActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_staff);
 
         staff = (User) getIntent().getSerializableExtra("staff");
+        String staffIdExtra = getIntent().getStringExtra("staffId");
+
+        // if the serializable User lost its id, set it from the explicit extra
+        if (staff != null && staff.getId() == null && staffIdExtra != null) {
+            try {
+                staff.setId(UUID.fromString(staffIdExtra));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
 
         setupToolbar();
 
@@ -46,14 +57,25 @@ public class EditStaffActivity extends AppCompatActivity {
             emailEditText.setText(staff.getEmail());
             mobileEditText.setText(staff.getMobile());
             passwordEditText.setText(staff.getPassword());
-            roleAutoCompleteTextView.setText(staff.getRole());
+            // Do not set role text here yet because we may not have the roles list loaded to map id->name
         }
 
         staffListViewModel.getRoles().observe(this, new Observer<List<Role>>() {
             @Override
-            public void onChanged(List<Role> roles) {
+            public void onChanged(List<Role> roleList) {
+                roles = roleList;
                 ArrayAdapter<Role> adapter = new ArrayAdapter<>(EditStaffActivity.this, android.R.layout.simple_dropdown_item_1line, roles);
                 roleAutoCompleteTextView.setAdapter(adapter);
+
+                // If we have a staff object with a role id, display the matching role name in the AutoCompleteTextView
+                if (staff != null && staff.getRole() != null) {
+                    for (Role r : roles) {
+                        if (r.getId().equals(staff.getRole())) {
+                            roleAutoCompleteTextView.setText(r.getName());
+                            break;
+                        }
+                    }
+                }
             }
         });
 
@@ -63,14 +85,30 @@ public class EditStaffActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                staff.setFullname(fullNameEditText.getText().toString());
-                staff.setEmail(emailEditText.getText().toString());
-                staff.setMobile(mobileEditText.getText().toString());
-                staff.setPassword(passwordEditText.getText().toString());
-                staff.setRole(roleAutoCompleteTextView.getText().toString());
+                if (staff == null) return; // nothing to update
+
+                String fullname = fullNameEditText.getText() != null ? fullNameEditText.getText().toString() : "";
+                String email = emailEditText.getText() != null ? emailEditText.getText().toString() : "";
+                String mobile = mobileEditText.getText() != null ? mobileEditText.getText().toString() : "";
+                String password = passwordEditText.getText() != null ? passwordEditText.getText().toString() : "";
+
+                staff.setFullname(fullname);
+                staff.setEmail(email);
+                staff.setMobile(mobile);
+                staff.setPassword(password);
+
+                String roleName = roleAutoCompleteTextView.getText() != null ? roleAutoCompleteTextView.getText().toString() : null;
+                if (roles != null && roleName != null) {
+                    for (Role role : roles) {
+                        if (role.getName().equals(roleName)) {
+                            // send role id (expected by backend), not role name
+                            staff.setRole(role.getId());
+                            break;
+                        }
+                    }
+                }
 
                 staffListViewModel.updateUser(staff);
-                finish();
             }
         });
     }
@@ -80,7 +118,7 @@ public class EditStaffActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Reservations");
+            getSupportActionBar().setTitle("Edit Staff");
         }
     }
 
