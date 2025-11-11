@@ -9,6 +9,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +25,7 @@ import com.group3.application.viewmodel.StaffListViewModel;
 
 import java.util.List;
 
-public class StaffListActivity extends BaseDrawerActivity {
+public class StaffListActivity extends AppCompatActivity {
 
     private StaffListViewModel viewModel;
     private StaffListAdapter staffListAdapter;
@@ -37,6 +39,8 @@ public class StaffListActivity extends BaseDrawerActivity {
         RecyclerView recyclerView = findViewById(R.id.rvStaffList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        setupToolbar();
+
         staffListAdapter = new StaffListAdapter();
         recyclerView.setAdapter(staffListAdapter);
 
@@ -49,6 +53,21 @@ public class StaffListActivity extends BaseDrawerActivity {
 
         FloatingActionButton fabAddReservation = findViewById(R.id.fab_add_staff);
         fabAddReservation.setOnClickListener(view -> showAddStaffDialog());
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Reservations");
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void setupObservers() {
