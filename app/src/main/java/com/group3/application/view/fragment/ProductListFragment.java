@@ -150,26 +150,15 @@ public class ProductListFragment extends Fragment {
             }
         });
 
-        // --- SỬA LẠI HOÀN TOÀN LOGIC NÚT FAB ---
         fab.setOnClickListener(v -> {
             if (orderVM.isEditMode()) {
-                // --- CHẾ ĐỘ SỬA ---
-
-                // 1. Lấy danh sách món ăn đã cập nhật từ ViewModel
                 List<OrderItemDTO> updatedItems = orderVM.getCurrentOrderItems().getValue();
-
-                // 2. Tạo Intent kết quả
                 Intent resultIntent = new Intent();
-
-                // 3. Đặt "extra" VỚI ĐÚNG TÊN MÀ OrderDetailActivity đang chờ ("updatedItems")
                 resultIntent.putExtra("updatedItems", (Serializable) updatedItems);
-
-                // 4. Đặt cờ RESULT_OK và đóng Activity
                 requireActivity().setResult(Activity.RESULT_OK, resultIntent);
                 requireActivity().finish();
 
             } else {
-                // --- CHẾ ĐỘ TẠO MỚI (Code cũ của bạn - đã đúng) ---
                 if (getActivity() instanceof OrderHostActivity) {
                     ((OrderHostActivity) getActivity()).navigateToSummary();
                 }
@@ -199,8 +188,6 @@ public class ProductListFragment extends Fragment {
         orderVM.getCurrentOrderItems().observe(getViewLifecycleOwner(), adapter::setOrderItems);
 
         orderVM.getTotalAmount().observe(getViewLifecycleOwner(), total -> updateFabButton());
-
-        // SỬA: Xóa logic xử lý thành công cho chế độ sửa, chỉ giữ lại xử lý lỗi
         orderVM.orderSubmissionResult.observe(getViewLifecycleOwner(), event -> {
             APIResult result = event.getContentIfNotHandled();
             if (result != null && !result.isSuccess()) {

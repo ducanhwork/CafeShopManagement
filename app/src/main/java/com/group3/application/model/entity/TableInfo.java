@@ -8,7 +8,7 @@ public class TableInfo implements Serializable {
     private String id;
     private String name;
     private String location;
-    @SerializedName("seat_count") private Integer seatCount;
+    @SerializedName("seatCount") private Integer seatCount;
     private String status;
     public String getId() { return id; }
     public String getName() { return name; }

@@ -53,7 +53,6 @@ public class OrderDetailActivity extends AppCompatActivity {
     private Menu menu;
 
     private ExtendedFloatingActionButton fabSaveChanges;
-    private MaterialButton btnCreateInvoice;
 
     private AutoCompleteTextView actStatus;
     private TextInputEditText edtNote;
@@ -104,8 +103,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         actStatus = findViewById(R.id.act_detail_status);
         edtNote = findViewById(R.id.edt_detail_note);
         fabSaveChanges = findViewById(R.id.fab_save_changes);
-        btnCreateInvoice = findViewById(R.id.btn_create_invoice);
-
         String[] orderStatuses = new String[] {"SERVING", "PAID", "CANCELLED", "PENDING"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 this,
@@ -116,21 +113,9 @@ public class OrderDetailActivity extends AppCompatActivity {
         fabSaveChanges.setOnClickListener(v -> {
             String newStatus = actStatus.getText().toString();
             String newNote = edtNote.getText().toString();
+
             viewModel.updateOrderOnServer(newStatus, newNote);
         });
-
-        btnCreateInvoice.setOnClickListener(v -> {
-            Order currentOrder = viewModel.order.getValue();
-            if (currentOrder != null) {
-                Intent intent = new Intent(OrderDetailActivity.this, GenerateBillActivity.class);
-                intent.putExtra(GenerateBillActivity.EXTRA_ORDER_ID, currentOrder.getId());
-                intent.putExtra("SUBTOTAL", currentOrder.getTotalAmount());
-                startActivity(intent);
-            } else {
-                Toast.makeText(OrderDetailActivity.this, "Không thể lấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         actStatus.setAdapter(statusAdapter);
 
         RecyclerView recyclerView = findViewById(R.id.rv_order_detail_items);
@@ -153,15 +138,13 @@ public class OrderDetailActivity extends AppCompatActivity {
                 }
         );
         actStatus.setOnItemClickListener((parent, view, position, id) -> {
-            fabSaveChanges.show(); // Hiện nút khi Status thay đổi
-            String selectedStatus = (String) parent.getItemAtPosition(position);
-            btnCreateInvoice.setEnabled("SERVING".equals(selectedStatus));
+            fabSaveChanges.show();
         });
         edtNote.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override public void afterTextChanged(Editable s) {
-                fabSaveChanges.show(); // Hiện nút khi Note thay đổi
+                fabSaveChanges.show();
             }
         });
     }
@@ -173,7 +156,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             intent.putExtra(OrderHostActivity.EXTRA_START_FRAGMENT, "PRODUCTS");
 
             List<OrderItemDTO> currentItems = order.getItems().stream()
-                    .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
+                    .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity(), null))
                     .collect(Collectors.toList());
 
             intent.putExtra("initialOrderItems", (Serializable) currentItems);
@@ -208,7 +191,6 @@ public class OrderDetailActivity extends AppCompatActivity {
             if (result != null) {
                 if (result.isSuccess()) {
                     Toast.makeText(this, "Lưu thay đổi thành công!", Toast.LENGTH_SHORT).show();
-                    // SỬA: Ẩn nút FAB
                     fabSaveChanges.hide();
                 } else {
                     Toast.makeText(this, "Lỗi khi lưu: " + result.getMessage(), Toast.LENGTH_LONG).show();
@@ -226,8 +208,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvTotalAmount.setText("Tổng: " + formatCurrency(order.getTotalAmount()));
         actStatus.setText(order.getStatus(), false);
         edtNote.setText(order.getNote());
-
-        btnCreateInvoice.setEnabled("SERVING".equals(order.getStatus()));
 
         adapter.setItems(order.getItems());
     }

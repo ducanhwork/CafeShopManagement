@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Locale; // Đổi Locale
 
 public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapter.VH> {
-
     public interface OnQuantityChangedListener {
         void onIncrease(OrderItemDTO item);
         void onDecrease(OrderItemDTO item);
@@ -50,6 +49,7 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
     @Override
     public void onBindViewHolder(@NonNull VH h, int i) {
         OrderItemDTO it = data.get(i);
+        Glide.with(h.itemView.getContext()).load(it.imageUrl).into(h.img);
         h.tvName.setText(it.name);
         h.tvPrice.setText(fmt(it.unitPrice) + " đ");
         h.tvQty.setText(String.valueOf(it.quantity));

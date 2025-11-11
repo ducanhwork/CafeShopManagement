@@ -3,7 +3,6 @@ package com.group3.application.model.dto;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
-
 public class OrderUpdateDTO implements Serializable {
 
     @SerializedName("items")

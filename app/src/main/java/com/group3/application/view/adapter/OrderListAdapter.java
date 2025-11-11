@@ -3,13 +3,11 @@ package com.group3.application.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button; // Import Button
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton; // Import MaterialButton
 import com.group3.application.R;
 import com.group3.application.model.entity.Order;
 
@@ -39,13 +37,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
-        return new OrderViewHolder(view, clickListener);
+        return new OrderViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
-        holder.bind(order);
+        holder.bind(order, clickListener);
     }
 
     @Override
@@ -67,33 +65,28 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         private final TextView tvStaffName;
         private final TextView tvOrderDate;
         private final TextView tvTotalAmount;
-        private final OnOrderClickListener listener;
 
-        public OrderViewHolder(@NonNull View itemView, OnOrderClickListener listener) {
+        public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.listener = listener; // Gán listener
             tvTableNames = itemView.findViewById(R.id.tv_table_names);
             tvStatus = itemView.findViewById(R.id.tv_status);
             tvStaffName = itemView.findViewById(R.id.tv_staff_name);
             tvOrderDate = itemView.findViewById(R.id.tv_order_date);
             tvTotalAmount = itemView.findViewById(R.id.tv_total_amount);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && this.listener != null) {
-                    this.listener.onOrderClick((Order) itemView.getTag());
-                }
-            });
         }
 
-        public void bind(final Order order) {
-            itemView.setTag(order);
+        public void bind(final Order order, final OnOrderClickListener listener) {
             tvTableNames.setText("Bàn: " + String.join(", ", order.getTableNames()));
             tvStatus.setText(order.getStatus());
             tvStaffName.setText("NV: " + order.getStaffName());
             tvOrderDate.setText("Ngày: " + formatDate(order.getOrderDate()));
             tvTotalAmount.setText(formatCurrency(order.getTotalAmount()));
 
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onOrderClick(order);
+                }
+            });
         }
 
         private String formatDate(String isoDate) {

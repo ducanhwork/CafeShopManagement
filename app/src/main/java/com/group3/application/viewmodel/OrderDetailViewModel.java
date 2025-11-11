@@ -90,7 +90,8 @@ public class OrderDetailViewModel extends AndroidViewModel {
                         i.getProductId(),
                         i.getProductName(),
                         i.getPrice(),
-                        i.getQuantity()
+                        i.getQuantity(),
+                        null
                 ))
                 .collect(Collectors.toList());
 

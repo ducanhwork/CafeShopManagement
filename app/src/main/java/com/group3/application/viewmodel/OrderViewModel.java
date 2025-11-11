@@ -74,8 +74,6 @@ public class OrderViewModel extends AndroidViewModel {
     public void setNote(String note) {
         this.note = note;
     }
-
-    // SỬA: Đọc và lưu lại ghi chú khi tải đơn hàng
     public void loadExistingOrder(String orderId) {
         this.editOrderId = orderId;
         this.isEditMode = true;
@@ -83,11 +81,11 @@ public class OrderViewModel extends AndroidViewModel {
             if (result.isSuccess() && result.getData() != null) {
                 Order order = result.getData();
                 List<OrderItemDTO> existingItems = order.getItems().stream()
-                        .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity()))
+                        .map(item -> new OrderItemDTO(item.getProductId(), item.getProductName(), item.getPrice(), item.getQuantity(), null))
                         .collect(Collectors.toList());
                 currentOrderItems.postValue(existingItems);
                 setTableInfo(order.getTableIds(), String.join(", ", order.getTableNames()));
-                this.note = order.getNote(); // <--- SỬA Ở ĐÂY
+                this.note = order.getNote();
             }
         });
     }
@@ -107,7 +105,7 @@ public class OrderViewModel extends AndroidViewModel {
                 existingItem.quantity = quantity;
             }
         } else if (quantity > 0) {
-            currentList.add(new OrderItemDTO(product.getId(), product.getName(), product.getPrice(), quantity));
+            currentList.add(new OrderItemDTO(product.getId(), product.getName(), product.getPrice(), quantity, product.getImageLink()));
         }
         currentOrderItems.setValue(currentList);
     }

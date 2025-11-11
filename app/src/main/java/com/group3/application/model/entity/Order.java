@@ -109,7 +109,6 @@ public class Order {
         this.items = items;
     }
 
-    // SỬA: Thêm getter và setter cho note
     public String getNote() {
         return note;
     }
