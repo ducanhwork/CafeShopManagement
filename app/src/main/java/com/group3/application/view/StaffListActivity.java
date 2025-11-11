@@ -40,6 +40,7 @@ public class StaffListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         setupToolbar();
+        setTitle("Staff List");
 
         staffListAdapter = new StaffListAdapter();
         recyclerView.setAdapter(staffListAdapter);

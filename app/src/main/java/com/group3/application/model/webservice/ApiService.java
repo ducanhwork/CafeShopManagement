@@ -94,6 +94,9 @@ public interface ApiService {
     @POST("api/users")
     Call<User> createUser(@Body User newStaff);
 
+    @PUT("api/users/{id}")
+    Call<User> updateUser(@Path("id") String id, @Body User user);
+
     @GET("api/roles")
     Call<List<Role>> getRoles();
 

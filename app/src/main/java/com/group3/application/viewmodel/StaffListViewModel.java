@@ -26,6 +26,7 @@ public class StaffListViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
     private final MutableLiveData<User> createdStaff = new MutableLiveData<>();
+    private final MutableLiveData<User> updatedStaff = new MutableLiveData<>();
 
     public LiveData<List<User>> getStaffs() {
         return staffs;
@@ -45,6 +46,10 @@ public class StaffListViewModel extends ViewModel {
 
     public LiveData<User> getCreatedStaff() {
         return createdStaff;
+    }
+
+    public LiveData<User> getUpdatedStaff() {
+        return updatedStaff;
     }
 
     public void fetchStaff() {
@@ -107,6 +112,31 @@ public class StaffListViewModel extends ViewModel {
                         Log.e("Password", newStaff.getPassword());
                     } catch (IOException e) {
                         error.setValue("Failed to create staff and could not parse error body.");
+                    }
+                }
+                isLoading.setValue(false);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                error.setValue(t.getMessage());
+                isLoading.setValue(false);
+            }
+        });
+    }
+
+    public void updateUser(User staff) {
+        isLoading.setValue(true);
+        staffRepository.updateUser(staff).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    updatedStaff.setValue(response.body());
+                } else {
+                    try {
+                        error.setValue("Failed to update staff: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        error.setValue("Failed to update staff and could not parse error body.");
                     }
                 }
                 isLoading.setValue(false);

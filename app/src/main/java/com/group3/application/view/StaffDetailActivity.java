@@ -51,10 +51,10 @@ public class StaffDetailActivity extends AppCompatActivity {
             mobileTextView.setText(staff.getMobile());
         }
 
-        FloatingActionButton editFab = findViewById(R.id.editFab);
-        editFab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton editStaffButton = findViewById(R.id.editStaffButton);
+        editStaffButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(StaffDetailActivity.this, EditStaffActivity.class);
                 intent.putExtra("staff", staff);
                 startActivity(intent);
