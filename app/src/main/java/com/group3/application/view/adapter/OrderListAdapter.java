@@ -76,10 +76,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         }
 
         public void bind(final Order order, final OnOrderClickListener listener) {
-            tvTableNames.setText("Bàn: " + String.join(", ", order.getTableNames()));
+            tvTableNames.setText("Table: " + String.join(", ", order.getTableNames()));
             tvStatus.setText(order.getStatus());
-            tvStaffName.setText("NV: " + order.getStaffName());
-            tvOrderDate.setText("Ngày: " + formatDate(order.getOrderDate()));
+            tvStaffName.setText("Server: " + order.getStaffName());
+            tvOrderDate.setText("Date: " + formatDate(order.getOrderDate()));
             tvTotalAmount.setText(formatCurrency(order.getTotalAmount()));
 
             itemView.setOnClickListener(v -> {

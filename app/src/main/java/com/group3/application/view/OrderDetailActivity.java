@@ -74,7 +74,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         orderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
         if (orderId == null || orderId.isEmpty()) {
-            Toast.makeText(this, "Lỗi: Không tìm thấy ID đơn hàng", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: Can not find order id", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
@@ -103,7 +103,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         actStatus = findViewById(R.id.act_detail_status);
         edtNote = findViewById(R.id.edt_detail_note);
         fabSaveChanges = findViewById(R.id.fab_save_changes);
-        String[] orderStatuses = new String[] {"SERVING", "PAID", "CANCELLED", "PENDING"};
+        String[] orderStatuses = new String[] {"SERVING", "COMPLETED", "CANCELLED"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
@@ -202,10 +202,10 @@ public class OrderDetailActivity extends AppCompatActivity {
     private void updateUi(Order order) {
         if (order == null) return;
 
-        tvTableNames.setText("Bàn: " + String.join(", ", order.getTableNames()));
-        tvStaffName.setText(order.getStaffName());
-        tvOrderDate.setText(formatDate(order.getOrderDate()));
-        tvTotalAmount.setText("Tổng: " + formatCurrency(order.getTotalAmount()));
+        tvTableNames.setText("Table: " + String.join(", ", order.getTableNames()));
+        tvStaffName.setText("Server: " + order.getStaffName());
+        tvOrderDate.setText("Date: " + formatDate(order.getOrderDate()));
+        tvTotalAmount.setText("Total: " + formatCurrency(order.getTotalAmount()));
         actStatus.setText(order.getStatus(), false);
         edtNote.setText(order.getNote());
 

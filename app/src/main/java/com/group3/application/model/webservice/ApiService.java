@@ -2,7 +2,9 @@ package com.group3.application.model.webservice;
 
 import com.group3.application.model.dto.OrderRequest;
 import com.group3.application.model.dto.OrderUpdateDTO;
+import com.group3.application.model.dto.PeriodItemReportDTO;
 import com.group3.application.model.dto.ProductForOrder;
+import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
@@ -48,6 +50,13 @@ public interface ApiService {
     Call<List<TableInfo>> listTables(
             @Query("status") String status,
             @Query("keyword") String keyword
+    );
+
+    @PUT("api/tables/{id}/status")
+    Call<APIResult> updateTableStatus(
+        @Header("Authorization") String authToken,
+        @Path("id") String tableId,
+        @Query("status") String status
     );
 
     @GET("api/products")
@@ -186,4 +195,19 @@ public interface ApiService {
             @Path("customerId") UUID customerId
     );
 
+    @GET("api/reports/revenue")
+    Call<RevenueReportDTO> getRevenueReport(
+            @Header("Authorization") String authToken,
+            @Query("dateFrom") String dateFrom,
+            @Query("dateTo") String dateTo,
+            @Query("filterBy") String filterBy
+    );
+
+    @GET("api/reports/items")
+    Call<List<PeriodItemReportDTO>> getItemReport(
+            @Header("Authorization") String authToken,
+            @Query("dateFrom") String dateFrom,
+            @Query("dateTo") String dateTo,
+            @Query("filterBy") String filterBy
+    );
 }

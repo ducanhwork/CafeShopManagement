@@ -8,13 +8,16 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/coffee_primary">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_order_detail"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Chi tiết Đơn hàng" />
+            app:title="Order Detail"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:titleTextColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -69,7 +72,7 @@
                     app:drawableStartCompat="@drawable/ic_staff"
                     app:layout_constraintTop_toBottomOf="@+id/tv_detail_tables"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:text="NV: Nguyễn Văn A" />
+                    tools:text="Server: Nguyễn Văn A" />
 
                     <TextView
                         android:id="@+id/tv_detail_date"
@@ -80,7 +83,7 @@
                         app:drawableStartCompat="@drawable/ic_calendar"
                         app:layout_constraintTop_toBottomOf="@+id/tv_detail_staff"
                         app:layout_constraintStart_toStartOf="parent"
-                        tools:text="Ngày: 10:30 25/05/2024" />
+                        tools:text="Date: 10:30 25/05/2024" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_detail_status"
@@ -88,7 +91,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:hint="Trạng thái"
+                        android:hint="Status"
                         app:layout_constraintTop_toBottomOf="@+id/tv_detail_date"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
@@ -117,7 +120,7 @@
                     android:id="@+id/til_detail_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ghi chú (Tuỳ chọn)"
+                    android:hint="Note (Optional)"
                     android:padding="16dp">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -143,7 +146,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Các món đã gọi"
+                    android:text="Order Items"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
                 <ImageButton
@@ -180,7 +183,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                        tools:text="Tổng: 250,000 đ" />
+                        tools:text="Total: 250,000 đ" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -195,6 +198,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="16dp"
         android:text="Save change"
+        android:textColor="@color/white"
         android:visibility="gone"
         tools:visibility="visible" />
 

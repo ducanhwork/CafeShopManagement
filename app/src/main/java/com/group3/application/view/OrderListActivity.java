@@ -56,7 +56,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
-                        Toast.makeText(this, "Đang cập nhật danh sách...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "List updating...", Toast.LENGTH_SHORT).show();
                         viewModel.fetchOrders();
                     }
                 }
@@ -92,7 +92,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
             if (orders != null) {
                 adapter.setData(orders);
                 if(orders.isEmpty()){
-                    Toast.makeText(this, "Không tìm thấy đơn hàng nào", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No order found!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -110,7 +110,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         viewModel.users.observe(this, users -> {
             userList = users;
             List<String> userNames = new ArrayList<>();
-            userNames.add("Tất cả NV");
+            userNames.add("All");
             userNames.addAll(users.stream().map(User::getFullname).collect(Collectors.toList()));
             ArrayAdapter<String> userAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, userNames);
             actvStaff.setAdapter(userAdapter);
@@ -119,13 +119,13 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         viewModel.tables.observe(this, tables -> {
             tableList = tables;
             List<String> tableNames = new ArrayList<>();
-            tableNames.add("Tất cả bàn"); 
+            tableNames.add("All");
             tableNames.addAll(tables.stream().map(TableInfo::getName).collect(Collectors.toList()));
             ArrayAdapter<String> tableAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, tableNames);
             actvTable.setAdapter(tableAdapter);
         });
 
-        List<String> statusList = Arrays.asList("ALL", "SERVING", "PAID");
+        List<String> statusList = Arrays.asList("ALL", "SERVING", "COMPLETED", "CANCELLED");
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, statusList);
         actvStatus.setAdapter(statusAdapter);
 

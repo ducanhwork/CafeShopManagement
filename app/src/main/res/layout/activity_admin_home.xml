@@ -8,7 +8,6 @@
     android:id="@+id/main"
     tools:context=".view.AdminHomeActivity">
 
-    <!-- Thanh AppBar tùy chỉnh -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <!-- Layout chứa Avatar và Tiêu đề -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -37,7 +35,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Avatar người dùng -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="40dp"
@@ -57,7 +54,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Nội dung chính của màn hình -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -89,7 +85,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_welcome" />
 
-            <!-- MỚI: TextView để hiển thị ngày tháng -->
             <TextView
                 android:id="@+id/tv_current_date"
                 android:layout_width="wrap_content"
@@ -105,14 +100,11 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_welcome_subtitle"
                 tools:text="Thứ Tư, 29 tháng 05, 2024" />
 
-            <!-- Card chính để vào trang Product List -->
-
-            <!-- Các card phụ khác (ví dụ) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_manage_products"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="84dp"
+                android:layout_marginTop="24dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="24dp"
@@ -120,13 +112,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_welcome_subtitle"
+                app:layout_constraintTop_toBottomOf="@id/tv_current_date"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/card_background"
+                    app:strokeColor="@color/coffee_accent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="20dp">
@@ -134,7 +126,7 @@
                     <ImageView
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@drawable/btn_4" />
+                        android:src="@drawable/ic_add_24" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -164,21 +156,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_manage_orders"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_manage_products"
-                app:strokeColor="@color/coffee_accent"
-                app:strokeWidth="1dp"/>
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_manage_orders"
+                android:id="@+id/card_manage_reports"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -200,10 +178,10 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        android:src="@drawable/btn_2"
-                        app:tint="@color/coffee_primary"/>
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        app:tint="@color/coffee_primary"
+                        android:src="@drawable/report_icon" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -215,7 +193,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Order Management"
+                            android:text="Report Management"
                             android:textColor="@color/coffee_primary_dark"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -224,7 +202,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="View, filter, and manage all orders"
+                            android:text="View sales and revenue reports"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -243,7 +221,7 @@
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/card_manage_orders"
+                app:layout_constraintTop_toBottomOf="@id/card_manage_reports"
                 app:strokeColor="@color/coffee_accent"
                 app:strokeWidth="1dp">
 
@@ -392,7 +370,6 @@
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

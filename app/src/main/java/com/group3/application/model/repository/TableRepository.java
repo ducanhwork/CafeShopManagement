@@ -2,6 +2,7 @@ package com.group3.application.model.repository;
 
 import android.util.Log;
 
+import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
@@ -19,9 +20,11 @@ public class TableRepository {
     public TableRepository() {
         this.apiService = ApiClient.get().create(ApiService.class);
     }
+
     public Call<List<TableInfo>> getTables(String status, String keyword) {
         return apiService.listTables(status, keyword);
     }
+
     public void getAllTables(OnTablesFetchListener listener) {
         apiService.listTables(null, null).enqueue(new Callback<List<TableInfo>>() {
             @Override
@@ -39,6 +42,27 @@ public class TableRepository {
             public void onFailure(Call<List<TableInfo>> call, Throwable t) {
                 Log.e(TAG, "Network error: " + t.getMessage(), t);
                 listener.onTablesFetchComplete(null, "Lỗi kết nối mạng.");
+            }
+        });
+    }
+
+    public void updateTableStatus(String authToken, String tableId, String status, final RepositoryCallback<APIResult> callback) {
+        apiService.updateTableStatus(authToken, tableId, status).enqueue(new Callback<APIResult>() {
+            @Override
+            public void onResponse(Call<APIResult> call, Response<APIResult> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new APIResult(true, response.body().getMessage(), null));
+                } else {
+                    String errorMsg = "Cập nhật trạng thái bàn thất bại. Code: " + response.code();
+                    Log.e(TAG, errorMsg);
+                    callback.onComplete(new APIResult(false, errorMsg, null));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResult> call, Throwable t) {
+                Log.e(TAG, "Network error while updating table status: " + t.getMessage(), t);
+                callback.onComplete(new APIResult(false, t.getMessage(), null));
             }
         });
     }

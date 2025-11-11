@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.ItemReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.CashierHomeActivity"
             android:exported="false" />
         <activity
@@ -59,7 +62,6 @@
             android:name=".view.ReservationDetailActivity"
             android:exported="false"
             android:parentActivityName=".view.ReservationListActivity" />
-            android:exported="true"/>
         <activity
             android:name=".view.OrderHostActivity"
             android:exported="false" />
@@ -68,8 +70,7 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".view.ProductListActivity"
             android:exported="false" />
@@ -81,15 +82,16 @@
             android:exported="false" />
         <activity
             android:name=".view.HomeMenuActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -98,7 +100,12 @@
             android:exported="false" />
         <activity
             android:name=".view.StaffListActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity
+            android:name=".view.RevenueReportActivity"
+            android:exported="false" />
+        <activity android:name=".view.ReportManagementActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

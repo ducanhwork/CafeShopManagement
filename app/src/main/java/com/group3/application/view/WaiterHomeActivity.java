@@ -83,6 +83,11 @@ public class WaiterHomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ReservationListActivity.class);
             startActivity(intent);
         });
+
+        findViewById(R.id.card_manage_orders).setOnClickListener(v -> {
+            Intent intent = new Intent(this, OrderListActivity.class);
+            startActivity(intent);
+        });
     }
 }
 

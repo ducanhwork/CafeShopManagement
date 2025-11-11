@@ -179,12 +179,12 @@ public class ProductListFragment extends Fragment {
             categoryData.clear();
             if (list != null) categoryData.addAll(list);
             List<String> display = new ArrayList<>();
-            display.add("Tất cả");
+            display.add("All");
             for (Category c : categoryData) display.add(c.getName());
             catAdapter.clear();
             catAdapter.addAll(display);
             catAdapter.notifyDataSetChanged();
-            actCategory.setText("Tất cả", false);
+            actCategory.setText("All", false);
         });
 
         orderVM.getCurrentOrderItems().observe(getViewLifecycleOwner(), adapter::setOrderItems);
@@ -229,7 +229,7 @@ public class ProductListFragment extends Fragment {
 
     private String currentCategoryIdFromUi() {
         String label = safeText(actCategory);
-        if (label == null || label.isEmpty() || "Tất cả".equalsIgnoreCase(label)) return null;
+        if (label == null || label.isEmpty() || "All".equalsIgnoreCase(label)) return null;
         for (Category c : categoryData) if (label.equals(c.getName())) return c.getId();
         return null;
     }

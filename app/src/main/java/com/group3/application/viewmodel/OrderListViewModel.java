@@ -19,28 +19,23 @@ import java.util.List;
 
 public class OrderListViewModel extends AndroidViewModel {
 
-    // Repositories
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final TableRepository tableRepository;
 
-    // LiveData cho danh sách Order
     private final MutableLiveData<List<Order>> _orders = new MutableLiveData<>();
     public final LiveData<List<Order>> orders = _orders;
 
-    // LiveData cho dữ liệu bộ lọc
     private final MutableLiveData<List<User>> _users = new MutableLiveData<>();
     public final LiveData<List<User>> users = _users;
     private final MutableLiveData<List<TableInfo>> _tables = new MutableLiveData<>();
     public final LiveData<List<TableInfo>> tables = _tables;
 
-    // LiveData cho trạng thái UI
     private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>();
     public final LiveData<Boolean> isLoading = _isLoading;
     private final MutableLiveData<String> _error = new MutableLiveData<>();
     public final LiveData<String> error = _error;
 
-    // Biến lưu trạng thái bộ lọc
     private String statusFilter = null;
     private String tableIdFilter = null;
     private String staffIdFilter = null;
@@ -49,10 +44,9 @@ public class OrderListViewModel extends AndroidViewModel {
         super(application);
         this.orderRepository = new OrderRepository(application);
         this.userRepository = new UserRepository(application);
-        this.tableRepository = new TableRepository(); // Không cần Application context
+        this.tableRepository = new TableRepository();
     }
 
-    // Lấy dữ liệu cho các bộ lọc (dropdown)
     public void fetchFilterData(){
         userRepository.getAllUsers((users, error) -> {
             if(error != null) _error.postValue("Lỗi lấy danh sách NV: " + error);
@@ -65,7 +59,6 @@ public class OrderListViewModel extends AndroidViewModel {
         });
     }
 
-    // SỬA: Đồng bộ lại với OrderRepository mới
     public void fetchOrders() {
         _isLoading.setValue(true);
         orderRepository.getOrders(statusFilter, tableIdFilter, staffIdFilter, result -> {
@@ -78,9 +71,7 @@ public class OrderListViewModel extends AndroidViewModel {
         });
     }
 
-    // Hàm để Activity cập nhật bộ lọc và gọi lại fetchOrders
     public void setStatusFilter(@Nullable String status) {
-        // Nếu chọn "ALL", giá trị gửi đi là null
         this.statusFilter = (status != null && status.equalsIgnoreCase("ALL")) ? null : status;
         fetchOrders();
     }
