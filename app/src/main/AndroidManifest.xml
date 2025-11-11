@@ -9,6 +9,7 @@
         android:maxSdkVersion="32" /> <!-- Quyền truy cập Camera -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.activity.ConfirmPaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.GenerateBillActivity"
+            android:exported="false" />
         <activity
             android:name=".view.CashierHomeActivity"
             android:exported="false" />
@@ -43,6 +50,19 @@
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".view.OrderListActivity"
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".view.activity.CreateReservationActivity" -->
+        <!-- android:exported="true" /> -->
+        <!-- <activity -->
+        <!-- android:name=".view.ReservationActivity" -->
+        <!-- android:exported="true"/> -->
+        <activity
+            android:name=".view.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.OrderHostActivity"
+            android:exported="false" />
             android:name=".view.ReservationActivity"
             android:exported="false" />
         <activity
@@ -71,12 +91,15 @@
             android:exported="false" />
         <activity
             android:name=".view.HomeMenuActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.TableListActivity"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -86,6 +109,12 @@
         </activity>
         <activity
             android:name=".view.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillListActivity"
             android:exported="false" />
         <activity
             android:name=".view.StaffListActivity"

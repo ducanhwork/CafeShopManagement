@@ -16,7 +16,7 @@ public class PointsHistoryItem {
     private String orderNo;
 
     @SerializedName("type")
-    private String type; // "EARN" hoặc "REDEEM"
+    private String type;
 
     @SerializedName("pointsEarned")
     private Integer pointsEarned;
@@ -24,11 +24,9 @@ public class PointsHistoryItem {
     @SerializedName("pointsSpent")
     private Integer pointsSpent;
 
-    // Map "timestamp" từ JSON vào biến "transactionDate"
     @SerializedName("timestamp")
     private LocalDateTime transactionDate;
 
-    // Getters
     public UUID getId() { return id; }
     public UUID getOrderId() { return orderId; }
     public String getOrderNo() { return orderNo; }

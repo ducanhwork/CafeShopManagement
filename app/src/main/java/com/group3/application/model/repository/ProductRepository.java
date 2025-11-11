@@ -27,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductRepository {
+    private final ApiService api = ApiClient.get().create(ApiService.class);
     private static final String TAG = "ProductRepository";
     private final ApiService apiService;
     private final Application application;
@@ -88,6 +89,8 @@ public class ProductRepository {
                 }
             }
 
+    public Call<List<Product>> getProducts(String status, String categoryId, String keyword) {
+        return api.listProducts(status, categoryId, keyword);
             @Override
             public void onFailure(Call<APIResult> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());

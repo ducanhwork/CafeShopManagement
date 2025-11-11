@@ -31,7 +31,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private TextInputLayout tilEmail;
     private EditText editEmail;
     private Button btnResetPassword;
-    // NEW: Add references to the layouts
     private LinearLayout formLayout;
     private LinearLayout successLayout;
 
@@ -53,10 +52,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             APIResult result = event.getContentIfNotHandled();
             if (result != null) {
                 if (result.isSuccess()) {
-                    // Xử lý thành công
                     hideInstructionAndSuccessMessage();
                 } else {
-                    // Xử lý lỗi
                     Log.e(TAG, "Line 56"+result.getMessage());
                     Toast.makeText(ForgotPasswordActivity.this, "Line 57: " + result.getMessage(), Toast.LENGTH_SHORT).show();
                 }

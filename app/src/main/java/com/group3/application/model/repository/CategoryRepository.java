@@ -34,6 +34,8 @@ public class CategoryRepository {
         this.prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
     }
 
+    public Call<List<Category>> getCategories() {
+        return api.getCategories();
     public void getCategories(OnGetCategoriesListener listener) {
         apiService.listCategories("Bearer " + prefs.getString(KEY_AUTH_TOKEN, null)).enqueue(new Callback<List<CategoryDTO>>() {
             @Override
