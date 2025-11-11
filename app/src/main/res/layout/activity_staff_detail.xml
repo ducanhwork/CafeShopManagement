@@ -103,4 +103,13 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editStaffButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Edit Staff"
+        android:src="@android:drawable/ic_menu_edit" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

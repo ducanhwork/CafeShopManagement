@@ -49,7 +49,21 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void checkInitialLoginState() {
         if (authRepository.isUserLoggedIn()) { // Dùng repository để kiểm tra
-            _navigationEvent.postValue(new Event<>(NavigationTarget.PRODUCT_LIST));
+            // Nếu đã đăng nhập, chuyển hướng đến trang chính
+            String role = prefs.getString(KEY_ROLE_AUTH, null);
+            if (role != null) {
+                switch (role) {
+                    case "MANAGER":
+                        _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
+                        break;
+                    case "CASHIER":
+                        _navigationEvent.postValue(new Event<>(NavigationTarget.CASHIER_PAGE));
+                        break;
+                    case "WAITER":
+                        _navigationEvent.postValue(new Event<>(NavigationTarget.WAITER_PAGE));
+                        break;
+                }
+            }
         }
     }
 
@@ -86,7 +100,7 @@ public class LoginViewModel extends AndroidViewModel {
                 String role = prefs.getString(KEY_ROLE_AUTH, null);
                 if (role != null) {
                     switch (role) {
-                        case "ADMIN":
+                        case "MANAGER":
                             _navigationEvent.postValue(new Event<>(NavigationTarget.ADMIN_PAGE));
                             break;
                         case "CASHIER":

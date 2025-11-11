@@ -109,7 +109,7 @@
 
             <!-- Các card phụ khác (ví dụ) -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_manage_products"
+                android:id="@+id/card_manage_reservation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="84dp"
@@ -123,6 +123,43 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_welcome_subtitle"
                 app:strokeWidth="0dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/btn_4" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reservation Management"
+                            android:textColor="@color/coffee_primary_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tạo, xem và quản lý đặt bàn"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -155,7 +192,6 @@
                 app:layout_constraintTop_toBottomOf="@id/card_manage_orders"
                 app:strokeColor="@color/coffee_accent"
                 app:strokeWidth="1dp">
-
 
             </com.google.android.material.card.MaterialCardView>
 

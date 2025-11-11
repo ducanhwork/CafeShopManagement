@@ -34,6 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.group3.application.R;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.ProductCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.viewmodel.ProductCreateViewModel;
@@ -87,7 +88,7 @@ public class ProductCreateActivity extends AppCompatActivity {
         List<String> categoryNames = new ArrayList<>();
         viewModel.getCategories();
         viewModel.categories.observe(this, categories -> {
-            for (Category category : categories) {
+            for (CategoryDTO category : categories) {
                 categoryNames.add(category.getName());
             }
         });

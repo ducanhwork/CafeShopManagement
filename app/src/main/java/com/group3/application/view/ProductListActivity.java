@@ -3,6 +3,7 @@ package com.group3.application.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.view.adapter.ProductAdapter;
@@ -56,6 +58,15 @@ public class ProductListActivity extends AppCompatActivity {
     private CircleImageView ivAvatar;
     private MaterialButton btnCreate;
 
+    private final ActivityResultLauncher launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    viewModel.getProducts(null, selectedCategory == "All" ? null : selectedCategory);
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    Log.d("ProductListActivity", "Product update cancelled.");
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +93,15 @@ public class ProductListActivity extends AppCompatActivity {
         adapter = new ProductAdapter(products, updateProduct -> {
             Log.i("ProductListActivity ", updateProduct.toString());
             Intent intent = new Intent(this, ProductUpdateActivity.class);
+            intent.putExtra("productId", updateProduct.getId().toString());
+            intent.putExtra("productCategory", updateProduct.getCategoryName());
             intent.putExtra("productName", updateProduct.getName());
-            intent.putExtra("productPrice", updateProduct.getPrice());
+            intent.putExtra("productPrice", updateProduct.getPrice().toString());
             intent.putExtra("productDescription", updateProduct.getDescription());
             intent.putExtra("productStatus", updateProduct.getStatus());
-            intent.putExtra("productId", updateProduct.getId());
             intent.putExtra("productImage", updateProduct.getImageLink());
-            startActivity(intent);
+
+            launcher.launch(intent);
         }, viewModel);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -129,7 +142,7 @@ public class ProductListActivity extends AppCompatActivity {
         categoriesList.add("All");
         viewModel.getCategories();
         viewModel.categories.observe(this, categories -> {
-            for (Category category : categories) {
+            for (CategoryDTO category : categories) {
                 categoriesList.add(category.getName());
             }
         });

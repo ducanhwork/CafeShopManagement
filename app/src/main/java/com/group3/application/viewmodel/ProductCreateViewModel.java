@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.ProductCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
@@ -28,8 +29,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductCreateViewModel extends AndroidViewModel {
-    private MutableLiveData<List<Category>> _categories = new MutableLiveData<>();
-    public final LiveData<List<Category>> categories = _categories;
+    private MutableLiveData<List<CategoryDTO>> _categories = new MutableLiveData<>();
+    public final LiveData<List<CategoryDTO>> categories = _categories;
     private static final String TAG = "ProductCreateViewModel";
 
     // Repository để tương tác với data source (API)
@@ -112,7 +113,7 @@ public class ProductCreateViewModel extends AndroidViewModel {
     public void getCategories() {
         categoryRepository.getCategories(result -> {
             if (result.isSuccess()) {
-                _categories.postValue((List<Category>) result.getData());
+                _categories.postValue((List<CategoryDTO>) result.getData());
             } else {
                 Log.e(TAG, "getCategories: " + result.getMessage());
             }
