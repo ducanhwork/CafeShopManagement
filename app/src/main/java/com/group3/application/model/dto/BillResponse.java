@@ -12,7 +12,6 @@ public class BillResponse {
     private BigDecimal finalTotal;
     private String paymentStatus;
 
-    // Getters and Setters
     public UUID getBillId() { return billId; }
     public void setBillId(UUID billId) { this.billId = billId; }
 

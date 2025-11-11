@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-// DTO này CHỈ chứa các trường mà server @RequestBody mong đợi
 public class OrderUpdateDTO implements Serializable {
 
     @SerializedName("items")

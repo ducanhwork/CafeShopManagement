@@ -3,7 +3,6 @@ package com.group3.application.model.dto;
 import com.google.gson.annotations.SerializedName;
 
 public class OrderDetailItemDTO {
-    // SỬA: Thêm productId
     @SerializedName("productId")
     private String productId;
 
@@ -16,7 +15,6 @@ public class OrderDetailItemDTO {
     @SerializedName("price")
     private double price;
 
-    // Getters and Setters
 
     public String getProductId() {
         return productId;

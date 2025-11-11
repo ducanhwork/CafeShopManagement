@@ -27,10 +27,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     private List<Order> orderList = new ArrayList<>();
     private final OnOrderClickListener clickListener;
 
-    // CẬP NHẬT: Thêm phương thức onGenerateBillClick
     public interface OnOrderClickListener {
         void onOrderClick(Order order);
-        void onGenerateBillClick(Order order); // Phương thức mới
     }
 
     public OrderListAdapter(OnOrderClickListener clickListener) {
@@ -41,14 +39,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
-        // Truyền clickListener vào OrderViewHolder
         return new OrderViewHolder(view, clickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
-        holder.bind(order); // Thay đổi: Chỉ truyền order vì listener đã có trong constructor ViewHolder
+        holder.bind(order);
     }
 
     @Override
@@ -70,10 +67,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         private final TextView tvStaffName;
         private final TextView tvOrderDate;
         private final TextView tvTotalAmount;
-        private final MaterialButton btnGenerateBill; // Ánh xạ nút mới
-        private final OnOrderClickListener listener; // Lưu listener
+        private final OnOrderClickListener listener;
 
-        // CẬP NHẬT: Constructor nhận thêm listener
         public OrderViewHolder(@NonNull View itemView, OnOrderClickListener listener) {
             super(itemView);
             this.listener = listener; // Gán listener
@@ -82,45 +77,25 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             tvStaffName = itemView.findViewById(R.id.tv_staff_name);
             tvOrderDate = itemView.findViewById(R.id.tv_order_date);
             tvTotalAmount = itemView.findViewById(R.id.tv_total_amount);
-            btnGenerateBill = itemView.findViewById(R.id.btn_generate_bill); // Ánh xạ
 
-            // Gán sự kiện click cho toàn bộ item (để xem chi tiết)
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && this.listener != null) {
                     this.listener.onOrderClick((Order) itemView.getTag());
                 }
             });
-
-            // Gán sự kiện click cho nút Tạo Hóa Đơn
-            btnGenerateBill.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && this.listener != null) {
-                    this.listener.onGenerateBillClick((Order) itemView.getTag());
-                }
-            });
         }
 
-        // CẬP NHẬT: Hàm bind
         public void bind(final Order order) {
-            // Lưu đối tượng Order vào Tag của itemView để truy cập trong Listener
             itemView.setTag(order);
-
             tvTableNames.setText("Bàn: " + String.join(", ", order.getTableNames()));
             tvStatus.setText(order.getStatus());
             tvStaffName.setText("NV: " + order.getStaffName());
             tvOrderDate.setText("Ngày: " + formatDate(order.getOrderDate()));
             tvTotalAmount.setText(formatCurrency(order.getTotalAmount()));
 
-            // LOGIC HIỂN THỊ NÚT
-            if ("SERVING".equals(order.getStatus())) {
-                btnGenerateBill.setVisibility(View.VISIBLE);
-            } else {
-                btnGenerateBill.setVisibility(View.GONE);
-            }
         }
 
-        // ... (các hàm formatDate và formatCurrency giữ nguyên)
         private String formatDate(String isoDate) {
             if (isoDate == null) return "";
             try {

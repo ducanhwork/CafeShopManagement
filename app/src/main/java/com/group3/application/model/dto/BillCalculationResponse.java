@@ -9,7 +9,6 @@ public class BillCalculationResponse {
     private String customerName;
     private int customerAvailablePoints;
 
-    // Getters and Setters
     public BigDecimal getSubtotal() { return subtotal; }
     public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
 

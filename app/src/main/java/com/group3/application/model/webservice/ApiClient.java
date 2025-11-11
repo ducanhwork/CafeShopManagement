@@ -39,7 +39,6 @@ public class ApiClient {
                         .readTimeout(20, TimeUnit.SECONDS)
                         .writeTimeout(20, TimeUnit.SECONDS)
                         .addInterceptor(log)
-                        // .addInterceptor(new AuthInterceptor(appContext)) // nếu có
                         .build();
 
                     instance = new Retrofit.Builder()

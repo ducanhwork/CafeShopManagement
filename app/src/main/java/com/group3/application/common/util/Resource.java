@@ -2,10 +2,6 @@ package com.group3.application.common.util;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/**
- * A generic class that holds a value with its loading status.
- * Used to wrap network responses for better state management.
- */
 public class Resource<T> {
     @NonNull
     public final Status status;

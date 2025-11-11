@@ -19,32 +19,26 @@ import java.util.Locale; // Đổi Locale
 
 public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapter.VH> {
 
-    // --- SỬA 1: Interface listener rõ ràng hơn ---
     public interface OnQuantityChangedListener {
-        void onIncrease(OrderItemDTO item); // Báo cáo sự kiện Tăng
-        void onDecrease(OrderItemDTO item); // Báo cáo sự kiện Giảm
-        // Bạn có thể thêm: void onRemove(OrderItemDTO item);
+        void onIncrease(OrderItemDTO item);
+        void onDecrease(OrderItemDTO item);
     }
 
     private final List<OrderItemDTO> data = new ArrayList<>();
-    private final OnQuantityChangedListener listener; // SỬA 2: Dùng final và constructor
+    private final OnQuantityChangedListener listener;
 
-    // SỬA 3: Nhận listener qua constructor
     public OrderSummaryAdapter(OnQuantityChangedListener listener) {
         this.listener = listener;
     }
 
-    // SỬA 4: Đơn giản hóa hàm submit (DiffUtil sẽ tốt hơn, nhưng notifyDataSetChanged() vẫn OK)
     public void submit(List<OrderItemDTO> items) {
         data.clear();
         if (items != null) {
-            data.addAll(new ArrayList<>(items)); // Tạo bản sao mới để an toàn
+            data.addAll(new ArrayList<>(items));
         }
         notifyDataSetChanged();
-        // Bỏ listener.onChanged() ở đây, Activity không cần biết sự kiện này
     }
 
-    // BỎ HÀM: getItems() - Activity không nên lấy data từ Adapter
 
     @NonNull
     @Override
@@ -61,22 +55,18 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
         h.tvQty.setText(String.valueOf(it.quantity));
         h.tvSubtotal.setText(fmt(it.getSubtotal()) + " đ");
 
-        // --- SỬA 5: Logic Nút Bấm (Quan trọng nhất) ---
-        // Adapter KHÔNG tự thay đổi 'it.quantity'
-
         h.btnMinus.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onDecrease(it); // Chỉ báo cáo sự kiện
+                listener.onDecrease(it);
             }
         });
 
         h.btnPlus.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onIncrease(it); // Chỉ báo cáo sự kiện
+                listener.onIncrease(it);
             }
         });
 
-        // Bỏ 'notifyItemChanged()' - ViewModel sẽ kích hoạt cập nhật toàn bộ list
     }
 
     @Override
@@ -100,9 +90,7 @@ public class OrderSummaryAdapter extends RecyclerView.Adapter<OrderSummaryAdapte
         }
     }
 
-    // SỬA 6: Dùng Locale của quốc gia (ví dụ: VN) để định dạng số
     private static String fmt(double d) {
-        // Có thể dùng NumberFormat cho chuẩn
         return String.format(Locale.getDefault(), "%,.0f", d);
     }
 }

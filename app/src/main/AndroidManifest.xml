@@ -81,6 +81,12 @@
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.BillDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

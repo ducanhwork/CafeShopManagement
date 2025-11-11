@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
             app:titleCentered="true"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Nội dung -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +24,6 @@
         android:padding="12dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Subtitle: gợi hành động -->
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="match_parent"
@@ -36,7 +33,6 @@
             android:textColor="#666"
             android:paddingBottom="8dp"/>
 
-        <!-- Search -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +40,6 @@
             android:gravity="center_vertical"
             android:paddingTop="4dp">
 
-            <!-- Search -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -58,7 +53,6 @@
                     android:hint="Search product name..."/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Category Dropdown -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCategory"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -78,7 +72,6 @@
 
         </LinearLayout>
 
-        <!-- Danh sách (kéo để refresh) -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
@@ -95,7 +88,6 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-    <!-- Nút xác nhận giỏ chọn -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"

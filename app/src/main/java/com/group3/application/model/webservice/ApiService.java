@@ -1,12 +1,16 @@
 package com.group3.application.model.webservice;
 
 import com.group3.application.model.dto.BillCalculationResponse;
+import com.group3.application.model.dto.BillDetailResponse;
 import com.group3.application.model.dto.BillGenerationRequest;
 import com.group3.application.model.dto.BillResponse;
+import com.group3.application.model.dto.BillSummaryDTO;
 import com.group3.application.model.dto.CustomerSearchResponse;
 import com.group3.application.model.dto.NewCustomerRequest;
 import com.group3.application.model.dto.OrderRequest;
 import com.group3.application.model.dto.OrderUpdateDTO;
+import com.group3.application.model.dto.PaymentConfirmationRequest;
+import com.group3.application.model.dto.PaymentConfirmationResponse;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
@@ -66,7 +70,6 @@ public interface ApiService {
             @Query("staffId") String staffId
     );
 
-    // SỬA: Hoàn trả lại kiểu dữ liệu gốc mà server trả về
     @GET("api/orders/{id}")
     Call<Order> getOrderDetails(
             @Header("Authorization") String authToken,
@@ -150,14 +153,26 @@ public interface ApiService {
         @Path("customerId") UUID customerId
     );
 
-    @POST("/api/v1/loyalty/members")
+    @POST("api/v1/loyalty-members/add-member")
     Call<CustomerSearchResponse> addNewMember(@Body NewCustomerRequest request);
-    @GET("/api/v1/loyalty/search")
+    @GET("api/v1/loyalty-members/search")
     Call<CustomerSearchResponse> searchCustomer(@Query("phone") String phone);
 
-    @POST("/api/v1/bills/calculate")
+    @POST("api/v1/bills/calculate")
     Call<BillCalculationResponse> calculateBill(@Body BillGenerationRequest request);
 
-    @POST("/api/v1/bills/generate")
+    @POST("api/v1/bills/generate")
     Call<BillResponse> generateBill(@Body BillGenerationRequest request);
+
+    @GET("api/v1/bills/{billId}")
+    Call<BillDetailResponse> getBillDetails(@Path("billId") String billId);
+
+    @POST("api/v1/bills/{billId}/confirm-payment")
+    Call<PaymentConfirmationResponse> confirmPayment(
+            @Path("billId") String billId,
+            @Body PaymentConfirmationRequest request
+    );
+
+    @GET("/api/v1/bills")
+    Call<List<BillSummaryDTO>> getBillList(@Query("date") String date);
 }

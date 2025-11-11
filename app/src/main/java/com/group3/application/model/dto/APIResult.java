@@ -18,7 +18,6 @@ public class APIResult<T> {
         this(isSuccess, errorMessage, null);
     }
 
-    // Getters
     public boolean isSuccess() {
         return isSuccess;
     }

@@ -56,10 +56,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         detailLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
-                        Toast.makeText(this, "Đang cập nhật danh sách...", Toast.LENGTH_SHORT).show();
-                        viewModel.fetchOrders();
-                    }
+                    // onResume will handle the refresh
                 }
         );
 
@@ -89,8 +86,12 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
             startActivity(intent);
         });
 
-        // Bắt đầu lấy tất cả dữ liệu
         viewModel.fetchFilterData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         viewModel.fetchOrders();
     }
 
@@ -171,10 +172,4 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
         detailLauncher.launch(intent);
     }
 
-    @Override
-    public void onGenerateBillClick(Order order) {
-        Intent intent = new Intent(this, GenerateBillActivity.class);
-        intent.putExtra(GenerateBillActivity.EXTRA_ORDER_ID, order.getId().toString());
-        startActivity(intent);
-    }
 }

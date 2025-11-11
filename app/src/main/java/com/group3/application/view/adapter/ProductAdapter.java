@@ -26,7 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private final List<Product> productList = new ArrayList<>();
-    private List<OrderItemDTO> orderItems = new ArrayList<>(); // Danh sách giỏ hàng
+    private List<OrderItemDTO> orderItems = new ArrayList<>();
     private final OnQuantityChangedListener listener;
 
     public ProductAdapter(OnQuantityChangedListener listener) {

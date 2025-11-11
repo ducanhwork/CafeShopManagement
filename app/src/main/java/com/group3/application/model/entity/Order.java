@@ -36,7 +36,6 @@ public class Order {
     @SerializedName("note")
     private String note;
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

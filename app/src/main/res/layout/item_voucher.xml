@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Mã Voucher (Thông tin chính) -->
         <TextView
             android:id="@+id/tvCode"
             android:layout_width="0dp"
@@ -30,7 +29,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="BLACKFRIDAY2025" />
 
-        <!-- Chip Trạng thái (Nổi bật) -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chipStatus"
             style="@style/Widget.Material3.Chip.Assist"
@@ -43,7 +41,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="ACTIVE" />
 
-        <!-- Nút Edit (dạng icon) -->
         <ImageButton
             android:id="@+id/btnEdit"
             android:layout_width="48dp"
@@ -56,7 +53,6 @@
             app:layout_constraintTop_toTopOf="@+id/chipStatus"
             app:tint="?attr/colorPrimary" />
 
-        <!-- Thông tin Loại và Giá trị -->
         <TextView
             android:id="@+id/tvTypeValue"
             android:layout_width="0dp"
@@ -71,7 +67,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvCode"
             tools:text="Giảm 25%" />
 
-        <!-- Thông tin Ngày -->
         <TextView
             android:id="@+id/tvDates"
             android:layout_width="0dp"

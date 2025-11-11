@@ -8,7 +8,6 @@ public class OrderItem {
     private int quantity;
     private double subtotal;
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

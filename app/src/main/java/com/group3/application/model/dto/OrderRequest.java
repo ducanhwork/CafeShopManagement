@@ -5,7 +5,7 @@ import java.util.List;
 public class OrderRequest {
     private List<String> tableIds;
     private List<OrderItemDTO> items;
-    private String note; // Thêm trường note
+    private String note;
 
     public OrderRequest(List<String> tableIds, List<OrderItemDTO> items, String note) {
         this.tableIds = tableIds;

@@ -53,6 +53,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private Menu menu;
 
     private ExtendedFloatingActionButton fabSaveChanges;
+    private MaterialButton btnCreateInvoice;
 
     private AutoCompleteTextView actStatus;
     private TextInputEditText edtNote;
@@ -103,6 +104,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         actStatus = findViewById(R.id.act_detail_status);
         edtNote = findViewById(R.id.edt_detail_note);
         fabSaveChanges = findViewById(R.id.fab_save_changes);
+        btnCreateInvoice = findViewById(R.id.btn_create_invoice);
+
         String[] orderStatuses = new String[] {"SERVING", "PAID", "CANCELLED", "PENDING"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 this,
@@ -111,14 +114,23 @@ public class OrderDetailActivity extends AppCompatActivity {
         );
 
         fabSaveChanges.setOnClickListener(v -> {
-            // 1. Lấy dữ liệu mới từ UI
             String newStatus = actStatus.getText().toString();
             String newNote = edtNote.getText().toString();
-
-            // 2. Ra lệnh cho ViewModel gửi lên server
-            // (ViewModel của bạn từ lần trước đã có hàm này)
             viewModel.updateOrderOnServer(newStatus, newNote);
         });
+
+        btnCreateInvoice.setOnClickListener(v -> {
+            Order currentOrder = viewModel.order.getValue();
+            if (currentOrder != null) {
+                Intent intent = new Intent(OrderDetailActivity.this, GenerateBillActivity.class);
+                intent.putExtra(GenerateBillActivity.EXTRA_ORDER_ID, currentOrder.getId());
+                intent.putExtra("SUBTOTAL", currentOrder.getTotalAmount());
+                startActivity(intent);
+            } else {
+                Toast.makeText(OrderDetailActivity.this, "Không thể lấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         actStatus.setAdapter(statusAdapter);
 
         RecyclerView recyclerView = findViewById(R.id.rv_order_detail_items);
@@ -142,6 +154,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         );
         actStatus.setOnItemClickListener((parent, view, position, id) -> {
             fabSaveChanges.show(); // Hiện nút khi Status thay đổi
+            String selectedStatus = (String) parent.getItemAtPosition(position);
+            btnCreateInvoice.setEnabled("SERVING".equals(selectedStatus));
         });
         edtNote.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -212,6 +226,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvTotalAmount.setText("Tổng: " + formatCurrency(order.getTotalAmount()));
         actStatus.setText(order.getStatus(), false);
         edtNote.setText(order.getNote());
+
+        btnCreateInvoice.setEnabled("SERVING".equals(order.getStatus()));
 
         adapter.setItems(order.getItems());
     }
