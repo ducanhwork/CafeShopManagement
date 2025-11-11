@@ -24,6 +24,7 @@ import com.group3.application.view.adapter.StaffListAdapter;
 import com.group3.application.viewmodel.StaffListViewModel;
 
 import java.util.List;
+import java.util.UUID;
 
 public class StaffListActivity extends AppCompatActivity {
 
@@ -148,8 +149,7 @@ public class StaffListActivity extends AppCompatActivity {
                         return;
                     }
 
-                    User newStaff = new User(email, password, fullName, mobile, selectedRole.getId().toString());
-                    viewModel.addStaff(newStaff);
+                    viewModel.addStaff(email, password, fullName, mobile, selectedRole.getId());
 
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());

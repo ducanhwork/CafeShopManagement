@@ -5,6 +5,7 @@ import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.UpdatePassWordRequest;
+import com.group3.application.model.dto.UserCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
@@ -83,7 +84,7 @@ public interface ApiService {
     Call<List<Reservation>> getReservationsByTable(@Path("tableId") String tableId);
 
     @POST("api/reservations")
-    Call<Reservation> createReservation(@Body Reservation reservation);
+    Call<Reservation> createReservation(@Body Reservation reservation, @Header("Authorization") String token);
 
     @PATCH("api/reservations/cancel/{id}")
     Call<Void> cancelReservation(@Path("id") UUID id);
@@ -91,8 +92,8 @@ public interface ApiService {
     @GET("api/users")
     Call<List<User>> getAllUsers();
 
-    @POST("api/users")
-    Call<User> createUser(@Body User newStaff);
+    @POST("api/users/manage")
+    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
 
     @PUT("api/users/{id}")
     Call<User> updateUser(@Path("id") String id, @Body User user);
