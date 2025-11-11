@@ -10,13 +10,17 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/coffee_primary"
+        >
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Danh sách Đơn hàng" />
+            app:title="Order List"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:titleTextColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="4dp"
-                android:hint="Trạng thái">
+                android:hint="Status">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_status"
@@ -54,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:hint="Nhân viên">
+                android:hint="Server">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_staff"
@@ -69,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:hint="Bàn">
+                android:hint="Table">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_table"

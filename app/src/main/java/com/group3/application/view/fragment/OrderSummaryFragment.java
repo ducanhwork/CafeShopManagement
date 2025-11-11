@@ -63,7 +63,6 @@ public class OrderSummaryFragment extends Fragment {
         RecyclerView rv = view.findViewById(R.id.rvSummary);
         tvHeader = view.findViewById(R.id.tvHeader);
         tvSubtotal = view.findViewById(R.id.tvSubtotal);
-        tvDiscount = view.findViewById(R.id.tvDiscount);
         tvTotal = view.findViewById(R.id.tvTotal);
         MaterialButton btnConfirm = view.findViewById(R.id.btnConfirm);
         tvStaffName = view.findViewById(R.id.tv_staff_name);
@@ -106,7 +105,6 @@ public class OrderSummaryFragment extends Fragment {
 
         orderVM.getTotalAmount().observe(getViewLifecycleOwner(), total -> {
             tvSubtotal.setText(fmt(total) + " đ");
-            tvDiscount.setText(fmt(0d) + " đ");
             tvTotal.setText(fmt(total) + " đ");
         });
 

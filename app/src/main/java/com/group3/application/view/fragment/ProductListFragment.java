@@ -35,7 +35,9 @@ import com.group3.application.model.dto.OrderItemDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.view.OrderHostActivity;
 import com.group3.application.view.adapter.ProductAdapter;
+import com.group3.application.view.adapter.ProductForOrderAdapter;
 import com.group3.application.viewmodel.OrderViewModel;
+import com.group3.application.viewmodel.ProductListForOrderViewModel;
 import com.group3.application.viewmodel.ProductListViewModel;
 
 import java.io.Serializable;
@@ -46,9 +48,9 @@ import java.util.Objects;
 
 public class ProductListFragment extends Fragment {
 
-    private ProductListViewModel productVM;
+    private ProductListForOrderViewModel productVM;
     private OrderViewModel orderVM;
-    private ProductAdapter adapter;
+    private ProductForOrderAdapter adapter;
 
     private SwipeRefreshLayout swipe;
     private RecyclerView rv;
@@ -66,7 +68,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        productVM = new ViewModelProvider(this).get(ProductListViewModel.class);
+        productVM = new ViewModelProvider(this).get(ProductListForOrderViewModel.class);
         orderVM = new ViewModelProvider(requireActivity()).get(OrderViewModel.class);
     }
 
@@ -116,12 +118,12 @@ public class ProductListFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        productVM = new ViewModelProvider(this).get(ProductListViewModel.class);
+        productVM = new ViewModelProvider(this).get(ProductListForOrderViewModel.class);
         orderVM = new ViewModelProvider(requireActivity()).get(OrderViewModel.class);
     }
 
     private void setupAdapter() {
-        adapter = new ProductAdapter((product, newQuantity) -> orderVM.addOrUpdateItem(product, newQuantity));
+        adapter = new ProductForOrderAdapter((product, newQuantity) -> orderVM.addOrUpdateItem(product, newQuantity));
         rv.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         rv.setAdapter(adapter);
 
@@ -177,12 +179,12 @@ public class ProductListFragment extends Fragment {
             categoryData.clear();
             if (list != null) categoryData.addAll(list);
             List<String> display = new ArrayList<>();
-            display.add("Tất cả");
+            display.add("All");
             for (Category c : categoryData) display.add(c.getName());
             catAdapter.clear();
             catAdapter.addAll(display);
             catAdapter.notifyDataSetChanged();
-            actCategory.setText("Tất cả", false);
+            actCategory.setText("All", false);
         });
 
         orderVM.getCurrentOrderItems().observe(getViewLifecycleOwner(), adapter::setOrderItems);
@@ -227,7 +229,7 @@ public class ProductListFragment extends Fragment {
 
     private String currentCategoryIdFromUi() {
         String label = safeText(actCategory);
-        if (label == null || label.isEmpty() || "Tất cả".equalsIgnoreCase(label)) return null;
+        if (label == null || label.isEmpty() || "All".equalsIgnoreCase(label)) return null;
         for (Category c : categoryData) if (label.equals(c.getName())) return c.getId();
         return null;
     }

@@ -38,10 +38,9 @@ public class OrderRepository {
         void onResult(APIResult<T> result);
     }
 
-    public void getOrderDetails(String orderId, OnResultListener<Order> listener) {
-        String authToken = getAuthToken();
+    public void getOrderDetails(String authToken, String orderId, OnResultListener<Order> listener) {
         if (authToken == null) {
-            listener.onResult(new APIResult<>(false, "Người dùng chưa đăng nhập.", null));
+            listener.onResult(new APIResult<>(false, "User did not login.", null));
             return;
         }
         apiService.getOrderDetails(authToken, orderId).enqueue(new Callback<Order>() {
@@ -67,7 +66,7 @@ public class OrderRepository {
     public void getOrders(String status, String tableId, String staffId, OnResultListener<List<Order>> listener) {
         String authToken = getAuthToken();
         if (authToken == null) {
-            listener.onResult(new APIResult<>(false, "Người dùng chưa đăng nhập.", null));
+            listener.onResult(new APIResult<>(false, "User did not login.", null));
             return;
         }
         apiService.getOrders(authToken, status, tableId, staffId).enqueue(new Callback<List<Order>>() {
@@ -93,7 +92,7 @@ public class OrderRepository {
     public void createOrder(List<String> tableIds, List<OrderItemDTO> orderItems, String note, OnResultListener<Object> listener) {
         String authToken = getAuthToken();
         if (authToken == null) {
-            listener.onResult(new APIResult<>(false, "Người dùng chưa đăng nhập.", null));
+            listener.onResult(new APIResult<>(false, "User did not login.", null));
             return;
         }
         OrderRequest orderRequest = new OrderRequest(tableIds, orderItems, note);
@@ -103,18 +102,16 @@ public class OrderRepository {
     public void updateOrderItems(String orderId, List<OrderItemDTO> items, String note, OnResultListener<Object> listener) {
         String authToken = getAuthToken();
         if (authToken == null) {
-            listener.onResult(new APIResult<>(false, "Người dùng chưa đăng nhập.", null));
+            listener.onResult(new APIResult<>(false, "User did not login.", null));
             return;
         }
         OrderRequest updateRequest = new OrderRequest(null, items, note);
         apiService.updateOrderItems(authToken, orderId, updateRequest).enqueue(new DefaultCallback<>(listener));
     }
 
-    public void updateOrder(String orderId, OrderUpdateDTO updateData, OnResultListener<APIResult> listener) {
-
-        String authToken = getAuthToken();
+    public void updateOrder(String authToken, String orderId, OrderUpdateDTO updateData, OnResultListener<APIResult> listener) {
         if (authToken == null) {
-            listener.onResult(new APIResult(false, "Người dùng chưa đăng nhập.", null));
+            listener.onResult(new APIResult(false, "User did not login.", null));
             return;
         }
 

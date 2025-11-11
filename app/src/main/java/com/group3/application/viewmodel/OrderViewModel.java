@@ -13,9 +13,10 @@ import com.google.gson.Gson;
 import com.group3.application.common.utils.Event;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.OrderItemDTO;
+import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.entity.Order;
-import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.User;
+import com.group3.application.model.repository.AuthRepository;
 import com.group3.application.model.repository.OrderRepository;
 import com.group3.application.model.repository.UserRepository;
 
@@ -28,6 +29,7 @@ public class OrderViewModel extends AndroidViewModel {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     private final MutableLiveData<List<OrderItemDTO>> currentOrderItems;
     private final MediatorLiveData<Double> totalAmount = new MediatorLiveData<>();
@@ -46,6 +48,7 @@ public class OrderViewModel extends AndroidViewModel {
         super(application);
         this.orderRepository = new OrderRepository(application);
         this.userRepository = new UserRepository(application);
+        this.authRepository = new AuthRepository(application);
         this.currentOrderItems = new MutableLiveData<>(new ArrayList<>());
 
         totalAmount.addSource(currentOrderItems, items -> {
@@ -77,7 +80,12 @@ public class OrderViewModel extends AndroidViewModel {
     public void loadExistingOrder(String orderId) {
         this.editOrderId = orderId;
         this.isEditMode = true;
-        orderRepository.getOrderDetails(orderId, result -> {
+        String token = authRepository.getAuthToken();
+        if (token == null) {
+            _orderSubmissionResult.postValue(new Event<>(new APIResult(false, "Lỗi xác thực, vui lòng đăng nhập lại.", null)));
+            return;
+        }
+        orderRepository.getOrderDetails(token, orderId, result -> {
             if (result.isSuccess() && result.getData() != null) {
                 Order order = result.getData();
                 List<OrderItemDTO> existingItems = order.getItems().stream()
@@ -90,7 +98,7 @@ public class OrderViewModel extends AndroidViewModel {
         });
     }
 
-    public void addOrUpdateItem(Product product, int quantity) {
+    public void addOrUpdateItem(ProductForOrder product, int quantity) {
         List<OrderItemDTO> currentList = currentOrderItems.getValue();
         if (currentList == null) currentList = new ArrayList<>();
 
