@@ -19,6 +19,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.common.util.Resource;
+import com.group3.application.common.validator.LoyaltyValidator;
+import com.group3.application.common.validator.ValidationResult;
+import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.dto.BillCalculationResponse;
 import com.group3.application.model.dto.BillResponse;
 import com.group3.application.model.dto.CustomerSearchResponse;
@@ -112,12 +115,14 @@ public class GenerateBillActivity extends AppCompatActivity {
 
         btnSearchCustomer.setOnClickListener(v -> {
             String inputPhone = edtCustomerPhone.getText().toString().trim();
-            if (!inputPhone.isEmpty()) {
-                phone = inputPhone;
-                generateBillViewModel.searchCustomer(inputPhone);
-            } else {
-                Toast.makeText(this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
+            ValidationResult result = LoyaltyValidator.validatePhone(inputPhone);
+
+            if (!result.isValid && "phone".equals(result.errorField)) {
+                Toast.makeText(this, result.errorMessage, Toast.LENGTH_SHORT).show();
+                return;
             }
+            phone = inputPhone;
+            generateBillViewModel.searchCustomer(inputPhone);
         });
 
         btnApplyVoucher.setOnClickListener(v -> {
