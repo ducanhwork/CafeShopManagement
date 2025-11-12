@@ -42,7 +42,7 @@ public class BillListActivity extends AppCompatActivity implements BillSummaryAd
 
         RecyclerView rvBillList = findViewById(R.id.rv_bill_list);
         rvBillList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new BillSummaryAdapter(this);
+        adapter = new BillSummaryAdapter(this, this);
         rvBillList.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(BillListViewModel.class);
