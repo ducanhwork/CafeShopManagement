@@ -161,10 +161,14 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     private void loadCurrentUser() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(LoginViewModel.PREF_NAME, android.content.Context.MODE_PRIVATE);
-        String userJson = sharedPreferences.getString(LoginViewModel.KEY_USER, null);
-        if (userJson != null) {
-            _currentUser.setValue(new Gson().fromJson(userJson, User.class));
-        }
+        authRepository.getMyProfile(new AuthRepository.OnGetProfileCompleteListener() {
+            @Override
+            public void onGetProfileComplete(APIResult result) {
+                if (result.isSuccess() && result.getData() != null) {
+                    _currentUser.postValue((User) result.getData());
+                }
+            }
+        });
     }
+
 }

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.PeriodItemReportDTO;
 import com.group3.application.model.dto.RevenueReportDTO;
+import com.group3.application.model.dto.StockReportDTO;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
 
@@ -77,6 +78,30 @@ public class ReportRepository {
             }
             @Override
             public void onFailure(Call<List<PeriodItemReportDTO>> call, Throwable t) {
+                callback.onComplete(new APIResult<>(false, "Lỗi mạng: " + t.getMessage(), null));
+            }
+        });
+    }
+
+    public void getStockReport(RepositoryCallback<APIResult<StockReportDTO>> callback) {
+
+        String authToken = getAuthToken();
+        if (authToken == null) {
+            callback.onComplete(new APIResult<>(false, "Người dùng chưa đăng nhập.", null));
+            return;
+        }
+
+        apiService.getStockReport(authToken).enqueue(new Callback<StockReportDTO>() {
+            @Override
+            public void onResponse(Call<StockReportDTO> call, Response<StockReportDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onComplete(new APIResult<>(true, "Success", response.body()));
+                } else {
+                    callback.onComplete(new APIResult<>(false, "Lỗi server: " + response.code(), null));
+                }
+            }
+            @Override
+            public void onFailure(Call<StockReportDTO> call, Throwable t) {
                 callback.onComplete(new APIResult<>(false, "Lỗi mạng: " + t.getMessage(), null));
             }
         });

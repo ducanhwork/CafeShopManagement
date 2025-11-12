@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.StockReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ItemReportActivity"
             android:exported="false" />
         <activity
@@ -70,7 +73,7 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".view.ProductListActivity"
             android:exported="false" />
@@ -104,7 +107,8 @@
         <activity
             android:name=".view.RevenueReportActivity"
             android:exported="false" />
-        <activity android:name=".view.ReportManagementActivity"
+        <activity
+            android:name=".view.ReportManagementActivity"
             android:exported="false" />
     </application>
 

@@ -23,7 +23,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.view.adapter.RevenueReportAdapter;
-import com.group3.application.viewmodel.ReportViewModel;
+import com.group3.application.viewmodel.RevenueReportViewModel;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -34,7 +34,7 @@ import java.time.format.DateTimeFormatter;
 
 public class RevenueReportActivity extends AppCompatActivity {
 
-    private ReportViewModel viewModel;
+    private RevenueReportViewModel viewModel;
     private RevenueReportAdapter adapter;
 
     private ProgressBar progressBar;
@@ -52,7 +52,7 @@ public class RevenueReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_revenue_report);
 
         setupViews();
-        viewModel = new ViewModelProvider(this).get(ReportViewModel.class);
+        viewModel = new ViewModelProvider(this).get(RevenueReportViewModel.class);
         setupAdapter();
         setupListeners();
 
@@ -153,18 +153,14 @@ public class RevenueReportActivity extends AppCompatActivity {
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker()
                 .setTitleText(isDateFrom ? "Chọn ngày bắt đầu" : "Chọn ngày kết thúc")
                 .setSelection(currentSelection);
-
-        // --- Bắt đầu logic Validation ---
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
         if (isDateFrom) {
-            // Nếu chọn NGÀY BẮT ĐẦU, không được chọn sau ngày kết thúc
             if (toDate != null) {
                 long toDateMillis = toDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 constraintsBuilder.setEnd(toDateMillis);
                 constraintsBuilder.setValidator(DateValidatorPointBackward.before(toDateMillis));
             }
         } else {
-            // Nếu chọn NGÀY KẾT THÚC, không được chọn trước ngày bắt đầu
             if (fromDate != null) {
                 long fromDateMillis = fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 constraintsBuilder.setStart(fromDateMillis);
@@ -172,7 +168,6 @@ public class RevenueReportActivity extends AppCompatActivity {
             }
         }
         builder.setCalendarConstraints(constraintsBuilder.build());
-        // --- Kết thúc logic Validation ---
 
         MaterialDatePicker<Long> datePicker = builder.build();
 

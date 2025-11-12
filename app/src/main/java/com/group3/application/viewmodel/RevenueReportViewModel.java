@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.repository.ReportRepository;
 
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ReportViewModel extends AndroidViewModel {
+public class RevenueReportViewModel extends AndroidViewModel {
     private final ReportRepository reportRepository;
     public final MutableLiveData<RevenueReportDTO> report = new MutableLiveData<>();
     public final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
@@ -23,14 +22,11 @@ public class ReportViewModel extends AndroidViewModel {
     public final MutableLiveData<LocalDate> dateFrom = new MutableLiveData<>();
     public final MutableLiveData<LocalDate> dateTo = new MutableLiveData<>();
     public final MutableLiveData<String> filterBy = new MutableLiveData<>();
-
-    // Sửa lại formatter để gửi lên server đúng định dạng LocalDateTime
     private final DateTimeFormatter apiFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-    public ReportViewModel(@NonNull Application application) {
+    public RevenueReportViewModel(@NonNull Application application) {
         super(application);
         this.reportRepository = new ReportRepository(application);
-        // Thiết lập giá trị mặc định
         dateFrom.setValue(LocalDate.now());
         dateTo.setValue(LocalDate.now());
         filterBy.setValue("Day");
@@ -52,7 +48,6 @@ public class ReportViewModel extends AndroidViewModel {
     public void fetchReport() {
         isLoading.setValue(true);
 
-        // Chuyển đổi LocalDate thành LocalDateTime để gửi đi
         LocalDateTime fromDateTime = dateFrom.getValue() != null ? dateFrom.getValue().atStartOfDay() : null;
         LocalDateTime toDateTime = dateTo.getValue() != null ? dateTo.getValue().atTime(23, 59, 59) : null;
 

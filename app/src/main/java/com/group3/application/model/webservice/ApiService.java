@@ -5,6 +5,7 @@ import com.group3.application.model.dto.OrderUpdateDTO;
 import com.group3.application.model.dto.PeriodItemReportDTO;
 import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.dto.RevenueReportDTO;
+import com.group3.application.model.dto.StockReportDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
@@ -209,5 +210,10 @@ public interface ApiService {
             @Query("dateFrom") String dateFrom,
             @Query("dateTo") String dateTo,
             @Query("filterBy") String filterBy
+    );
+
+    @GET("api/reports/stock")
+    Call<StockReportDTO> getStockReport(
+            @Header("Authorization") String authToken
     );
 }

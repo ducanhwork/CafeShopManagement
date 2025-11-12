@@ -14,7 +14,7 @@ import com.group3.application.R;
 public class ReportManagementActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private MaterialCardView cardRevenueReport, cardItemReport;
+    private MaterialCardView cardRevenueReport, cardItemReport, cardStockReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,8 @@ public class ReportManagementActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_report_management);
         cardRevenueReport = findViewById(R.id.card_revenue_report);
         cardItemReport = findViewById(R.id.card_item_report);
+        cardStockReport = findViewById(R.id.card_stock_report);
+
 
         setupToolbar();
         setupClickListeners();
@@ -46,6 +48,11 @@ public class ReportManagementActivity extends AppCompatActivity {
         cardItemReport.setOnClickListener(v -> {
              Intent intent = new Intent(ReportManagementActivity.this, ItemReportActivity.class);
              startActivity(intent);
+        });
+
+        cardStockReport.setOnClickListener(v -> {
+            Intent intent = new Intent(ReportManagementActivity.this, StockReportActivity.class);
+            startActivity(intent);
         });
     }
 
