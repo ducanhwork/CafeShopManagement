@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.OrderAndBillManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.StockReportActivity"
             android:exported="false" />
         <activity
@@ -49,6 +52,9 @@
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".view.OrderHostActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.OrderListActivity"
             android:exported="true" />
         <activity
@@ -66,9 +72,6 @@
             android:exported="false"
             android:parentActivityName=".view.ReservationListActivity" />
         <activity
-            android:name=".view.OrderHostActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.ProfileActivity"
             android:exported="false" />
         <activity
@@ -78,13 +81,22 @@
             android:name=".view.ProductListActivity"
             android:exported="false" />
         <activity
+            android:name=".view.BillListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.GenerateBillActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.VoucherManagementActivity"
             android:exported="false" />
         <activity
             android:name=".view.LoyaltyListActivity"
             android:exported="false" />
         <activity
-            android:name=".view.HomeMenuActivity"
+            android:name=".view.VoucherAndLoyaltyManagementActivity"
             android:exported="true" />
         <activity
             android:name=".view.TableListActivity"

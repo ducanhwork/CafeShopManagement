@@ -93,7 +93,7 @@ public class ReservationViewModel extends AndroidViewModel {
         isLoading.setValue(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString, formatter);
-        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "confirmed", null, UUID.fromString(tableId));
+        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "Confirmed", null, UUID.fromString(tableId));
 
         String token = getAuthToken();
         if (token == null) {

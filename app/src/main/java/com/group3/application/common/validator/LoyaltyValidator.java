@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 public class LoyaltyValidator {
 
-    // Lấy regex từ code backend của bạn
     private static final Pattern PHONE_RE = Pattern.compile("^[0-9+][0-9]{7,14}$");
     private static final Pattern EMAIL_RE = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
@@ -16,12 +15,10 @@ public class LoyaltyValidator {
         String phone = req.getPhone();
         String email = req.getEmail();
 
-        // 1. Kiểm tra Tên
         if (TextUtils.isEmpty(name) || name.trim().isEmpty()) {
             return ValidationResult.failure("name", "Tên không được để trống");
         }
 
-        // 2. Kiểm tra SĐT
         if (TextUtils.isEmpty(phone) || phone.trim().isEmpty()) {
             return ValidationResult.failure("phone", "SĐT không được để trống");
         }
@@ -29,7 +26,6 @@ public class LoyaltyValidator {
             return ValidationResult.failure("phone", "Định dạng SĐT không hợp lệ (8-15 số, bắt đầu bằng số hoặc +)");
         }
 
-        // 3. Kiểm tra Email (không bắt buộc)
         if (email != null && !email.trim().isEmpty()) {
             if (!EMAIL_RE.matcher(email.trim()).matches()) {
                 return ValidationResult.failure("email", "Định dạng email không hợp lệ");

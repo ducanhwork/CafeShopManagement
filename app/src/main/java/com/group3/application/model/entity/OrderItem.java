@@ -9,7 +9,6 @@ public class OrderItem {
     private double subtotal;
     private String imageUrl;
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

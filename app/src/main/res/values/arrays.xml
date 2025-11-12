@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="voucher_types">
         <item>PERCENT</item>
@@ -8,5 +7,14 @@
     <string-array name="voucher_statuses">
         <item>ACTIVE</item>
         <item>INACTIVE</item>
+    </string-array>
+    <string-array name="payment_methods_display">
+        <item>Tiền mặt</item>
+        <item>Chuyển khoản</item>
+    </string-array>
+
+    <string-array name="payment_methods_values">
+        <item>cash</item>
+        <item>banking</item>
     </string-array>
 </resources>

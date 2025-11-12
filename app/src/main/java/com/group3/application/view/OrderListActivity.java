@@ -70,7 +70,7 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new OrderListAdapter(this); 
+        adapter = new OrderListAdapter(this);
         recyclerView.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(OrderListViewModel.class);
@@ -83,10 +83,23 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
             startActivity(intent);
         });
 
-        viewModel.fetchFilterData(); 
-        viewModel.fetchOrders();    
+        viewModel.fetchFilterData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.fetchOrders();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (viewModel != null) {
+            viewModel.fetchOrders();
+        }
+    }
     private void observeViewModel() {
         viewModel.orders.observe(this, orders -> {
             if (orders != null) {
@@ -139,18 +152,18 @@ public class OrderListActivity extends AppCompatActivity implements OrderListAda
 
         actvStaff.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
-                viewModel.setStaffIdFilter(null); 
+                viewModel.setStaffIdFilter(null);
             } else {
-                User selectedUser = userList.get(position - 1); 
+                User selectedUser = userList.get(position - 1);
                 viewModel.setStaffIdFilter(selectedUser.getId().toString());
             }
         });
 
         actvTable.setOnItemClickListener((parent, view, position, id) -> {
             if (position == 0) {
-                viewModel.setTableIdFilter(null); 
+                viewModel.setTableIdFilter(null);
             } else {
-                TableInfo selectedTable = tableList.get(position - 1); 
+                TableInfo selectedTable = tableList.get(position - 1);
                 viewModel.setTableIdFilter(selectedTable.getId());
             }
         });

@@ -75,15 +75,16 @@ public class UserRepository {
         return apiService.getAllUsers();
     }
 
+
+    public Call<List<Role>> getRoles() {
+        return apiService.getRoles();
+    }
+
     public Call<UserCreateRequest> createUser(UserCreateRequest newStaff) {
         return apiService.createUser(newStaff);
     }
 
     public Call<User> updateUser(User staff) {
         return apiService.updateUser(staff.getId().toString(), staff);
-    }
-
-    public Call<List<Role>> getRoles() {
-        return apiService.getRoles();
     }
 }

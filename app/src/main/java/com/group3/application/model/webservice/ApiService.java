@@ -7,6 +7,20 @@ import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.dto.StockReportDTO;
 import com.group3.application.model.entity.Category;
+import com.group3.application.model.dto.BillCalculationResponse;
+import com.group3.application.model.dto.BillDetailResponse;
+import com.group3.application.model.dto.BillGenerationRequest;
+import com.group3.application.model.dto.BillResponse;
+import com.group3.application.model.dto.BillSummaryDTO;
+import com.group3.application.model.dto.CustomerSearchResponse;
+import com.group3.application.model.dto.NewCustomerRequest;
+import com.group3.application.model.dto.OrderRequest;
+import com.group3.application.model.dto.OrderUpdateDTO;
+import com.group3.application.model.dto.PaymentConfirmationRequest;
+import com.group3.application.model.dto.PaymentConfirmationResponse;
+import com.group3.application.model.dto.PeriodItemReportDTO;
+import com.group3.application.model.dto.ProductForOrder;
+import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
@@ -15,7 +29,6 @@ import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.dto.UserCreateRequest;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.entity.Role;
@@ -25,6 +38,7 @@ import com.group3.application.model.bean.PointsHistoryItem;
 import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.bean.VoucherRequest;
 import com.group3.application.model.bean.VoucherResponse;
+import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
 
@@ -61,6 +75,27 @@ public interface ApiService {
         @Path("id") String tableId,
         @Query("status") String status
     );
+    @POST("api/users/manage")
+    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
+
+    @GET("api/tables?for=order")
+    Call<List<TableInfo>> listTables(
+            @Query("status") String status,
+            @Query("keyword") String keyword
+    );
+
+    @PUT("api/tables/{id}/status")
+    Call<APIResult> updateTableStatus(
+        @Header("Authorization") String authToken,
+        @Path("id") String tableId,
+        @Query("status") String status
+    );
+
+    @GET("api/categories")
+    Call<List<CategoryDTO>> getCategories();
+
+    @POST("api/orders")
+    Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
 
     @GET("api/products")
     Call<List<ProductForOrder>> listProductsForOrder(
@@ -107,12 +142,66 @@ public interface ApiService {
     Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
 
     @POST("api/auth/login")
+    @GET("api/orders")
+    Call<List<Order>> getOrders(
+            @Header("Authorization") String authToken,
+            @Query("status") String status,
+            @Query("tableId") String tableId,
+            @Query("staffId") String staffId
+    );
+
+    @GET("api/orders/{id}")
+    Call<Order> getOrderDetails(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId
+    );
+
+    @PUT("api/orders/{id}")
+    Call<APIResult> updateOrder(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderUpdateDTO updateData
+    );
+
+    @PUT("api/orders/{id}/items")
+    Call<APIResult<Object>> updateOrderItems(
+            @Header("Authorization") String authToken,
+            @Path("id") String orderId,
+            @Body OrderRequest orderRequest
+    );
+
+    @GET("api/reports/revenue")
+    Call<RevenueReportDTO> getRevenueReport(
+        @Header("Authorization") String authToken,
+        @Query("dateFrom") String dateFrom,
+        @Query("dateTo") String dateTo,
+        @Query("filterBy") String filterBy
+    );
+
+    @GET("api/reports/items")
+    Call<List<PeriodItemReportDTO>> getItemReport(
+        @Header("Authorization") String authToken,
+        @Query("dateFrom") String dateFrom,
+        @Query("dateTo") String dateTo,
+        @Query("filterBy") String filterBy
+    );
+    @GET("api/products")
+    Call<List<ProductForOrder>> listProductsForOrder(
+        @Query("status") String status,
+        @Query("categoryId") String categoryId,
+        @Query("keyword") String keyword
+    );
+
+    @GET("api/users")
+    Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
+
+    @POST("api/auth/login")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 
     @PUT("/api/auth/change-password")
     Call<APIResult> changePassword(@Body UpdatePassWordRequest updatePassWordRequest);
 
-    @POST("/api/auth/reset-password")
+    @POST("api/auth/reset-password")
     Call<APIResult> resetPassword(@Body String email);
 
     @GET("api/auth/me")
@@ -220,4 +309,26 @@ public interface ApiService {
     Call<StockReportDTO> getStockReport(
             @Header("Authorization") String authToken
     );
+    @POST("api/v1/loyalty-members/add-member")
+    Call<CustomerSearchResponse> addNewMember(@Body NewCustomerRequest request);
+    @GET("api/v1/loyalty-members/search")
+    Call<CustomerSearchResponse> searchCustomer(@Query("phone") String phone);
+
+    @POST("api/v1/bills/calculate")
+    Call<BillCalculationResponse> calculateBill(@Body BillGenerationRequest request);
+
+    @POST("api/v1/bills/generate")
+    Call<BillResponse> generateBill(@Body BillGenerationRequest request);
+
+    @GET("api/v1/bills/{billId}")
+    Call<BillDetailResponse> getBillDetails(@Path("billId") String billId);
+
+    @POST("api/v1/bills/{billId}/confirm-payment")
+    Call<PaymentConfirmationResponse> confirmPayment(
+            @Path("billId") String billId,
+            @Body PaymentConfirmationRequest request
+    );
+
+    @GET("/api/v1/bills")
+    Call<List<BillSummaryDTO>> getBillList(@Query("date") String date);
 }

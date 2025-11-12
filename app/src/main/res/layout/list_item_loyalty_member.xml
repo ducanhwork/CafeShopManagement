@@ -20,9 +20,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- === CỘT TRÁI: THÔNG TIN CHÍNH === -->
 
-        <!-- 1. Tên thành viên -->
         <TextView
             android:id="@+id/tv_full_name"
             android:layout_width="0dp"

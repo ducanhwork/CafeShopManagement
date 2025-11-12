@@ -53,7 +53,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private Menu menu;
 
     private ExtendedFloatingActionButton fabSaveChanges;
-
+    private MaterialButton btnCreateInvoice;
     private AutoCompleteTextView actStatus;
     private TextInputEditText edtNote;
 
@@ -103,12 +103,25 @@ public class OrderDetailActivity extends AppCompatActivity {
         actStatus = findViewById(R.id.act_detail_status);
         edtNote = findViewById(R.id.edt_detail_note);
         fabSaveChanges = findViewById(R.id.fab_save_changes);
+        btnCreateInvoice = findViewById(R.id.btn_create_invoice);
         String[] orderStatuses = new String[] {"SERVING", "COMPLETED", "CANCELLED"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
                 orderStatuses
         );
+
+        btnCreateInvoice.setOnClickListener(v -> {
+            Order currentOrder = viewModel.order.getValue();
+            if (currentOrder != null) {
+                Intent intent = new Intent(OrderDetailActivity.this, GenerateBillActivity.class);
+                intent.putExtra(GenerateBillActivity.EXTRA_ORDER_ID, currentOrder.getId());
+                intent.putExtra("SUBTOTAL", currentOrder.getTotalAmount());
+                startActivity(intent);
+            } else {
+                Toast.makeText(OrderDetailActivity.this, "Không thể lấy chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         fabSaveChanges.setOnClickListener(v -> {
             String newStatus = actStatus.getText().toString();
@@ -123,6 +136,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         adapter = new OrderDetailItemAdapter();
         recyclerView.setAdapter(adapter);
     }
+
 
     private void setupLaunchers() {
         editItemsLauncher = registerForActivityResult(
@@ -139,6 +153,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         );
         actStatus.setOnItemClickListener((parent, view, position, id) -> {
             fabSaveChanges.show();
+            String selectedStatus = (String) parent.getItemAtPosition(position);
+            btnCreateInvoice.setEnabled("SERVING".equals(selectedStatus));
         });
         edtNote.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -208,7 +224,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         tvTotalAmount.setText("Total: " + formatCurrency(order.getTotalAmount()));
         actStatus.setText(order.getStatus(), false);
         edtNote.setText(order.getNote());
-
+        btnCreateInvoice.setEnabled("SERVING".equals(order.getStatus()));
         adapter.setItems(order.getItems());
     }
 

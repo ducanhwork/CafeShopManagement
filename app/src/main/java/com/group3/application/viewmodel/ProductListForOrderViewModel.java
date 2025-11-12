@@ -1,12 +1,14 @@
 package com.group3.application.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.ProductForOrder;
-import com.group3.application.model.entity.Category;
-import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
 import com.group3.application.model.repository.ProductRepository;
 
@@ -17,12 +19,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductListForOrderViewModel extends ViewModel {
+public class ProductListForOrderViewModel extends AndroidViewModel {
 
-    private final ProductRepository productRepo = new ProductRepository();
-    private final CategoryRepository categoryRepo = new CategoryRepository();
+    private final ProductRepository productRepo;
+    private final CategoryRepository categoryRepo;
 
-    private final MutableLiveData<List<Category>> categories = new MutableLiveData<>();
+    public ProductListForOrderViewModel(
+        @NonNull Application application
+        ) {
+        super(application);
+        this.productRepo = new ProductRepository(application);
+        this.categoryRepo = new CategoryRepository(application);
+    }
+
+    private final MutableLiveData<List<CategoryDTO>> categories = new MutableLiveData<>();
     private final MutableLiveData<List<ProductForOrder>> products = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Boolean> loadingProducts = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> loadingCategories = new MutableLiveData<>(false);
@@ -34,20 +44,20 @@ public class ProductListForOrderViewModel extends ViewModel {
     private String currentCategoryId = null;
     private String currentKeyword = null;
 
-    public LiveData<List<Category>> getCategories() { return categories; }
+    public LiveData<List<CategoryDTO>> getCategories() { return categories; }
     public LiveData<List<ProductForOrder>> getProducts() { return products; }
     public LiveData<Boolean> getLoadingProducts() { return loadingProducts; }
     public LiveData<Boolean> getLoadingCategories() { return loadingCategories; }
     public LiveData<String> getError() { return error; }
 
     public void fetchCategories() {
-        categoryRepo.getCategories().enqueue(new Callback<List<Category>>() {
-            @Override public void onResponse(Call<List<Category>> call, Response<List<Category>> resp) {
+        categoryRepo.getCategories().enqueue(new Callback<List<CategoryDTO>>() {
+            @Override public void onResponse(Call<List<CategoryDTO>> call, Response<List<CategoryDTO>> resp) {
                 if (resp.isSuccessful() && resp.body()!=null) {
                     categories.postValue(resp.body());
                 } else error.postValue("Load categories failed: " + resp.code());
             }
-            @Override public void onFailure(Call<List<Category>> call, Throwable t) {
+            @Override public void onFailure(Call<List<CategoryDTO>> call, Throwable t) {
                 error.postValue(t.getMessage());
             }
         });

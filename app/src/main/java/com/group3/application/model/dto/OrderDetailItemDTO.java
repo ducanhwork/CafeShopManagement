@@ -15,7 +15,6 @@ public class OrderDetailItemDTO {
     @SerializedName("price")
     private double price;
 
-    // Getters and Setters
 
     public String getProductId() {
         return productId;
