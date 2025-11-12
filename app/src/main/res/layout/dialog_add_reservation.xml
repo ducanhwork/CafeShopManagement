@@ -34,12 +34,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Reservation Time (e.g., 2024-07-30 19:00)">
+        android:hint="Reservation Date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_reservation_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Reservation Time">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_reservation_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

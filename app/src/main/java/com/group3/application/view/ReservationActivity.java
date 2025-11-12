@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +15,7 @@ import com.group3.application.model.entity.TableInfo;
 import com.group3.application.view.adapter.TableAdapter;
 import com.group3.application.viewmodel.TableViewModel;
 
-public class ReservationActivity extends BaseDrawerActivity implements TableAdapter.OnItemClick {
+public class ReservationActivity extends AppCompatActivity implements TableAdapter.OnItemClick {
 
     private TableViewModel viewModel;
     private TableAdapter tableAdapter;
@@ -25,6 +27,8 @@ public class ReservationActivity extends BaseDrawerActivity implements TableAdap
 
         RecyclerView tablePanel = findViewById(R.id.table_panel);
         tablePanel.setLayoutManager(new LinearLayoutManager(this));
+
+        setupToolbar();
 
         tableAdapter = new TableAdapter(this);
         tablePanel.setAdapter(tableAdapter);
@@ -48,6 +52,21 @@ public class ReservationActivity extends BaseDrawerActivity implements TableAdap
         });
 
         viewModel.loadTables(null, null);
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Table");
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     @Override
