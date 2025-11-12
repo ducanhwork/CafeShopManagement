@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.group3.application.model.dto.UserCreateRequest;
+import com.group3.application.model.dto.UserUpdateRequest;
 import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.webservice.ApiClient;
@@ -84,7 +85,7 @@ public class UserRepository {
         return apiService.createUser(newStaff);
     }
 
-    public Call<User> updateUser(User staff) {
-        return apiService.updateUser(staff.getId().toString(), staff);
+    public Call<UserUpdateRequest> updateUser(UserUpdateRequest staff) {
+        return apiService.updateUser(staff.getId(), staff);
     }
 }

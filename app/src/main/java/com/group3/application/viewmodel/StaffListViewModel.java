@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.group3.application.model.dto.UserCreateRequest;
+import com.group3.application.model.dto.UserUpdateRequest;
 import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.repository.UserRepository;
@@ -27,7 +28,7 @@ public class StaffListViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
     private final MutableLiveData<UserCreateRequest> createdStaff = new MutableLiveData<>();
-    private final MutableLiveData<User> updatedStaff = new MutableLiveData<>();
+    private final MutableLiveData<UserUpdateRequest> updatedStaff = new MutableLiveData<>();
 
     public LiveData<List<User>> getStaffs() {
         return staffs;
@@ -49,7 +50,7 @@ public class StaffListViewModel extends ViewModel {
         return createdStaff;
     }
 
-    public LiveData<User> getUpdatedStaff() {
+    public LiveData<UserUpdateRequest> getUpdatedStaff() {
         return updatedStaff;
     }
 
@@ -107,11 +108,6 @@ public class StaffListViewModel extends ViewModel {
                 } else {
                     try {
                         error.setValue("Failed to create staff: " + response.errorBody().string());
-                        Log.e("email", newStaff.getEmail());
-                        Log.e("password", newStaff.getPassword());
-                        Log.e("name", newStaff.getFullname());
-                        Log.e("mobile", newStaff.getMobile());
-                        Log.e("role", newStaff.getRoleId());
                     } catch (IOException e) {
                         error.setValue("Failed to create staff and could not parse error body.");
                     }
@@ -127,11 +123,11 @@ public class StaffListViewModel extends ViewModel {
         });
     }
 
-    public void updateUser(User staff) {
+    public void updateUser(UserUpdateRequest staff) {
         isLoading.setValue(true);
-        staffRepository.updateUser(staff).enqueue(new Callback<User>() {
+        staffRepository.updateUser(staff).enqueue(new Callback<UserUpdateRequest>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserUpdateRequest> call, Response<UserUpdateRequest> response) {
                 if (response.isSuccessful()) {
                     updatedStaff.setValue(response.body());
                 } else {
@@ -145,7 +141,7 @@ public class StaffListViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<UserUpdateRequest> call, Throwable t) {
                 error.setValue(t.getMessage());
                 isLoading.setValue(false);
             }
