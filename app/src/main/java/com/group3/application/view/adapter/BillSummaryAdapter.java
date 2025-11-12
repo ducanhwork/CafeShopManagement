@@ -1,5 +1,6 @@
 package com.group3.application.view.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.application.R;
+import com.group3.application.common.util.DisplayMapperUtil;
 import com.group3.application.model.dto.BillResponse;
 import com.group3.application.model.dto.BillSummaryDTO;
 import com.group3.application.model.entity.Order;
@@ -26,12 +28,13 @@ public class BillSummaryAdapter extends RecyclerView.Adapter<BillSummaryAdapter.
     private final DecimalFormat currencyFormatter = new DecimalFormat("#,###,### đ");
 
     private final OnBillClickListener clickListener;
-
+    private final Context context;
     public interface OnBillClickListener {
         void onBillClick(BillSummaryDTO bill);
     }
 
-    public BillSummaryAdapter(BillSummaryAdapter.OnBillClickListener clickListener) {
+    public BillSummaryAdapter(Context context, BillSummaryAdapter.OnBillClickListener clickListener) {
+        this.context = context;
         this.clickListener = clickListener;
     }
 
@@ -89,9 +92,13 @@ public class BillSummaryAdapter extends RecyclerView.Adapter<BillSummaryAdapter.
             itemView.setTag(bill);
             tvIssuedTime.setText("Thời gian: " + bill.getIssuedTime().format(timeFormatter));
             tvCashierName.setText("Thu ngân: " + bill.getCashierName());
+
             tvFinalAmount.setText("Tổng tiền: " + currencyFormatter.format(bill.getFinalAmount()));
-            tvPaymentStatus.setText("Trạng thái: " + bill.getPaymentStatus());
-            tvPaymentMethod.setText("Phương thức: " + bill.getPaymentMethod());
+            String displayStatus = DisplayMapperUtil.mapPaymentStatus(bill.getPaymentStatus());
+            tvPaymentStatus.setText("Trạng thái: " + displayStatus);
+
+            String displayMethod = DisplayMapperUtil.mapPaymentMethod(itemView.getContext(), bill.getPaymentMethod());
+            tvPaymentMethod.setText("Phương thức: " + displayMethod);
         }
     }
 }

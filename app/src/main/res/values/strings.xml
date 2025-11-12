@@ -6,6 +6,40 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="staff_list">Staff List</string>
     <string name="no_staff_found">No Staff Found</string>
+    
+    <!-- Shift Management -->
+    <string name="no_shift">No Active Shift</string>
+    <string name="shift_management">Shift Management</string>
+    <string name="start_shift">Start Shift</string>
+    <string name="end_shift">End Shift</string>
+    <string name="record_transaction">Record Transaction</string>
+    <string name="view_transactions">View Transactions</string>
+    
+    <!-- Table Management -->
+    <string name="table_management">Table Management</string>
+    <string name="add_table">Add Table</string>
+    <string name="edit_table">Edit Table</string>
+    <string name="delete_table">Delete Table</string>
+    <string name="table_name">Table Name</string>
+    <string name="table_location">Location</string>
+    <string name="seat_count">Seat Count</string>
+    <string name="table_status">Status</string>
+    
+    <!-- Inventory Management -->
+    <string name="inventory_management">Inventory Management</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="edit_ingredient">Edit Ingredient</string>
+    <string name="delete_ingredient">Delete Ingredient</string>
+    <string name="add_stock">Add Stock</string>
+    <string name="low_stock_alerts">Low Stock Alerts</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="ingredient_price">Price</string>
+    <string name="reorder_level">Reorder Level</string>
+    <string name="quantity_in_stock">Quantity in Stock</string>
+    
+    <!-- Shift History -->
+    <string name="shift_history">Shift History</string>
+    <string name="filter_shifts">Filter Shifts</string>
     <string-array name="staff_roles">
         <item>Manager</item>
         <item>Cashier</item>
@@ -13,3 +47,4 @@
         <item>Waiter</item>
     </string-array>
 </resources>
+

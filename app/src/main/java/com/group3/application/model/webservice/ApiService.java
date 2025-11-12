@@ -17,10 +17,22 @@ import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
+import com.group3.application.model.dto.CashBalanceResponse;
+import com.group3.application.model.dto.CashTransactionRequest;
 import com.group3.application.model.dto.CategoryDTO;
+import com.group3.application.model.dto.CreateTableRequest;
+import com.group3.application.model.dto.EndShiftRequest;
+import com.group3.application.model.dto.IncomingStockRequest;
+import com.group3.application.model.dto.IngredientRequest;
+import com.group3.application.model.dto.PageResponse;
+import com.group3.application.model.dto.StartShiftRequest;
 import com.group3.application.model.dto.UpdatePassWordRequest;
+import com.group3.application.model.dto.UpdateTableRequest;
 import com.group3.application.model.dto.UserCreateRequest;
 import com.group3.application.model.dto.UserUpdateRequest;
+import com.group3.application.model.entity.CashTransaction;
+import com.group3.application.model.entity.Ingredient;
+import com.group3.application.model.entity.LowStockNotification;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.entity.Role;
@@ -30,6 +42,8 @@ import com.group3.application.model.bean.PointsHistoryItem;
 import com.group3.application.model.bean.UpdateLoyaltyMemberRequest;
 import com.group3.application.model.bean.VoucherRequest;
 import com.group3.application.model.bean.VoucherResponse;
+import com.group3.application.model.entity.Shift;
+import com.group3.application.model.entity.StockTransaction;
 import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.entity.User;
@@ -42,6 +56,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -220,6 +235,94 @@ public interface ApiService {
     Call<List<PointsHistoryItem>> getPointsHistory(
             @Path("customerId") UUID customerId
     );
+
+    // ==================== SHIFT MANAGEMENT ENDPOINTS ====================
+    
+    @POST("api/shifts/start")
+    Call<Shift> startShift(@Header("Authorization") String token, @Body StartShiftRequest request);
+
+    @GET("api/shifts/current")
+    Call<Shift> getCurrentShift(@Header("Authorization") String token);
+
+    @POST("api/shifts/end")
+    Call<Shift> endShift(@Header("Authorization") String token, @Body EndShiftRequest request);
+
+    @POST("api/shifts/cash/record")
+    Call<CashTransaction> recordCashTransaction(@Header("Authorization") String token, @Body CashTransactionRequest request);
+
+    @GET("api/shifts/cash/balance")
+    Call<CashBalanceResponse> getCashBalance(@Header("Authorization") String token);
+
+    @GET("api/shifts/{shiftId}/cash-transactions")
+    Call<List<CashTransaction>> getCashTransactions(@Header("Authorization") String token, @Path("shiftId") UUID shiftId);
+
+    @GET("api/shifts")
+    Call<PageResponse<Shift>> getAllShifts(
+            @Header("Authorization") String token,
+            @Query("status") String status,
+            @Query("userId") UUID userId,
+            @Query("startDate") String startDate,
+            @Query("endDate") String endDate,
+            @Query("page") Integer page,
+            @Query("size") Integer size
+    );
+
+    // ==================== TABLE MANAGEMENT ENDPOINTS ====================
+    
+    @GET("api/tables/manager/all")
+    Call<PageResponse<TableInfo>> getAllTablesWithPagination(
+            @Header("Authorization") String token,
+            @Query("status") String status,
+            @Query("location") String location,
+            @Query("minSeatCount") Integer minSeatCount,
+            @Query("page") Integer page,
+            @Query("size") Integer size,
+            @Query("sort") String sort
+    );
+
+    @GET("api/tables/{id}")
+    Call<TableInfo> getTableById(@Header("Authorization") String token, @Path("id") String id);
+
+    @POST("api/tables")
+    Call<TableInfo> createTable(@Header("Authorization") String token, @Body CreateTableRequest request);
+
+    @PUT("api/tables/{id}")
+    Call<TableInfo> updateTable(@Header("Authorization") String token, @Path("id") String id, @Body UpdateTableRequest request);
+
+    @PATCH("api/tables/{id}/status")
+    Call<TableInfo> updateTableStatus(@Header("Authorization") String token, @Path("id") String id, @Body Map<String, String> status);
+
+    @DELETE("api/tables/{id}")
+    Call<Map<String, String>> deleteTable(@Header("Authorization") String token, @Path("id") String id);
+
+    // ==================== INVENTORY MANAGEMENT ENDPOINTS ====================
+    
+    @POST("api/inventory/ingredients")
+    Call<Ingredient> addIngredient(@Header("Authorization") String token, @Body IngredientRequest request);
+
+    @PUT("api/inventory/ingredients/{id}")
+    Call<Ingredient> updateIngredient(@Header("Authorization") String token, @Path("id") UUID id, @Body IngredientRequest request);
+
+    @DELETE("api/inventory/ingredients/{id}")
+    Call<Void> deleteIngredient(@Header("Authorization") String token, @Path("id") UUID id);
+
+    @GET("api/inventory/ingredients/{id}")
+    Call<Ingredient> getIngredient(@Header("Authorization") String token, @Path("id") UUID id);
+
+    @GET("api/inventory/ingredients")
+    Call<List<Ingredient>> listIngredients(@Header("Authorization") String token);
+
+    @GET("api/inventory/ingredients/search")
+    Call<List<Ingredient>> searchIngredients(@Header("Authorization") String token, @Query("name") String name);
+
+    @POST("api/inventory/stock/incoming")
+    Call<StockTransaction> addIncomingStock(@Header("Authorization") String token, @Body IncomingStockRequest request);
+
+    @GET("api/inventory/transactions/{productId}")
+    Call<List<StockTransaction>> getTransactionHistory(@Header("Authorization") String token, @Path("productId") UUID productId);
+
+    @GET("api/inventory/low-stock")
+    Call<List<LowStockNotification>> getLowStockNotifications(@Header("Authorization") String token);
 
     @POST("api/v1/loyalty-members/add-member")
     Call<CustomerSearchResponse> addNewMember(@Body NewCustomerRequest request);

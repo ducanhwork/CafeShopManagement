@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Quản lý Bán hàng"
+            app:title="Quản lý Hóa đơn, thanh toán"
             app:navigationIcon="@drawable/ic_arrow_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quản lý Đơn hàng"
+                android:text="Tạo Hóa đơn"
                 android:layout_gravity="center"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 

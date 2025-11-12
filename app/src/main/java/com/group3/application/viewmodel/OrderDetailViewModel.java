@@ -33,7 +33,7 @@ public class OrderDetailViewModel extends AndroidViewModel {
     public OrderDetailViewModel(@NonNull Application application) {
         super(application);
         orderRepository = new OrderRepository(application);
-        tableRepository = new TableRepository();
+        tableRepository = new TableRepository(application.getApplicationContext());
         authRepository = new AuthRepository(application);
     }
 
