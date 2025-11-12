@@ -28,7 +28,6 @@ public class AdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardManageOrders;
     private MaterialCardView cardManageVouchers;
     private MaterialCardView cardManageReservations;
-    private MaterialCardView cardManageBills;
     private MaterialCardView cardManageStaffs;
     private MaterialCardView cardManageTables;
     private MaterialCardView cardManageInventory;
@@ -62,7 +61,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageTables = findViewById(R.id.card_manage_tables);
         cardManageInventory = findViewById(R.id.card_manage_inventory);
         cardShiftHistory = findViewById(R.id.card_shift_history);
-        cardManageBills = findViewById(R.id.card_manage_bills);
         tvCurrentDate = findViewById(R.id.tv_current_date);
     }
 
@@ -141,11 +139,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardShiftHistory.setOnClickListener(v -> {
             Intent intent = new Intent(AdminHomeActivity.this, ShiftHistoryActivity.class);
             startActivity(intent);
-        });
-
-        cardManageBills.setOnClickListener(v -> {
-            Intent i = new Intent(this, OrderAndBillManagementActivity.class);
-            startActivity(i);
         });
     }
 
