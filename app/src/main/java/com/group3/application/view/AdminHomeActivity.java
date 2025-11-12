@@ -29,6 +29,9 @@ public class AdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardManageVouchers;
     private MaterialCardView cardManageReservations;
     private MaterialCardView cardManageStaffs;
+    private MaterialCardView cardManageTables;
+    private MaterialCardView cardManageInventory;
+    private MaterialCardView cardShiftHistory;
     private TextView tvCurrentDate;
 
     @Override
@@ -55,6 +58,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         cardManageReservations = findViewById(R.id.card_manage_reservation);
         cardManageStaffs = findViewById(R.id.card_manage_staffs);
+        cardManageTables = findViewById(R.id.card_manage_tables);
+        cardManageInventory = findViewById(R.id.card_manage_inventory);
+        cardShiftHistory = findViewById(R.id.card_shift_history);
         tvCurrentDate = findViewById(R.id.tv_current_date);
     }
 
@@ -120,6 +126,21 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         cardManageStaffs.setOnClickListener(v -> {
             Intent intent = new Intent(AdminHomeActivity.this, StaffListActivity.class);
+            startActivity(intent);
+        });
+
+        cardManageTables.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, TableManagementActivity.class);
+            startActivity(intent);
+        });
+
+        cardManageInventory.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, InventoryManagementActivity.class);
+            startActivity(intent);
+        });
+
+        cardShiftHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, ShiftHistoryActivity.class);
             startActivity(intent);
         });
     }
