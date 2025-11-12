@@ -59,7 +59,7 @@ public class ReservationActivity extends AppCompatActivity implements TableAdapt
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Reservations");
+            getSupportActionBar().setTitle("Table");
         }
     }
 

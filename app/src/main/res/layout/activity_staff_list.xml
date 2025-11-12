@@ -49,5 +49,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Add Staff"
-        app:srcCompat="@drawable/ic_add" />
+        app:backgroundTint="@color/coffee_primary"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
