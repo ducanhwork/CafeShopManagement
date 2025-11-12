@@ -278,7 +278,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Tạo, xem và quản lý đặt bàn"
+                            android:text="Create, View and manage reservations"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -324,7 +324,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quản lý nhân viên"
+                            android:text="Staff Management"
                             android:textColor="@color/coffee_primary_dark"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -333,7 +333,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Tạo, xem và quản lý nhân viên"
+                            android:text="Create, View and manage staff"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
