@@ -218,7 +218,6 @@ public class VoucherViewModel extends ViewModel {
         if (!Objects.equals(old.startDate, req.startDate)) map.put("startDate", req.startDate);
         if (!Objects.equals(old.endDate, req.endDate)) map.put("endDate", req.endDate);
 
-        // So sánh Double cần cẩn thận
         if (req.value != null && (old.value == null || old.value.doubleValue() != req.value)) {
             map.put("value", req.value);
         }
@@ -228,7 +227,6 @@ public class VoucherViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        // Hủy các cuộc gọi mạng đang chạy nếu ViewModel bị hủy
         if (listInFlight != null) listInFlight.cancel();
         if (detailInFlight != null) detailInFlight.cancel();
         if (saveInFlight != null) saveInFlight.cancel();

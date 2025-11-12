@@ -107,6 +107,14 @@ public class AuthRepository {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false) && (prefs.getString(KEY_AUTH_TOKEN, null) != null);
     }
 
+    public String getAuthToken() {
+        SharedPreferences prefs = application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString(KEY_AUTH_TOKEN, null);
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+        return "Bearer " + token;
+    }
 
     public void forgotPassword(String email, OnResetPasswordCompleteListener listener) {
         apiService.resetPassword(email).enqueue(new Callback<APIResult>() {

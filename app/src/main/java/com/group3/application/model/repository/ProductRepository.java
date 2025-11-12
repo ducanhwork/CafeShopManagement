@@ -11,6 +11,7 @@ import androidx.core.net.ParseException;
 
 import com.google.gson.Gson;
 import com.group3.application.model.dto.APIResult;
+import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
@@ -34,6 +35,10 @@ public class ProductRepository {
     public ProductRepository(Application application) {
         this.application = application;
         this.apiService = ApiClient.get().create(ApiService.class);
+    }
+
+    public Call<List<ProductForOrder>> getProducts(String status, String categoryId, String keyword) {
+        return apiService.listProductsForOrder(status, categoryId, keyword);
     }
 
     public void getProducts(OnGetProductsListener listener, String keyword, String category) {
@@ -97,9 +102,9 @@ public class ProductRepository {
     }
 
     public void createProduct(
-            RequestBody productJson,
-            MultipartBody.Part image,
-            Callback<Product> callback
+        RequestBody productJson,
+        MultipartBody.Part image,
+        Callback<Product> callback
     ) {
         if (apiService == null) {
             Log.e(TAG, "ApiService is not initialized.");
@@ -114,10 +119,10 @@ public class ProductRepository {
     }
 
     public void updateProduct(
-            UUID productId,
-            RequestBody productJson,
-            MultipartBody.Part image,
-            Callback<Product> callback
+        UUID productId,
+        RequestBody productJson,
+        MultipartBody.Part image,
+        Callback<Product> callback
     ) {
         if (apiService == null) {
             Log.e(TAG, "ApiService is not initialized.");

@@ -92,7 +92,7 @@ public class ReservationViewModel extends AndroidViewModel {
         isLoading.setValue(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString, formatter);
-        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "confirmed", null, UUID.fromString(tableId));
+        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "Confirmed", null, UUID.fromString(tableId));
 
         String token = getAuthToken();
         if (token == null) {
@@ -106,10 +106,11 @@ public class ReservationViewModel extends AndroidViewModel {
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 if (response.isSuccessful()) {
                     createdReservation.setValue(response.body());
+                    fetchReservationsByTable(tableId);
                 } else {
                     error.setValue("Failed to create reservation" + response.code());
+                    isLoading.setValue(false);
                 }
-                isLoading.setValue(false);
             }
 
             @Override

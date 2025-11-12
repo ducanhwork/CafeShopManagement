@@ -25,7 +25,7 @@ public class ReservationRepository {
     public Call<Reservation> createReservation(Reservation reservation, @Header("Authorization") String token) {
         return apiService.createReservation(reservation, token);
     }
-    
+
     public Call<Void> cancelReservation(UUID id) {
         return apiService.cancelReservation(id);
     }

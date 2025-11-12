@@ -25,10 +25,10 @@ public class VoucherManagementActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            String action = getIntent().getStringExtra(HomeMenuActivity.ACTION_START_KEY);
+            String action = getIntent().getStringExtra(VoucherAndLoyaltyManagementActivity.ACTION_START_KEY);
 
             Fragment initialFragment;
-            if (HomeMenuActivity.ACTION_CREATE_NEW.equals(action)) {
+            if (VoucherAndLoyaltyManagementActivity.ACTION_CREATE_NEW.equals(action)) {
                 initialFragment = new CreateVoucherFragment();
                 getSupportActionBar().setTitle("Tạo Voucher mới");
             } else {

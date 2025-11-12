@@ -12,6 +12,8 @@ import com.group3.application.model.repository.TableRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +73,23 @@ public class TableViewModel extends ViewModel {
 
     private final MutableLiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> events = new MutableLiveData<>();
     public LiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> getEvents() { return events; }
+
+    // SỬA: Thêm phương thức để chọn các bàn ban đầu bằng ID
+    public void selectTablesByIds(List<String> tableIds) {
+        if (tableIds == null || tableIds.isEmpty()) {
+            return;
+        }
+        List<TableInfo> allTables = tables.getValue();
+        if (allTables == null || allTables.isEmpty()) {
+            return; // Chưa có danh sách bàn để tìm kiếm
+        }
+
+        List<TableInfo> initialSelection = allTables.stream()
+                .filter(table -> tableIds.contains(table.getId()))
+                .collect(Collectors.toList());
+
+        selectedTables.setValue(initialSelection);
+    }
 
     public void onTableClicked(TableInfo table) {
         List<TableInfo> currentSelection = selectedTables.getValue();

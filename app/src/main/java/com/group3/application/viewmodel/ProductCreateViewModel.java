@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.ProductCreateRequest;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
 import com.group3.application.model.repository.ProductRepository;
