@@ -16,7 +16,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Reservations" />
+            app:title="Reservations List" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,6 +50,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Add Reservation"
-        app:srcCompat="@drawable/ic_add" />
+        app:backgroundTint="@color/coffee_primary"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

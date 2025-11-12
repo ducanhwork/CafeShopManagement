@@ -50,9 +50,31 @@
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintBottom_toBottomOf="@+id/guests_icon"
-            app:layout_constraintStart_toEndOf="@id/guests_icon"
+            app:layout_constraintStart_toEndOf="@+id/guests_icon"
             app:layout_constraintTop_toTopOf="@+id/guests_icon"
             tools:text="4 guests" />
+
+        <ImageView
+            android:id="@+id/date_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_baseline_calendar_today_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guests_icon"
+            app:tint="?attr/colorOnSurface"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/reservation_date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/date_icon"
+            app:layout_constraintStart_toEndOf="@+id/date_icon"
+            app:layout_constraintTop_toTopOf="@+id/date_icon"
+            tools:text="July 31, 2024" />
 
         <ImageView
             android:id="@+id/time_icon"
@@ -61,7 +83,7 @@
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_baseline_access_time_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guests_icon"
+            app:layout_constraintTop_toBottomOf="@id/date_icon"
             app:tint="?attr/colorOnSurface"
             android:contentDescription="@null" />
 
@@ -72,7 +94,7 @@
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintBottom_toBottomOf="@+id/time_icon"
-            app:layout_constraintStart_toEndOf="@id/time_icon"
+            app:layout_constraintStart_toEndOf="@+id/time_icon"
             app:layout_constraintTop_toTopOf="@+id/time_icon"
             tools:text="10:00 AM" />
 
