@@ -14,9 +14,8 @@ public class Reservation implements Serializable {
     private String status;
     private LocalDateTime createdAt;
     private UUID tableId;
-    private UUID userId;
 
-    public Reservation(UUID id, String customerName, String customerPhone, LocalDateTime reservationTime, Integer numGuests, String status, LocalDateTime createdAt, UUID tableId, UUID userId) {
+    public Reservation(UUID id, String customerName, String customerPhone, LocalDateTime reservationTime, Integer numGuests, String status, LocalDateTime createdAt, UUID tableId) {
         this.id = id;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -25,7 +24,6 @@ public class Reservation implements Serializable {
         this.status = status;
         this.createdAt = createdAt;
         this.tableId = tableId;
-        this.userId = userId;
     }
 
     public UUID getId() {
@@ -90,13 +88,5 @@ public class Reservation implements Serializable {
 
     public void setTableId(UUID tableId) {
         this.tableId = tableId;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 }

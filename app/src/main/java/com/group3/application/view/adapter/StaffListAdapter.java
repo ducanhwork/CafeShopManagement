@@ -1,7 +1,7 @@
-
 package com.group3.application.view.adapter;
 
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group3.application.R;
 import com.group3.application.model.entity.User;
-import com.group3.application.view.ReservationDetailActivity;
 import com.group3.application.view.StaffDetailActivity;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.Staf
     @NonNull
     @Override
     public StaffViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_staff, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_staff, parent, false);
         return new StaffViewHolder(view);
     }
 
@@ -58,6 +57,9 @@ public class StaffListAdapter extends RecyclerView.Adapter<StaffListAdapter.Staf
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), StaffDetailActivity.class);
                 intent.putExtra("staff", staff);
+                if (staff != null && staff.getId() != null) {
+                    intent.putExtra("staffId", staff.getId().toString());
+                }
                 itemView.getContext().startActivity(intent);
             });
         }

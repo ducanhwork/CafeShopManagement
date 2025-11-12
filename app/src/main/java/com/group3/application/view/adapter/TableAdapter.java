@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
+
     public interface OnItemClick {
         void onClick(TableInfo item);
     }
@@ -23,7 +24,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     private final List<TableInfo> data = new ArrayList<>();
     private final OnItemClick listener;
 
-    // --- ĐÃ THÊM: Danh sách lưu các bàn được chọn ---
     private final List<TableInfo> selectedTables = new ArrayList<>();
 
     public TableAdapter(OnItemClick listener) {
@@ -43,6 +43,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         }
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -69,10 +70,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         h.tvStatus.getBackground().setTint(color);
 
         if (selectedTables.contains(t)) {
-            h.itemView.setBackgroundColor(Color.parseColor("#E0F7FA"));
+            h.itemView.setBackgroundColor(Color.parseColor("#BD8C4D"));
         } else {
-            // Không được chọn
-            h.itemView.setBackgroundColor(Color.TRANSPARENT); // Màu nền mặc định
+            h.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         h.itemView.setOnClickListener(v -> {
@@ -81,13 +81,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
     @Override
-    public int getItemCount() {
-        return data.size();
-    }
+    public int getItemCount() { return data.size(); }
 
     static class TableViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvStatus, tvLocation, tvSeat;
-
         TableViewHolder(@NonNull View v) {
             super(v);
             tvName = v.findViewById(R.id.tvName);

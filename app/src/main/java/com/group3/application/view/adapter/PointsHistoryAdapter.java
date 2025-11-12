@@ -1,6 +1,8 @@
 package com.group3.application.view.adapter;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,22 +60,44 @@ public class PointsHistoryAdapter extends ListAdapter<PointsHistoryItem, PointsH
 
         public void bind(PointsHistoryItem item) {
             String reason = "Giao dịch";
-            int pointsChange = 0;
-            int color = defaultTextColor;
 
-            if (item.getPointsEarned() != null && item.getPointsEarned() > 0) {
-                pointsChange = item.getPointsEarned();
-                color = ContextCompat.getColor(context, R.color.positive_points);
-                tvPointsChange.setText(String.format("+%d", pointsChange));
-            } else if (item.getPointsSpent() != null && item.getPointsSpent() > 0) {
-                pointsChange = -item.getPointsSpent(); // Thêm dấu âm
-                color = ContextCompat.getColor(context, R.color.negative_points);
-                tvPointsChange.setText(String.valueOf(pointsChange));
+            int earnedPoints = item.getPointsEarned() != null ? item.getPointsEarned() : 0;
+            int spentPoints = item.getPointsSpent() != null ? item.getPointsSpent() : 0;
+
+            boolean hasEarned = earnedPoints > 0;
+            boolean hasSpent = spentPoints > 0;
+
+            if (hasEarned && hasSpent) {
+                String spentText = String.format("-%d", spentPoints);
+                String earnedText = String.format("+%d", earnedPoints);
+                String fullText = spentText + " / " + earnedText;
+                SpannableString spannable = new SpannableString(fullText);
+
+                int negativeColor = ContextCompat.getColor(context, R.color.negative_points);
+                int positiveColor = ContextCompat.getColor(context, R.color.positive_points);
+
+                spannable.setSpan(new ForegroundColorSpan(negativeColor),
+                                0,
+                                spentText.length(),
+                                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                spannable.setSpan(new ForegroundColorSpan(positiveColor),
+                                fullText.indexOf(earnedText),
+                                fullText.length(),
+                                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                tvPointsChange.setText(spannable);
+
+            } else if (hasEarned) {
+                tvPointsChange.setText(String.format("+%d", earnedPoints));
+                tvPointsChange.setTextColor(ContextCompat.getColor(context, R.color.positive_points));
+            } else if (hasSpent) {
+                tvPointsChange.setText(String.format("-%d", spentPoints));
+                tvPointsChange.setTextColor(ContextCompat.getColor(context, R.color.negative_points));
             } else {
                 tvPointsChange.setText("0");
+                tvPointsChange.setTextColor(defaultTextColor);
             }
-            tvPointsChange.setTextColor(color);
-
 
             if (Objects.equals(item.getType(), "EARN") && item.getOrderNo() != null) {
                 reason = "Tích điểm đơn hàng " + item.getOrderNo();

@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.group3.application.common.utils.Event;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.CategoryDTO;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
 import com.group3.application.model.repository.ProductRepository;

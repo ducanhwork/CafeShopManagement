@@ -20,17 +20,6 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public User(String email, String password, String fullname, String mobile, String role) {
-        this.email = email;
-        this.password = password;
-        this.fullname = fullname;
-        this.mobile = mobile;
-        this.role = role;
-    }
-
-    public User() {
-    }
-
     public UUID getId() {
         return id;
     }

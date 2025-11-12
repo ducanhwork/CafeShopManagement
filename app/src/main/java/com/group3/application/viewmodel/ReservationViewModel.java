@@ -1,5 +1,16 @@
 package com.group3.application.viewmodel;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import static com.group3.application.viewmodel.LoginViewModel.KEY_AUTH_TOKEN;
+import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReservationViewModel extends ViewModel {
+public class ReservationViewModel extends AndroidViewModel {
 
     private ReservationRepository reservationRepository = new ReservationRepository();
 
@@ -25,6 +36,10 @@ public class ReservationViewModel extends ViewModel {
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
     private final MutableLiveData<Reservation> createdReservation = new MutableLiveData<>();
     private final MutableLiveData<Boolean> _reservationCancelled = new MutableLiveData<>(false);
+
+    public ReservationViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public LiveData<List<Reservation>> getReservations() {
         return reservations;
@@ -67,21 +82,35 @@ public class ReservationViewModel extends ViewModel {
         });
     }
 
-    public void createReservation(String customerName, String customerPhone, String reservationTimeString, int numGuests, String tableId, String userId) {
+    private String getAuthToken() {
+        SharedPreferences prefs = getApplication().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String rawToken = prefs.getString(KEY_AUTH_TOKEN, null);
+        return rawToken != null ? "Bearer " + rawToken : null;
+    }
+
+    public void createReservation(String customerName, String customerPhone, String reservationTimeString, int numGuests, String tableId) {
         isLoading.setValue(true);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime reservationTime = LocalDateTime.parse(reservationTimeString, formatter);
-        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "confirmed", null, UUID.fromString(tableId), UUID.fromString(userId));
+        Reservation reservation = new Reservation(null, customerName, customerPhone, reservationTime, numGuests, "Confirmed", null, UUID.fromString(tableId));
 
-        reservationRepository.createReservation(reservation).enqueue(new Callback<Reservation>() {
+        String token = getAuthToken();
+        if (token == null) {
+            isLoading.postValue(false);
+            error.postValue("Authentication token not found");
+            return;
+        }
+
+        reservationRepository.createReservation(reservation, token).enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 if (response.isSuccessful()) {
                     createdReservation.setValue(response.body());
+                    fetchReservationsByTable(tableId);
                 } else {
-                    error.setValue("Failed to create reservation");
+                    error.setValue("Failed to create reservation" + response.code());
+                    isLoading.setValue(false);
                 }
-                isLoading.setValue(false);
             }
 
             @Override

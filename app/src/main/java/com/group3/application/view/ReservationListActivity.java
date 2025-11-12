@@ -1,10 +1,13 @@
 package com.group3.application.view;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,13 +23,13 @@ import com.group3.application.R;
 import com.group3.application.view.adapter.ReservationListAdapter;
 import com.group3.application.viewmodel.ReservationViewModel;
 
+import java.util.Calendar;
+
 public class ReservationListActivity extends AppCompatActivity {
 
     private ReservationViewModel viewModel;
     private ReservationListAdapter reservationListAdapter;
     private String tableId;
-    // TODO: Replace with actual user ID from session
-    private String userId = "21f2f0f3-6b62-470e-83d6-405ac6411523";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,6 @@ public class ReservationListActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ReservationViewModel.class);
 
-        setupObservers();
-
-        viewModel.fetchReservationsByTable(tableId);
-
-        FloatingActionButton fabAddReservation = findViewById(R.id.fab_add_reservation);
-        fabAddReservation.setOnClickListener(view -> showAddReservationDialog());
-    }
-
-    private void setupObservers() {
         viewModel.getReservations().observe(this, reservations -> {
             if (reservations != null) {
                 reservationListAdapter.setReservations(reservations);
@@ -76,34 +70,68 @@ public class ReservationListActivity extends AppCompatActivity {
         viewModel.getCreatedReservation().observe(this, reservation -> {
             if (reservation != null) {
                 Toast.makeText(this, "Reservation created successfully", Toast.LENGTH_SHORT).show();
-                viewModel.fetchReservationsByTable(tableId);
             }
         });
-    }
 
-    private void showAddReservationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_reservation, null);
-        builder.setView(dialogView);
+        viewModel.fetchReservationsByTable(tableId);
 
-        final TextInputEditText etCustomerName = dialogView.findViewById(R.id.et_customer_name);
-        final TextInputEditText etCustomerPhone = dialogView.findViewById(R.id.et_customer_phone);
-        final TextInputEditText etReservationTime = dialogView.findViewById(R.id.et_reservation_time);
-        final TextInputEditText etNumGuests = dialogView.findViewById(R.id.et_number_of_guests);
+        FloatingActionButton fabAddReservation = findViewById(R.id.fab_add_reservation);
+        fabAddReservation.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_add_reservation, null);
+            builder.setView(dialogView);
 
-        builder.setTitle("Add New Reservation")
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String customerName = etCustomerName.getText().toString();
-                    String customerPhone = etCustomerPhone.getText().toString();
-                    String reservationTime = etReservationTime.getText().toString();
-                    int numGuests = Integer.parseInt(etNumGuests.getText().toString());
+            final TextInputEditText etCustomerName = dialogView.findViewById(R.id.et_customer_name);
+            final TextInputEditText etCustomerPhone = dialogView.findViewById(R.id.et_customer_phone);
+            final TextInputEditText etReservationDate = dialogView.findViewById(R.id.et_reservation_date);
+            final TextInputEditText etReservationTime = dialogView.findViewById(R.id.et_reservation_time);
+            final TextInputEditText etNumGuests = dialogView.findViewById(R.id.et_number_of_guests);
 
-                    viewModel.createReservation(customerName, customerPhone, reservationTime, numGuests, tableId, userId);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            final Calendar calendar = Calendar.getInstance();
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            etReservationDate.setOnClickListener(v -> {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                        (datePicker, year, month, day) -> {
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, day);
+                            etReservationDate.setText(String.format("%d-%02d-%02d", year, month + 1, day));
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            });
+
+            etReservationTime.setOnClickListener(v -> {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                        (timePicker, hour, minute) -> {
+                            calendar.set(Calendar.HOUR_OF_DAY, hour);
+                            calendar.set(Calendar.MINUTE, minute);
+                            etReservationTime.setText(String.format("%02d:%02d", hour, minute));
+                        },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true);
+                timePickerDialog.show();
+            });
+
+            builder.setTitle("Add New Reservation")
+                    .setPositiveButton("Save", (dialog, which) -> {
+                        String customerName = etCustomerName.getText().toString();
+                        String customerPhone = etCustomerPhone.getText().toString();
+                        String reservationDate = etReservationDate.getText().toString();
+                        String reservationTime = etReservationTime.getText().toString();
+                        String reservationDateTime = reservationDate + " " + reservationTime;
+                        int numGuests = Integer.parseInt(etNumGuests.getText().toString());
+
+                        viewModel.createReservation(customerName, customerPhone, reservationDateTime, numGuests, tableId);
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
     }
 }

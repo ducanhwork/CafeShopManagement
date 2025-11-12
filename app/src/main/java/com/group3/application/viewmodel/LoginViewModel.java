@@ -26,6 +26,7 @@ public class LoginViewModel extends AndroidViewModel {
     public static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     public static final String KEY_USER_EMAIL = "userEmail";
     public static final String KEY_AUTH_TOKEN = "authToken";
+    public static final String KEY_USER = "userJson";
 
     private MutableLiveData<Event<APIResult>> _loginResult = new MutableLiveData<>();
     public LiveData<Event<APIResult>> loginResult = _loginResult;

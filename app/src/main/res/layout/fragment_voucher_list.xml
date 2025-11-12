@@ -8,13 +8,11 @@
     tools:context=".view.fragment.VoucherListFragment">
 
 
-    <!-- Main content area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- 2. KHU VỰC FILTER ĐÃ ĐƯỢC THIẾT KẾ LẠI -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Dòng tiêu đề có thể click để mở rộng/thu gọn -->
                 <RelativeLayout
                     android:id="@+id/headerFilter"
                     android:layout_width="match_parent"
@@ -60,7 +57,6 @@
 
                 </RelativeLayout>
 
-                <!-- Nội dung filter, mặc định sẽ ẩn đi -->
                 <LinearLayout
                     android:id="@+id/layoutExpandable"
                     android:layout_width="match_parent"
@@ -72,7 +68,6 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <!-- Filter by Code -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilCode"
                         style="@style/Cafe.OutlinedTextInput"
@@ -88,7 +83,6 @@
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Row for Type and Status -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -126,7 +120,6 @@
 
                     </LinearLayout>
 
-                    <!-- Sort By -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilSortBy"
                         style="@style/Cafe.OutlinedDropdown"
@@ -141,7 +134,6 @@
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Hàng chứa 2 nút Clear và Apply -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -168,7 +160,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 3. RecyclerView và các phần còn lại không đổi -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -200,7 +191,6 @@
 
     </LinearLayout>
 
-    <!-- 4. FAB không đổi -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddVoucher"
         android:layout_width="wrap_content"

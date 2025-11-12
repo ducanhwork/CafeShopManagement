@@ -104,11 +104,14 @@
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editFab"
+        android:id="@+id/editStaffButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_edit" />
+        android:contentDescription="Edit Staff"
+        android:src="@android:drawable/ic_menu_edit"
+        app:backgroundTint="@color/coffee_primary"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

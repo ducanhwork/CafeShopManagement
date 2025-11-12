@@ -10,7 +10,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.CategoryDTO;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.webservice.ApiClient;
 import com.group3.application.model.webservice.ApiService;
 import com.group3.application.viewmodel.LoginViewModel;
@@ -32,6 +31,10 @@ public class CategoryRepository {
         this.application = application;
         this.apiService = ApiClient.get().create(ApiService.class);
         this.prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public Call<List<CategoryDTO>> getCategories() {
+        return apiService.getCategories();
     }
 
     public void getCategories(OnGetCategoriesListener listener) {
