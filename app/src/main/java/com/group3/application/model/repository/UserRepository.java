@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.group3.application.model.dto.UserCreateRequest;
 import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.webservice.ApiClient;
@@ -74,11 +75,16 @@ public class UserRepository {
         return apiService.getAllUsers();
     }
 
-    public Call<User> createUser(User newStaff) {
-        return apiService.createUser(newStaff);
-    }
 
     public Call<List<Role>> getRoles() {
         return apiService.getRoles();
+    }
+
+    public Call<UserCreateRequest> createUser(UserCreateRequest newStaff) {
+        return apiService.createUser(newStaff);
+    }
+
+    public Call<User> updateUser(User staff) {
+        return apiService.updateUser(staff.getId().toString(), staff);
     }
 }

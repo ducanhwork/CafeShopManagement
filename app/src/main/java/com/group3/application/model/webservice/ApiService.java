@@ -11,14 +11,15 @@ import com.group3.application.model.dto.OrderRequest;
 import com.group3.application.model.dto.OrderUpdateDTO;
 import com.group3.application.model.dto.PaymentConfirmationRequest;
 import com.group3.application.model.dto.PaymentConfirmationResponse;
-import com.group3.application.model.entity.Category;
+import com.group3.application.model.dto.PeriodItemReportDTO;
+import com.group3.application.model.dto.ProductForOrder;
+import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.dto.UserCreateRequest;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.entity.Role;
@@ -51,21 +52,25 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    @POST("api/users/manage")
+    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
+
     @GET("api/tables?for=order")
     Call<List<TableInfo>> listTables(
             @Query("status") String status,
             @Query("keyword") String keyword
     );
 
-    @GET("api/products")
-    Call<java.util.List<Product>> listProducts(
-            @Query("status") String status,
-            @Query("categoryId") String categoryId,
-            @Query("keyword") String keyword
+    @PUT("api/tables/{id}/status")
+    Call<APIResult> updateTableStatus(
+        @Header("Authorization") String authToken,
+        @Path("id") String tableId,
+        @Query("status") String status
     );
 
     @GET("api/categories")
-    Call<List<Category>> getCategories();
+    Call<List<CategoryDTO>> getCategories();
 
     @POST("api/orders")
     Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
@@ -98,6 +103,28 @@ public interface ApiService {
             @Body OrderRequest orderRequest
     );
 
+    @GET("api/reports/revenue")
+    Call<RevenueReportDTO> getRevenueReport(
+        @Header("Authorization") String authToken,
+        @Query("dateFrom") String dateFrom,
+        @Query("dateTo") String dateTo,
+        @Query("filterBy") String filterBy
+    );
+
+    @GET("api/reports/items")
+    Call<List<PeriodItemReportDTO>> getItemReport(
+        @Header("Authorization") String authToken,
+        @Query("dateFrom") String dateFrom,
+        @Query("dateTo") String dateTo,
+        @Query("filterBy") String filterBy
+    );
+    @GET("api/products")
+    Call<List<ProductForOrder>> listProductsForOrder(
+        @Query("status") String status,
+        @Query("categoryId") String categoryId,
+        @Query("keyword") String keyword
+    );
+
     @GET("api/users")
     Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
 
@@ -117,7 +144,6 @@ public interface ApiService {
     Call<List<Product>> listProducts(@Header("Authorization") String token, @Query("keyword") String keyword, @Query("category") String category);
 
     @PUT("/api/products/manage/update-status/{productId}")
-    @PUT("/api/product/update-status/{productId}")
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
 
     @Multipart
@@ -152,8 +178,6 @@ public interface ApiService {
     @GET("api/users")
     Call<List<User>> getAllUsers();
 
-    @POST("api/users/manage")
-    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
 
     @PUT("api/users/{id}")
     Call<User> updateUser(@Path("id") String id, @Body User user);

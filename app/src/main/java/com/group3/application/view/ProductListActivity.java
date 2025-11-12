@@ -3,7 +3,6 @@ package com.group3.application.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,7 +30,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.group3.application.R;
 import com.group3.application.model.dto.CategoryDTO;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.view.adapter.ProductAdapter;
 import com.group3.application.viewmodel.ProductListViewModel;
@@ -59,14 +56,14 @@ public class ProductListActivity extends AppCompatActivity {
     private MaterialButton btnCreate;
 
     private final ActivityResultLauncher launcher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    viewModel.getProducts(null, selectedCategory == "All" ? null : selectedCategory);
-                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                    Log.d("ProductListActivity", "Product update cancelled.");
-                }
-            });
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                viewModel.getProducts(null, selectedCategory == "All" ? null : selectedCategory);
+            } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                Log.d("ProductListActivity", "Product update cancelled.");
+            }
+        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

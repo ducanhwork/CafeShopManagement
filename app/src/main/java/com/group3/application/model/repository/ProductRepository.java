@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.core.net.ParseException;
+
 import com.google.gson.Gson;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.ProductForOrder;
@@ -26,15 +28,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductRepository {
-    private final ApiService api = ApiClient.get().create(ApiService.class);
     private static final String TAG = "ProductRepository";
     private final ApiService apiService;
     private final Application application;
-
-    public ProductRepository() {
-        this.apiService = ApiClient.get().create(ApiService.class);
-        this.application = null;
-    }
 
     public ProductRepository(Application application) {
         this.application = application;
@@ -44,6 +40,7 @@ public class ProductRepository {
     public Call<List<ProductForOrder>> getProducts(String status, String categoryId, String keyword) {
         return apiService.listProductsForOrder(status, categoryId, keyword);
     }
+
     public void getProducts(OnGetProductsListener listener, String keyword, String category) {
         SharedPreferences prefs = application.getSharedPreferences(LoginViewModel.PREF_NAME, Context.MODE_PRIVATE);
         String token = prefs.getString(KEY_AUTH_TOKEN, null);
@@ -96,8 +93,6 @@ public class ProductRepository {
                 }
             }
 
-    public Call<List<Product>> getProducts(String status, String categoryId, String keyword) {
-        return api.listProducts(status, categoryId, keyword);
             @Override
             public void onFailure(Call<APIResult> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
@@ -107,9 +102,9 @@ public class ProductRepository {
     }
 
     public void createProduct(
-            RequestBody productJson,
-            MultipartBody.Part image,
-            Callback<Product> callback
+        RequestBody productJson,
+        MultipartBody.Part image,
+        Callback<Product> callback
     ) {
         if (apiService == null) {
             Log.e(TAG, "ApiService is not initialized.");
@@ -124,10 +119,10 @@ public class ProductRepository {
     }
 
     public void updateProduct(
-            UUID productId,
-            RequestBody productJson,
-            MultipartBody.Part image,
-            Callback<Product> callback
+        UUID productId,
+        RequestBody productJson,
+        MultipartBody.Part image,
+        Callback<Product> callback
     ) {
         if (apiService == null) {
             Log.e(TAG, "ApiService is not initialized.");

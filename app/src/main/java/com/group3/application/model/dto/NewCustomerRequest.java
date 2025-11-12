@@ -3,10 +3,8 @@ package com.group3.application.model.dto;
 import com.google.gson.annotations.SerializedName;
 
 public class NewCustomerRequest {
-
-    @SerializedName("customerName")
-    private String name;
     private String phone;
+    private String name;
     public NewCustomerRequest() {}
 
     public NewCustomerRequest(String name, String phone) {

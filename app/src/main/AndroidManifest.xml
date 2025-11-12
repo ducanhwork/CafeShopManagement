@@ -9,7 +9,6 @@
         android:maxSdkVersion="32" /> <!-- Quyền truy cập Camera -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,10 +20,10 @@
         android:theme="@style/Theme.CafeApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.activity.ConfirmPaymentActivity"
+            android:name=".view.OrderAndBillManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".view.GenerateBillActivity"
+            android:name=".view.ItemReportActivity"
             android:exported="false" />
         <activity
             android:name=".view.CashierHomeActivity"
@@ -50,19 +49,15 @@
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".view.OrderHostActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.OrderListActivity"
-            android:exported="true" /> <!-- <activity -->
-        <!-- android:name=".view.activity.CreateReservationActivity" -->
-        <!-- android:exported="true" /> -->
-        <!-- <activity -->
-        <!-- android:name=".view.ReservationActivity" -->
-        <!-- android:exported="true"/> -->
+            android:exported="true" />
         <activity
             android:name=".view.OrderDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.OrderHostActivity"
-            android:exported="false" />
             android:name=".view.ReservationActivity"
             android:exported="false" />
         <activity
@@ -78,10 +73,18 @@
             android:exported="false" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".view.ProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BillDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.GenerateBillActivity"
             android:exported="false" />
         <activity
             android:name=".view.VoucherManagementActivity"
@@ -90,7 +93,7 @@
             android:name=".view.LoyaltyListActivity"
             android:exported="false" />
         <activity
-            android:name=".view.HomeMenuActivity"
+            android:name=".view.VoucherAndLoyaltyManagementActivity"
             android:exported="true" />
         <activity
             android:name=".view.TableListActivity"
@@ -98,9 +101,6 @@
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -111,14 +111,14 @@
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".view.BillDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.BillListActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.StaffListActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity
+            android:name=".view.RevenueReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ReportManagementActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

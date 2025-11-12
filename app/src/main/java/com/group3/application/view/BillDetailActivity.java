@@ -211,7 +211,7 @@ public class BillDetailActivity extends AppCompatActivity {
             for (BillPaymentDTO p : payments) {
 
                 MaterialTextView tv = new MaterialTextView(this, null,
-                    com.google.android.material.R.attr.textAppearanceBodyMedium);
+                    R.style.TextAppearance_App_BodyMedium);
 
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -231,7 +231,7 @@ public class BillDetailActivity extends AppCompatActivity {
             }
         } else {
             MaterialTextView tv = new MaterialTextView(this, null,
-                com.google.android.material.R.attr.textAppearanceBodyMedium);
+                R.style.TextAppearance_App_BodyMedium);
 
             tv.setText("Chưa có thanh toán nào");
             llPaymentsContainer.addView(tv);
