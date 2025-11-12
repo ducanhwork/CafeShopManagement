@@ -7,12 +7,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.group3.application.R;
+import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.viewmodel.StaffListViewModel;
+
+import java.util.List;
 
 public class StaffDetailActivity extends AppCompatActivity {
 
@@ -38,6 +42,7 @@ public class StaffDetailActivity extends AppCompatActivity {
         }
 
         staffListViewModel = new ViewModelProvider(this).get(StaffListViewModel.class);
+        staffListViewModel.fetchRoles();
 
         if (staff != null) {
             TextView fullNameTextView = findViewById(R.id.fullNameTextView);
@@ -46,8 +51,22 @@ public class StaffDetailActivity extends AppCompatActivity {
             TextView mobileTextView = findViewById(R.id.mobileTextView);
 
             fullNameTextView.setText(staff.getFullname());
-            if (staff.getRole() != null) {
-                roleTextView.setText(staff.getRole().toString());
+            if (staff.getRole() == null) {
+                roleTextView.setText("N/A");
+            } else {
+                staffListViewModel.getRoles().observe(this, new Observer<List<Role>>() {
+                    @Override
+                    public void onChanged(List<Role> roles) {
+                        if (roles != null) {
+                            for (Role role : roles) {
+                                if (role.getId().equals(staff.getRole())) {
+                                    roleTextView.setText(role.getName());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
             }
             emailTextView.setText(staff.getEmail());
             mobileTextView.setText(staff.getMobile());

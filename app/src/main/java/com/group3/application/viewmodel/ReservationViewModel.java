@@ -106,10 +106,11 @@ public class ReservationViewModel extends AndroidViewModel {
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 if (response.isSuccessful()) {
                     createdReservation.setValue(response.body());
+                    fetchReservationsByTable(tableId);
                 } else {
                     error.setValue("Failed to create reservation" + response.code());
+                    isLoading.setValue(false);
                 }
-                isLoading.setValue(false);
             }
 
             @Override
