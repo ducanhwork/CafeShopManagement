@@ -1,11 +1,13 @@
 package com.group3.application.viewmodel;
 
+import android.app.Application;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.group3.application.model.entity.TableInfo;
 import com.group3.application.model.repository.TableRepository;
@@ -20,7 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class TableViewModel extends ViewModel {
+public class TableViewModel extends AndroidViewModel {
 
     public enum TableAction { SHOW_CONFIRM_RESERVED, OPEN_ORDER, SHOW_ERROR_SINGLE, SHOW_ERROR_MULTI }
 
@@ -30,7 +32,12 @@ public class TableViewModel extends ViewModel {
         public T getIfNotHandled(){ if(handled) return null; handled=true; return content; }
     }
 
-    private final TableRepository repo = new TableRepository();
+    private final TableRepository repo;
+
+    public TableViewModel(@NonNull Application application) {
+        super(application);
+        this.repo = new TableRepository(application.getApplicationContext());
+    }
 
     private final MutableLiveData<List<TableInfo>> tables = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);

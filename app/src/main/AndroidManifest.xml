@@ -122,6 +122,22 @@
         <activity
             android:name=".view.ReportManagementActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.ShiftActivity"
+            android:exported="false"
+            android:parentActivityName=".view.CashierHomeActivity" />
+        <activity
+            android:name=".view.TableManagementActivity"
+            android:exported="false"
+            android:parentActivityName=".view.AdminHomeActivity" />
+        <activity
+            android:name=".view.InventoryManagementActivity"
+            android:exported="false"
+            android:parentActivityName=".view.AdminHomeActivity" />
+        <activity
+            android:name=".view.ShiftHistoryActivity"
+            android:exported="false"
+            android:parentActivityName=".view.AdminHomeActivity" />
     </application>
 
 </manifest>

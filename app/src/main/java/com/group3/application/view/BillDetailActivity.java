@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.group3.application.R;
+import com.group3.application.common.util.DisplayMapperUtil;
 import com.group3.application.model.dto.BillDetailResponse;
 import com.group3.application.model.dto.BillItemDTO;
 import com.group3.application.model.dto.BillPaymentDTO;
@@ -187,8 +188,8 @@ public class BillDetailActivity extends AppCompatActivity {
             : "Khách lẻ";
         tvCustomerName.setText("Tên khách hàng: " + customerName);
 
-        String status = bill.getPaymentStatus() != null ? bill.getPaymentStatus() : "UNKNOWN";
-        tvStatus.setText("Trạng thái: " + status);
+        String displayStatus = DisplayMapperUtil.mapPaymentStatus(bill.getPaymentStatus());
+        tvStatus.setText("Trạng thái: " + displayStatus);
 
         tvSubtotal.setText("Tạm tính: " + formatMoney(bill.getSubtotal()));
         tvDiscount.setText("Giảm giá: " + (bill.getTotalDiscount() != null ? "-" + formatMoney(bill.getTotalDiscount()) : "-"));
@@ -218,9 +219,15 @@ public class BillDetailActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 );
                 tv.setLayoutParams(lp);
-                String method = p.getPaymentMethod() != null ? p.getPaymentMethod(): "Unknown";
+                String rawMethod = p.getPaymentMethod();
+                String displayMethod = "Không rõ";
+
+                if (rawMethod != null) {
+                    displayMethod = DisplayMapperUtil.mapPaymentMethod(this, rawMethod);
+                }
+
                 String amount = formatMoney(p.getAmount());
-                tv.setText(method + ": " + amount);
+                tv.setText(displayMethod + ": " + amount);
 
                 int paddingInDp = 4;
                 float density = getResources().getDisplayMetrics().density;
@@ -237,7 +244,7 @@ public class BillDetailActivity extends AppCompatActivity {
             llPaymentsContainer.addView(tv);
         }
 
-        boolean isPaid = "PAID".equalsIgnoreCase(status);
+        boolean isPaid = "PAID".equalsIgnoreCase(bill.getPaymentStatus());
         int visibility = isPaid ? View.GONE : View.VISIBLE;
 
         tvPaymentMethodTitle.setVisibility(visibility);
