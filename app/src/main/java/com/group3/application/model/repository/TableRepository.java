@@ -26,15 +26,10 @@ import retrofit2.Response;
 public class TableRepository {
     private static final String TAG = "TableRepository";
     private final ApiService apiService;
-
-    public TableRepository() {
-        this.apiService = ApiClient.get().create(ApiService.class);
     private SharedPreferences sharedPreferences;
 
-    public TableRepository() {
-    }
-
     public TableRepository(Context context) {
+        this.apiService = ApiClient.get().create(ApiService.class);
         this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
@@ -104,31 +99,31 @@ public class TableRepository {
     public Call<PageResponse<TableInfo>> getAllTablesWithPagination(String status, String location, 
                                                              Integer minSeatCount, Integer page, 
                                                              Integer size, String sort) {
-        return api.getAllTablesWithPagination(getAuthToken(), status, location, minSeatCount, page, size, sort);
+        return apiService.getAllTablesWithPagination(getAuthToken(), status, location, minSeatCount, page, size, sort);
     }
 
     // Get table by ID
     public Call<TableInfo> getTableById(String id) {
-        return api.getTableById(getAuthToken(), id);
+        return apiService.getTableById(getAuthToken(), id);
     }
 
     // Create new table
     public Call<TableInfo> createTable(CreateTableRequest request) {
-        return api.createTable(getAuthToken(), request);
+        return apiService.createTable(getAuthToken(), request);
     }
 
     // Update table
     public Call<TableInfo> updateTable(String id, UpdateTableRequest request) {
-        return api.updateTable(getAuthToken(), id, request);
+        return apiService.updateTable(getAuthToken(), id, request);
     }
 
     // Update table status
     public Call<TableInfo> updateTableStatus(String id, Map<String, String> status) {
-        return api.updateTableStatus(getAuthToken(), id, status);
+        return apiService.updateTableStatus(getAuthToken(), id, status);
     }
 
     // Delete table
     public Call<Map<String, String>> deleteTable(String id) {
-        return api.deleteTable(getAuthToken(), id);
+        return apiService.deleteTable(getAuthToken(), id);
     }
 }
