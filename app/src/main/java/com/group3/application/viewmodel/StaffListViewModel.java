@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.group3.application.model.dto.UserCreateRequest;
 import com.group3.application.model.entity.Role;
 import com.group3.application.model.entity.User;
 import com.group3.application.model.repository.UserRepository;
@@ -25,7 +26,8 @@ public class StaffListViewModel extends ViewModel {
     private final MutableLiveData<List<Role>> roles = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>(null);
-    private final MutableLiveData<User> createdStaff = new MutableLiveData<>();
+    private final MutableLiveData<UserCreateRequest> createdStaff = new MutableLiveData<>();
+    private final MutableLiveData<User> updatedStaff = new MutableLiveData<>();
 
     public LiveData<List<User>> getStaffs() {
         return staffs;
@@ -43,8 +45,12 @@ public class StaffListViewModel extends ViewModel {
         return error;
     }
 
-    public LiveData<User> getCreatedStaff() {
+    public LiveData<UserCreateRequest> getCreatedStaff() {
         return createdStaff;
+    }
+
+    public LiveData<User> getUpdatedStaff() {
+        return updatedStaff;
     }
 
     public void fetchStaff() {
@@ -89,24 +95,50 @@ public class StaffListViewModel extends ViewModel {
         });
     }
 
-    public void addStaff(User newStaff) {
+    public void addStaff(String email, String password, String fullname, String mobile, String role) {
         isLoading.setValue(true);
-        staffRepository.createUser(newStaff).enqueue(new Callback<User>() {
+        UserCreateRequest newStaff = new UserCreateRequest(email, password, fullname, mobile, role);
+
+        staffRepository.createUser(newStaff).enqueue(new Callback<UserCreateRequest>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserCreateRequest> call, Response<UserCreateRequest> response) {
                 if (response.isSuccessful()) {
                     createdStaff.setValue(response.body());
                 } else {
                     try {
                         error.setValue("Failed to create staff: " + response.errorBody().string());
-//                        Log.e("ID", newStaff.getId().toString());
-                        Log.e("Name", newStaff.getFullname());
-                        Log.e("Email", newStaff.getEmail());
-                        Log.e("Mobile", newStaff.getMobile());
-                        Log.e("Role", newStaff.getRole());
-                        Log.e("Password", newStaff.getPassword());
+                        Log.e("email", newStaff.getEmail());
+                        Log.e("password", newStaff.getPassword());
+                        Log.e("name", newStaff.getFullname());
+                        Log.e("mobile", newStaff.getMobile());
+                        Log.e("role", newStaff.getRoleId());
                     } catch (IOException e) {
                         error.setValue("Failed to create staff and could not parse error body.");
+                    }
+                }
+                isLoading.setValue(false);
+            }
+
+            @Override
+            public void onFailure(Call<UserCreateRequest> call, Throwable t) {
+                error.setValue(t.getMessage());
+                isLoading.setValue(false);
+            }
+        });
+    }
+
+    public void updateUser(User staff) {
+        isLoading.setValue(true);
+        staffRepository.updateUser(staff).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    updatedStaff.setValue(response.body());
+                } else {
+                    try {
+                        error.setValue("Failed to update staff: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        error.setValue("Failed to update staff and could not parse error body.");
                     }
                 }
                 isLoading.setValue(false);

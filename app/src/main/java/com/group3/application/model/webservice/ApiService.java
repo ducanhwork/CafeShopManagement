@@ -10,9 +10,11 @@ import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.APIResult;
 import com.group3.application.model.dto.AuthenticationRequest;
 import com.group3.application.model.dto.AuthenticationResponse;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.entity.Order;
 import com.group3.application.model.entity.Product;
+import com.group3.application.model.dto.UserCreateRequest;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
@@ -117,14 +119,14 @@ public interface ApiService {
     @GET("api/auth/me")
     Call<User> myProfile(@Header("Authorization") String token);
 
-    @GET("/api/product")
+    @GET("/api/products/manage")
     Call<List<Product>> listProducts(@Header("Authorization") String token, @Query("keyword") String keyword, @Query("category") String category);
 
-    @PUT("/api/product/update-status/{productId}")
+    @PUT("/api/products/manage/update-status/{productId}")
     Call<APIResult> updateProductStatus(@Header("Authorization") String token, @Path("productId") UUID productId, @Query("status") Boolean status);
 
     @Multipart
-    @PUT("api/product/update/{productId}")
+    @PUT("api/products/manage/update/{productId}")
     Call<Product> updateProduct(
             @Path("productId") UUID productId,
             @Part("product") RequestBody productJson,
@@ -133,21 +135,21 @@ public interface ApiService {
     );
 
     @Multipart
-    @POST("api/product/add")
+    @POST("api/products/manage/add")
     Call<Product> createProduct(
             @Part("product") RequestBody productJson,
             @Part MultipartBody.Part image,
             @Header("Authorization") String token
     );
 
-    @GET("/api/category")
-    Call<List<Category>> listCategories(@Header("Authorization") String token);
+    @GET("/api/categories")
+    Call<List<CategoryDTO>> listCategories(@Header("Authorization") String token);
 
     @GET("api/reservations/table/{tableId}")
     Call<List<Reservation>> getReservationsByTable(@Path("tableId") String tableId);
 
     @POST("api/reservations")
-    Call<Reservation> createReservation(@Body Reservation reservation);
+    Call<Reservation> createReservation(@Body Reservation reservation, @Header("Authorization") String token);
 
     @PATCH("api/reservations/cancel/{id}")
     Call<Void> cancelReservation(@Path("id") UUID id);
@@ -155,8 +157,11 @@ public interface ApiService {
     @GET("api/users")
     Call<List<User>> getAllUsers();
 
-    @POST("api/users")
-    Call<User> createUser(@Body User newStaff);
+    @POST("api/users/manage")
+    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
+
+    @PUT("api/users/{id}")
+    Call<User> updateUser(@Path("id") String id, @Body User user);
 
     @GET("api/roles")
     Call<List<Role>> getRoles();

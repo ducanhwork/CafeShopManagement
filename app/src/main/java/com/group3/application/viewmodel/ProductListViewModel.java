@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.group3.application.common.utils.Event;
 import com.group3.application.model.dto.APIResult;
+import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.entity.Category;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.repository.CategoryRepository;
@@ -25,8 +26,8 @@ public class ProductListViewModel extends AndroidViewModel {
     private final String TAG = "ProductListViewModel";
     private MutableLiveData<List<Product>> _products = new MutableLiveData<>();
     public final LiveData<List<Product>> products = _products;
-    private MutableLiveData<List<Category>> _categories = new MutableLiveData<>();
-    public final LiveData<List<Category>> categories = _categories;
+    private MutableLiveData<List<CategoryDTO>> _categories = new MutableLiveData<>();
+    public final LiveData<List<CategoryDTO>> categories = _categories;
     private MutableLiveData<Event<APIResult>> _updateStatusResult = new MutableLiveData<>();
     public LiveData<Event<APIResult>> updateStatusResult = _updateStatusResult;
 
@@ -79,7 +80,7 @@ public class ProductListViewModel extends AndroidViewModel {
     public void getCategories() {
         categoryRepository.getCategories(result -> {
             if (result.isSuccess()) {
-                _categories.postValue((List<Category>) result.getData());
+                _categories.postValue((List<CategoryDTO>) result.getData());
             } else {
                 Log.e(TAG, "getCategories: " + result.getMessage());
             }

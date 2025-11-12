@@ -1,14 +1,13 @@
-package com.group3.application.model.entity;
+package com.group3.application.model.dto;
 
-import androidx.annotation.NonNull;
-
-import java.util.UUID;
-
-public class Role {
+public class CategoryDTO {
     private String id;
     private String name;
 
-    public Role(String id, String name) {
+    public CategoryDTO() {
+    }
+
+    public CategoryDTO(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -27,11 +26,5 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return name;
     }
 }

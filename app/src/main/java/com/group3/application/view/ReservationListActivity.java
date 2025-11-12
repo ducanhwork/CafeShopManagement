@@ -26,7 +26,6 @@ public class ReservationListActivity extends AppCompatActivity {
     private ReservationListAdapter reservationListAdapter;
     private String tableId;
     // TODO: Replace with actual user ID from session
-    private String userId = "21f2f0f3-6b62-470e-83d6-405ac6411523";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +98,7 @@ public class ReservationListActivity extends AppCompatActivity {
                     String reservationTime = etReservationTime.getText().toString();
                     int numGuests = Integer.parseInt(etNumGuests.getText().toString());
 
-                    viewModel.createReservation(customerName, customerPhone, reservationTime, numGuests, tableId, userId);
+                    viewModel.createReservation(customerName, customerPhone, reservationTime, numGuests, tableId);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 

@@ -83,7 +83,7 @@ public class CashierHomeActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.card_manage_reservation).setOnClickListener(v -> {
-            Intent intent = new Intent(this, ReservationListActivity.class);
+            Intent intent = new Intent(this, ReservationActivity.class);
             startActivity(intent);
         });
     }
