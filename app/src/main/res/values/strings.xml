@@ -1,7 +1,15 @@
 <resources>
-    <string name="app_name">Cafe Management Application</string>
+    <string name="app_name">CafeManagementApplication</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="staff_list">Staff List</string>
     <string name="no_staff_found">No Staff Found</string>
+    <string-array name="staff_roles">
+        <item>Manager</item>
+        <item>Cashier</item>
+        <item>Barista</item>
+        <item>Waiter</item>
+    </string-array>
 </resources>

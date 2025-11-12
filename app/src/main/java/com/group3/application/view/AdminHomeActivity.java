@@ -28,6 +28,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private MaterialCardView cardManageOrders;
     private MaterialCardView cardManageVouchers;
     private MaterialCardView cardManageReservations;
+    private MaterialCardView cardManageBills;
     private MaterialCardView cardManageStaffs;
     private TextView tvCurrentDate;
 
@@ -55,6 +56,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         cardManageReservations = findViewById(R.id.card_manage_reservation);
         cardManageStaffs = findViewById(R.id.card_manage_staffs);
+        cardManageBills = findViewById(R.id.card_manage_bills);
         tvCurrentDate = findViewById(R.id.tv_current_date);
     }
 
@@ -64,8 +66,8 @@ public class AdminHomeActivity extends AppCompatActivity {
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                "EEEE, dd 'tháng' MM, yyyy HH:mm",
-                new Locale("us", "US")
+            "EEEE, dd 'tháng' MM, yyyy HH:mm",
+            new Locale("us", "US")
         );
 
         String formattedDateTime = currentDateTime.format(formatter);
@@ -104,12 +106,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         });
 
         cardManageVouchers.setOnClickListener(v -> {
-            // TODO: Tạo VoucherManagementActivity (layout thứ 2 bạn gửi) và điều hướng
+            Intent intent = new Intent(AdminHomeActivity.this, VoucherAndLoyaltyManagementActivity.class);
+            startActivity(intent);
 
-             Intent intent = new Intent(AdminHomeActivity.this, HomeMenuActivity.class);
-             startActivity(intent);
-
-            // Tạm thời hiển thị Toast
             Toast.makeText(this, "Navigate to Voucher Management Screen", Toast.LENGTH_SHORT).show();
         });
 
@@ -122,10 +121,14 @@ public class AdminHomeActivity extends AppCompatActivity {
             Intent intent = new Intent(AdminHomeActivity.this, StaffListActivity.class);
             startActivity(intent);
         });
+
+        cardManageBills.setOnClickListener(v -> {
+            Intent i = new Intent(this, OrderAndBillManagementActivity.class);
+            startActivity(i);
+        });
     }
 
 
 }
-
 
 
