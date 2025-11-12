@@ -29,6 +29,7 @@ import com.group3.application.model.dto.StartShiftRequest;
 import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.dto.UpdateTableRequest;
 import com.group3.application.model.dto.UserCreateRequest;
+import com.group3.application.model.dto.UserUpdateRequest;
 import com.group3.application.model.entity.CashTransaction;
 import com.group3.application.model.entity.Ingredient;
 import com.group3.application.model.entity.LowStockNotification;
@@ -195,7 +196,7 @@ public interface ApiService {
 
 
     @PUT("api/users/{id}")
-    Call<User> updateUser(@Path("id") String id, @Body User user);
+    Call<UserUpdateRequest> updateUser(@Path("id") String id, @Body UserUpdateRequest user);
 
     @GET("api/roles")
     Call<List<Role>> getRoles();
