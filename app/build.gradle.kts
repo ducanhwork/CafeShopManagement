@@ -50,7 +50,6 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
     implementation(libs.circleimageview)
     implementation(libs.core.i18n)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

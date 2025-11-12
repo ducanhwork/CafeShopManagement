@@ -83,7 +83,6 @@ public interface ApiService {
             @Query("staffId") String staffId
     );
 
-    // SỬA: Hoàn trả lại kiểu dữ liệu gốc mà server trả về
     @GET("api/orders/{id}")
     Call<Order> getOrderDetails(
             @Header("Authorization") String authToken,

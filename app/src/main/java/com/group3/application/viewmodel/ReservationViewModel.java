@@ -8,6 +8,7 @@ import static com.group3.application.viewmodel.LoginViewModel.PREF_NAME;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
