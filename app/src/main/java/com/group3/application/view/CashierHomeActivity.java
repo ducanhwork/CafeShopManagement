@@ -86,6 +86,11 @@ public class CashierHomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ReservationActivity.class);
             startActivity(intent);
         });
+
+        findViewById(R.id.card_shift_management).setOnClickListener(v -> {
+            Intent intent = new Intent(this, ShiftActivity.class);
+            startActivity(intent);
+        });
     }
 
 

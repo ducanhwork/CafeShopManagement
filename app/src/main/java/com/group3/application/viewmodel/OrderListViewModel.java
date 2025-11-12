@@ -44,7 +44,7 @@ public class OrderListViewModel extends AndroidViewModel {
         super(application);
         this.orderRepository = new OrderRepository(application);
         this.userRepository = new UserRepository(application);
-        this.tableRepository = new TableRepository();
+        this.tableRepository = new TableRepository(application.getApplicationContext());
     }
 
     public void fetchFilterData(){
