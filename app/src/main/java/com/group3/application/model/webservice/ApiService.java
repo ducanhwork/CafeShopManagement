@@ -20,6 +20,7 @@ import com.group3.application.model.dto.AuthenticationResponse;
 import com.group3.application.model.dto.CategoryDTO;
 import com.group3.application.model.dto.UpdatePassWordRequest;
 import com.group3.application.model.dto.UserCreateRequest;
+import com.group3.application.model.dto.UserUpdateRequest;
 import com.group3.application.model.entity.Product;
 import com.group3.application.model.entity.Reservation;
 import com.group3.application.model.entity.Role;
@@ -180,7 +181,7 @@ public interface ApiService {
 
 
     @PUT("api/users/{id}")
-    Call<User> updateUser(@Path("id") String id, @Body User user);
+    Call<UserUpdateRequest> updateUser(@Path("id") String id, @Body UserUpdateRequest user);
 
     @GET("api/roles")
     Call<List<Role>> getRoles();
