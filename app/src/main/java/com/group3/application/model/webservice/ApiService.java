@@ -6,7 +6,6 @@ import com.group3.application.model.dto.PeriodItemReportDTO;
 import com.group3.application.model.dto.ProductForOrder;
 import com.group3.application.model.dto.RevenueReportDTO;
 import com.group3.application.model.dto.StockReportDTO;
-import com.group3.application.model.entity.Category;
 import com.group3.application.model.dto.BillCalculationResponse;
 import com.group3.application.model.dto.BillDetailResponse;
 import com.group3.application.model.dto.BillGenerationRequest;
@@ -78,24 +77,8 @@ public interface ApiService {
     @POST("api/users/manage")
     Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
 
-    @GET("api/tables?for=order")
-    Call<List<TableInfo>> listTables(
-            @Query("status") String status,
-            @Query("keyword") String keyword
-    );
-
-    @PUT("api/tables/{id}/status")
-    Call<APIResult> updateTableStatus(
-        @Header("Authorization") String authToken,
-        @Path("id") String tableId,
-        @Query("status") String status
-    );
-
     @GET("api/categories")
     Call<List<CategoryDTO>> getCategories();
-
-    @POST("api/orders")
-    Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
 
     @GET("api/products")
     Call<List<ProductForOrder>> listProductsForOrder(
@@ -104,9 +87,6 @@ public interface ApiService {
             @Query("keyword") String keyword
     );
 
-    @GET("api/categories")
-    Call<List<Category>> getCategories();
-
     @POST("api/orders")
     Call<APIResult<Object>> createOrder(@Header("Authorization") String authToken, @Body OrderRequest orderRequest);
 
@@ -118,50 +98,23 @@ public interface ApiService {
             @Query("staffId") String staffId
     );
 
-    @GET("api/orders/{id}")
-    Call<Order> getOrderDetails(
-            @Header("Authorization") String authToken,
-            @Path("id") String orderId
-    );
 
     @PUT("api/orders/{id}")
     Call<APIResult> updateOrder(
             @Header("Authorization") String authToken,
             @Path("id") String orderId,
             @Body OrderUpdateDTO updateData
-    );
-
-    @PUT("api/orders/{id}/items")
-    Call<APIResult<Object>> updateOrderItems(
-            @Header("Authorization") String authToken,
-            @Path("id") String orderId,
-            @Body OrderRequest orderRequest
     );
 
     @GET("api/users")
     Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
 
-    @POST("api/auth/login")
-    @GET("api/orders")
-    Call<List<Order>> getOrders(
-            @Header("Authorization") String authToken,
-            @Query("status") String status,
-            @Query("tableId") String tableId,
-            @Query("staffId") String staffId
-    );
-
     @GET("api/orders/{id}")
     Call<Order> getOrderDetails(
             @Header("Authorization") String authToken,
             @Path("id") String orderId
     );
 
-    @PUT("api/orders/{id}")
-    Call<APIResult> updateOrder(
-            @Header("Authorization") String authToken,
-            @Path("id") String orderId,
-            @Body OrderUpdateDTO updateData
-    );
 
     @PUT("api/orders/{id}/items")
     Call<APIResult<Object>> updateOrderItems(
@@ -169,15 +122,6 @@ public interface ApiService {
             @Path("id") String orderId,
             @Body OrderRequest orderRequest
     );
-
-    @GET("api/reports/revenue")
-    Call<RevenueReportDTO> getRevenueReport(
-        @Header("Authorization") String authToken,
-        @Query("dateFrom") String dateFrom,
-        @Query("dateTo") String dateTo,
-        @Query("filterBy") String filterBy
-    );
-
     @GET("api/reports/items")
     Call<List<PeriodItemReportDTO>> getItemReport(
         @Header("Authorization") String authToken,
@@ -185,15 +129,6 @@ public interface ApiService {
         @Query("dateTo") String dateTo,
         @Query("filterBy") String filterBy
     );
-    @GET("api/products")
-    Call<List<ProductForOrder>> listProductsForOrder(
-        @Query("status") String status,
-        @Query("categoryId") String categoryId,
-        @Query("keyword") String keyword
-    );
-
-    @GET("api/users")
-    Call<List<User>> getAllUsers(@Header("Authorization") String authToken);
 
     @POST("api/auth/login")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
@@ -245,9 +180,6 @@ public interface ApiService {
     @GET("api/users")
     Call<List<User>> getAllUsers();
 
-    @POST("api/users/manage")
-    Call<UserCreateRequest> createUser(@Body UserCreateRequest newStaff);
-
     @PUT("api/users/{id}")
     Call<User> updateUser(@Path("id") String id, @Body User user);
 
@@ -297,13 +229,6 @@ public interface ApiService {
             @Query("filterBy") String filterBy
     );
 
-    @GET("api/reports/items")
-    Call<List<PeriodItemReportDTO>> getItemReport(
-            @Header("Authorization") String authToken,
-            @Query("dateFrom") String dateFrom,
-            @Query("dateTo") String dateTo,
-            @Query("filterBy") String filterBy
-    );
 
     @GET("api/reports/stock")
     Call<StockReportDTO> getStockReport(

@@ -70,26 +70,8 @@ public class TableViewModel extends ViewModel {
     @Override protected void onCleared() {
         if (inFlight != null) inFlight.cancel();
     }
-
     private final MutableLiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> events = new MutableLiveData<>();
     public LiveData<OneTimeEvent<Pair<TableAction, List<TableInfo>>>> getEvents() { return events; }
-
-    // SỬA: Thêm phương thức để chọn các bàn ban đầu bằng ID
-    public void selectTablesByIds(List<String> tableIds) {
-        if (tableIds == null || tableIds.isEmpty()) {
-            return;
-        }
-        List<TableInfo> allTables = tables.getValue();
-        if (allTables == null || allTables.isEmpty()) {
-            return; // Chưa có danh sách bàn để tìm kiếm
-        }
-
-        List<TableInfo> initialSelection = allTables.stream()
-                .filter(table -> tableIds.contains(table.getId()))
-                .collect(Collectors.toList());
-
-        selectedTables.setValue(initialSelection);
-    }
 
     public void onTableClicked(TableInfo table) {
         List<TableInfo> currentSelection = selectedTables.getValue();
@@ -97,29 +79,20 @@ public class TableViewModel extends ViewModel {
 
         String st = table.getStatus() == null ? "" : table.getStatus().toUpperCase();
 
-        // Kiểm tra xem bàn có được phép chọn không
         switch (st) {
-            case "EMPTY":
             case "AVAILABLE":
-            case "RESERVED": // Cho phép chọn bàn RESERVED (sẽ hỏi sau)
-
-                // Toggle (Thêm/bớt)
+            case "RESERVED":
                 if (currentSelection.contains(table)) {
                     currentSelection.remove(table);
                 } else {
                     currentSelection.add(table);
                 }
-                selectedTables.setValue(currentSelection); // Kích hoạt LiveData
+                selectedTables.setValue(currentSelection);
                 break;
-
-            case "SERVING":
-            case "WAITING_BILL":
-                // Bàn đang phục vụ không cho gộp
-                // Gửi sự kiện lỗi cho 1 bàn
+            case "OCCUPIED":
                 events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_SINGLE, List.of(table))));
                 break;
             default:
-                // Các trạng thái khác (VD: "DIRTY", "MAINTENANCE")
                 events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_SINGLE, List.of(table))));
         }
     }
@@ -127,12 +100,10 @@ public class TableViewModel extends ViewModel {
     public void confirmSelection() {
         List<TableInfo> currentSelection = selectedTables.getValue();
         if (currentSelection == null || currentSelection.isEmpty()) {
-            // Gửi sự kiện lỗi chung
             events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_ERROR_MULTI, null)));
             return;
         }
 
-        // Kiểm tra xem có bàn nào đang "RESERVED" không
         boolean hasReserved = false;
         for (TableInfo table : currentSelection) {
             if ("RESERVED".equalsIgnoreCase(table.getStatus())) {
@@ -142,10 +113,8 @@ public class TableViewModel extends ViewModel {
         }
 
         if (hasReserved) {
-            // Gửi sự kiện yêu cầu xác nhận cho toàn bộ danh sách
             events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.SHOW_CONFIRM_RESERVED, currentSelection)));
         } else {
-            // Không có bàn nào RESERVED, mở order trực tiếp
             events.setValue(new OneTimeEvent<>(new Pair<>(TableAction.OPEN_ORDER, currentSelection)));
         }
     }

@@ -25,7 +25,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private CircleImageView ivAvatar;
     private MaterialCardView cardManageProducts;
-    private MaterialCardView cardManageOrders;
+    private MaterialCardView cardManageReports;
     private MaterialCardView cardManageVouchers;
     private MaterialCardView cardManageReservations;
     private MaterialCardView cardManageBills;
@@ -52,7 +52,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         ivAvatar = findViewById(R.id.iv_avatar);
         cardManageProducts = findViewById(R.id.card_manage_products);
-        cardManageOrders = findViewById(R.id.card_manage_orders);
+        cardManageReports = findViewById(R.id.card_manage_reports);
         cardManageVouchers = findViewById(R.id.card_manage_vouchers);
         cardManageReservations = findViewById(R.id.card_manage_reservation);
         cardManageStaffs = findViewById(R.id.card_manage_staffs);
@@ -101,8 +101,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         });
 
         // Sự kiện click vào Card Quản lý Đơn hàng
-        cardManageOrders.setOnClickListener(v -> {
-            Toast.makeText(this, "Navigate to Order Management Screen", Toast.LENGTH_SHORT).show();
+        cardManageReports.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminHomeActivity.this, ReportManagementActivity.class);
+            startActivity(intent);
         });
 
         cardManageVouchers.setOnClickListener(v -> {

@@ -43,8 +43,8 @@ public class ApiClient {
                         .build();
 
             instance = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.106:8080/") //
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl("http://10.35.53.120:8080/") //
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(client)
                     .build();
                 }
